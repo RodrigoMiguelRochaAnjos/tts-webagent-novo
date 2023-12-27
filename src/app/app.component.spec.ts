@@ -1,35 +1,32 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { DebugElement } from '@angular/core';
+import { AppModule } from './app.module';
+import { AuthService } from './shared/data-access/auth.service';
+import { KeepAliveService } from './core/authentication/keep-alive.service';
+import { AuthService } from './core/authentication/auth.service';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  });
+    let component: AppComponent;
+    let fixture: ComponentFixture<AppComponent>;
+    let de: DebugElement;
+    
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [RouterTestingModule, AppModule],
+        }).compileComponents();
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(AppComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it(`should have as title 'tts-webagent-web'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('tts-webagent-web');
-  });
+    it('should create the app', () => {
+        expect(component).toBeTruthy();
+    });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('tts-webagent-web app is running!');
-  });
+    it(`should have as title 'tts-webagent-web'`, () => {
+        expect(component.title).toEqual('tts-webagent-web');
+    });
 });

@@ -1,0 +1,20 @@
+:host {
+    background-color: #fff;
+    position: relative;
+    width: 100%;
+    display: block;
+    box-shadow: 0px 0px 2px #11214a;
+    border-radius: 6px;
+    margin-top: 19px;
+    label {
+        position: absolute;
+        transform: translateY(-50%);
+        margin-left: 23px;
+        background-color: inherit;
+        padding: 0px 5px;
+        font-size: 13px;
+        color:#11214A;
+        font-weight: 600;
+        opacity: .8;
+    }
+}

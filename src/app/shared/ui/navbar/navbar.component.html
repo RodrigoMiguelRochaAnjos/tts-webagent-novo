@@ -1,0 +1,28 @@
+<nav>
+    <ng-container *ngIf="this.side">
+        <ul>
+            <li *ngFor="let item of this.routes">
+                <a [routerLink]="item.route" routerLinkActive="active">{{item.label}}</a>
+            </li>
+            <div class="line"></div>
+            <li (click)="logout()">
+                <a>Logout</a>
+            </li>
+        </ul>
+    </ng-container>
+
+    <ng-container *ngIf="!side">
+        <div class="user">
+            <div class="info">
+                <div class="name">
+                    {{ formatUsername(( this.user$ | async )) }}
+                </div>
+                <div class="wallet">
+                    {{ (this.balance$ | async)?.amount }} {{ (balance$ | async)?.currency }}
+                </div>
+            </div>
+            <div class="image">
+            </div>
+        </div>
+    </ng-container>
+</nav>

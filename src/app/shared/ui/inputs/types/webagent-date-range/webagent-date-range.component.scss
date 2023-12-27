@@ -1,0 +1,30 @@
+:host{
+    .date-range-container{
+        width: calc(7 * 60px);
+        .calendar-days-container {
+            .calendar-days{
+                width: 60px;
+                height: 60px;
+                background-color: #f0f0f0;
+                border: 1px solid #3331;
+
+                &.inactive {
+                    opacity: .6;
+                }
+
+                &.today {
+                    background-color: #313D5F;
+                    color: #f0f0f0;
+                }
+            }
+            
+        }
+        .month-control{
+            height: 40px;
+
+            .left-control, .right-control {
+                width: 20px;
+            }
+        }
+    }
+}

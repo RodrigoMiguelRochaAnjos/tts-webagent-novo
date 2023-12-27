@@ -1,0 +1,33 @@
+:host {
+    width: 100%;
+    display: block;
+    position: relative;
+
+    label {
+        background-color: #333;
+        margin-left: 1.5%;
+        background-color: #fff;
+        transform: translateY(.5em);
+        display: block;
+        width: fit-content;
+        padding: 0px 5px;
+    }
+
+    input {
+        padding: 10px;
+        width: 100%;
+        outline: none;
+    }
+
+    .search-area {
+        position: absolute;
+        z-index: 999;
+        .group {
+            background-color: #333;
+            color: #fff;
+            .airport{
+                padding-left: 10px;
+            }
+        }
+    }
+}

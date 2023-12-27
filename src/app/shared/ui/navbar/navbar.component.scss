@@ -1,0 +1,91 @@
+:host{
+    position: relative;
+    justify-content: flex-end;
+    nav{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 100%;
+        ul{
+            list-style-type: none;
+            padding: 0px;
+            width: 100%;
+            position: relative;
+            height: 100%;
+            li{
+                margin: 0px auto;
+                margin-top: 5px;
+                width: 89%;
+                a {
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: #11214A;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    user-select: none;
+                    height: 33px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    &.active {
+                        background-color: #e3ecf1;
+                    }
+                }
+    
+                &:hover a{
+                    background-color: #F2F7FA;
+                }
+
+                &:last-child {
+                    position: absolute;
+                    bottom: 0px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    a {
+                        background-color: #ff00000e;
+                        color: #FF0000;
+                    }
+                }
+            }
+            .line{
+                display: block;
+                width: 100%;
+                height: 1px;
+                background-color: #11214A;
+                margin: 10px 0;
+                opacity: .3;
+            }
+        }
+
+        .user{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            margin-right: 2.5%;
+            background-color: #F2F7FA;
+            padding: 7px;
+            border-radius: 33px;
+            .info{
+                color: #11214A;
+                font-size: .75em;
+                padding-right: 9px;
+                padding-left: 20px;
+                text-align: right;
+                .name {
+                    font-weight: 500;
+                }
+                .wallet {
+                    font-weight: 200;
+                }
+            }
+            .image{
+                width: 30px;
+                height: 30px;
+                background-color: #1F75AE;
+                border-radius: 50%;
+            }
+        }
+    }
+}

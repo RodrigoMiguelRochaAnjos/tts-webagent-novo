@@ -1,0 +1,8 @@
+
+<div class="form" [ngClass]="{ 'with-results': this.hasResults }">
+    <flight-search-form></flight-search-form>
+</div>
+
+<p *ngFor="let result of (this.results$ | async)">
+    {{ result.id }}
+</p>

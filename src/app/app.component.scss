@@ -1,0 +1,35 @@
+:host {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    > navbar {
+        padding: 8px;
+        box-shadow: 0px 0px 5px #3333;
+    }
+    .content{
+        height: 100vh;
+        display: flex;
+        navbar {
+            width: 14%;
+            padding: 20px 0px;
+            z-index: 999;
+        }
+        .right-content{
+            width: 86%;
+            position: relative;
+            padding-top: 20px;
+            height: 100%;
+            > * {
+                width: 100%;
+            }
+        }
+    }
+    footer{
+        text-align: center;
+    }
+
+    
+}
+

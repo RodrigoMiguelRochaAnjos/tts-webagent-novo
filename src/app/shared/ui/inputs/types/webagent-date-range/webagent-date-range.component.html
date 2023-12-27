@@ -1,0 +1,27 @@
+<div class="date-range-container">
+    <div class="month-control flex-container flex-center flex-middle">
+        <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
+            <
+        </div>
+        <div>{{ date.format('MMMM') }} {{ date.format('YYYY') }}</div>
+        <div class="right-control flex-container flex-middle flex-right" (click)="nextMonth()">
+            >
+        </div>
+    </div>
+    <div class="flex-container flex-center">
+        <div class="flex-container flex-center flex-middle calendar-days-container">
+            <div class="flex-container flex-center flex-middle calendar-days">S</div>
+            <div class="flex-container flex-center flex-middle calendar-days">M</div>
+            <div class="flex-container flex-center flex-middle calendar-days">T</div>
+            <div class="flex-container flex-center flex-middle calendar-days">W</div>
+            <div class="flex-container flex-center flex-middle calendar-days">T</div>
+            <div class="flex-container flex-center flex-middle calendar-days">F</div>
+            <div class="flex-container flex-center flex-middle calendar-days">S</div>
+        </div>
+    </div>
+    <div class="calendar-days-container flex-container">
+        <div class="calendar-days flex-container flex-center flex-middle" [ngClass]="{'inactive' : !day, 'today': todayCheck(day)}" *ngFor="let day of daysArray">
+            <div *ngIf="day">{{ day.date() }}</div>
+        </div>
+    </div>
+</div>

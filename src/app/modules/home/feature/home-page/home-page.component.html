@@ -1,0 +1,27 @@
+<div class="login">
+    <div class="fields">
+        {{ (this.user$ | async)?.name }}
+        <div class="gds">
+            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Galileo'}" (click)="selectGDS('Galileo')">Galileo</div>
+            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Apollo'}" (click)="selectGDS('Apollo')">Apollo</div>
+            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Worldspan'}" (click)="selectGDS('Worldspan')">Worldspan</div>
+        </div>
+        <div class="field son">
+            <label for="son">SON</label>
+            <input type="text" [(ngModel)]="this.loginRequest.son" id="son" placeholder=" 123">
+        </div>
+        <div class="field password">
+            <label for="password">Password</label>
+            <input type="password" [(ngModel)]="this.loginRequest.pwd" id="password" placeholder=" ">
+        </div>
+        <div class="field pcc">
+            <label for="pcc">PCC</label>
+            <input type="text" [(ngModel)]="this.loginRequest.pcc" id="pcc" placeholder=" ">
+        </div>
+
+        <button class="submit" (click)="this.login()">Login</button>
+    </div>
+</div>
+
+
+<news-template [title]="'title'" [text]="'text'"></news-template>

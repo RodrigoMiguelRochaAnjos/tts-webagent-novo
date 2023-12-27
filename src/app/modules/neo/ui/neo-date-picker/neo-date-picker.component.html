@@ -1,0 +1,33 @@
+<neo-row>
+    <neo-input [placeholder]="'Select location'" [label]="'FROM'"></neo-input>
+    <neo-input [placeholder]="'Select location'" [label]="'TO'"></neo-input>
+</neo-row>
+<div class="datepicker">
+    <input type="text" [(ngModel)]="startDate" placeholder="Start Date" (click)="openPicker('start')">
+    <input type="text" [(ngModel)]="endDate" placeholder="End Date" (click)="openPicker('end')">
+    <div *ngIf="isPickerOpen" class="calendar">
+        <div class="header">
+            <span (click)="previousMonth()">&lt;</span>
+            <div>{{ currentMonth | date: 'MMMM yyyy' }}</div>
+            <span (click)="nextMonth()">&gt;</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th *ngFor="let day of days">{{ day }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let week of weeks">
+                    <td *ngFor="let day of week" (click)="selectDate(day)"
+                        [class.other-month]="day.month !== currentMonth.getMonth()"
+                        [class.selected]="isDateSelected(day.date)"
+                        [class.in-between]="inBetween(day.date)"
+                        >
+                        {{ day.date.getDate() }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
