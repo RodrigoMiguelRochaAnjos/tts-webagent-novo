@@ -1,0 +1,32 @@
+.stepper-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+    height: 35px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 30px;
+    background-color: #12214A;
+}
+
+.stepper-input button {
+    padding: 8px 12px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: white;
+
+}
+
+.stepper-input input {
+    width: 60px;
+    text-align: center;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: transparent;
+    font-size: 1.5rem;
+    
+}
