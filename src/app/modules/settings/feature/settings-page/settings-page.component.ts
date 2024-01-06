@@ -13,6 +13,8 @@ export class SettingsPageComponent {
     test: SelectedLocation = new SelectedLocation();
     test2: SelectedLocation = new SelectedLocation();
     testOld: string = "1234";
+    testOld1: string = "123456";
+    options: string[] = ["test", "test2"]
 
     showTestValue(): void {
         console.log(this.test);

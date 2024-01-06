@@ -7,6 +7,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { WebagentLocationSearchComponent } from '../types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from '../types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
+import { WebagentCustomizableDropdownInputComponent } from '../types/webagent-customizable-dropdown-input/webagent-customizable-dropdown-input.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -30,6 +31,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() required: boolean = false;
     @Input() pattern: string = ``;
     @Input() placeholder: string = ``;
+    @Input() options: string[] = [];
     
     constructor(
         private cdr: ChangeDetectorRef
@@ -75,6 +77,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
+            case InputType.DROPDOWN_INPUT:
+                return WebagentCustomizableDropdownInputComponent;
             default:
                 throw new Error("Invalid input type");
         }
@@ -90,6 +94,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         componentRef.instance.required = this.required;
         componentRef.instance.pattern = this.pattern;
         componentRef.instance.placeholder = this.placeholder;
+        componentRef.instance.options = this.options;
 
         componentRef.instance.writeValue(this.value);
 

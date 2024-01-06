@@ -19,6 +19,7 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     required!: boolean;
     pattern: string = ``;
     placeholder: string = ""
+    options: string[] = [];
 
     writeValue(obj: any): void {
         this.value = obj;

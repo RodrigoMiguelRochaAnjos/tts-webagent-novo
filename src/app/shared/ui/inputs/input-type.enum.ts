@@ -3,5 +3,6 @@ export enum InputType {
     DROPDOWN,
     LOCATION_SEARCH,
     DATE,
-    DATE_RANGE
+    DATE_RANGE,
+    DROPDOWN_INPUT
 }

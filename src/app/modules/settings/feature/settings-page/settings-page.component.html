@@ -2,7 +2,7 @@
 
 <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'From'"></webagent-input>
 <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test2" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'To'"></webagent-input>
-<webagent-input [type]="InputType.TEXT" [(ngModel)]="testOld" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Something'" [label]="'First Name'"></webagent-input>
+<webagent-input [type]="InputType.TEXT" [(ngModel)]="testOld1" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Something'" [label]="'First Name'"></webagent-input>
 
 <h1>Hello</h1>
 <h2>Hello</h2>
@@ -20,3 +20,4 @@
 <button class="button-small">Hello</button>
 
 <webagent-input [type]="InputType.DATE_RANGE"></webagent-input>
+<webagent-input [type]="InputType.DROPDOWN_INPUT" [options]="options" [required]="true" [label]="'Custom Dropdown'"></webagent-input>
