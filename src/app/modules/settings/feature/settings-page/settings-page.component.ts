@@ -16,7 +16,7 @@ export class SettingsPageComponent {
 
     test3: DateRange = new DateRange();
     testOld: string = "1234";
-    // protected readonly CVV_PATTERN: RegExp = ;
+
     showTestValue(): void {
         console.log(this.test3);
     }
