@@ -7,15 +7,35 @@
                 height: 60px;
                 background-color: #f0f0f0;
                 border: 1px solid #3331;
+                cursor: pointer;
 
                 &.inactive {
                     opacity: .6;
+
+                    &:hover{
+                        background-color: #f0f0f0;
+                    }
                 }
 
                 &.today {
+                    background-color: #313d5f85;
+                    color: #f0f0f0;
+                }
+                &.selected {
                     background-color: #313D5F;
                     color: #f0f0f0;
                 }
+
+                &.hovered{
+                    background-color: #3333;
+                    color: #f0f0f0
+                }
+
+                &:hover{
+                    background-color: #313d5f85;
+                }
+
+
             }
             
         }
@@ -25,6 +45,13 @@
             .left-control, .right-control {
                 width: 20px;
             }
+        }
+    }
+    .date-input{
+        display: flex;
+        justify-content: space-between;
+        webagent-input{
+            width: calc(50% - 10px);
         }
     }
 }

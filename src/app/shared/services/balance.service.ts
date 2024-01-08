@@ -37,7 +37,6 @@ export class BalanceService {
 
             this.httpClient.get<Balance>(`${this.ENDPOINT}/account/balance`, { headers: headers }).subscribe({
                 next: (balance: Balance) => {
-                    console.log(balance);
                     this.balance$.next(balance);
                 },
                 error: (error: Error) => {
