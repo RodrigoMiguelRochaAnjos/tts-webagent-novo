@@ -13,7 +13,7 @@ export class SettingsPageComponent {
     test: SelectedLocation = new SelectedLocation();
     test2: SelectedLocation = new SelectedLocation();
     testOld: string = "1234";
-
+    // protected readonly CVV_PATTERN: RegExp = ;
     showTestValue(): void {
         console.log(this.test);
     }
