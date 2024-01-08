@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ComponentRef, ContentChildren, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, HostBinding, Input, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
@@ -26,7 +26,12 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() type!: InputType;
     @Input() value?: string = "";
     @Input() label?: string;
+    @Input() min?: string;
+    @Input() max?: string;
+
+    @HostBinding("class.ng-disabled")
     @Input() disabled: boolean = false;
+
     @Input() required: boolean = false;
     @Input() pattern: string = ``;
     @Input() placeholder: string = ``;
@@ -37,6 +42,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
     ngAfterViewInit(): void {
         this.writeValue(this.value);
+
+
 
         this.cdr.detectChanges();
     }
@@ -53,7 +60,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     }
 
     writeValue(obj: any): void {
-        console.log("obj: ",obj)
         if(obj == null) return;
 
         this.value = obj;
@@ -86,10 +92,11 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         const componentType = this.getChildComponentType();
         const componentRef: ComponentRef<WebagentBaseComponent> = this._container.createComponent(componentType);
 
-        componentRef.instance.disabled = this.disabled;
         componentRef.instance.required = this.required;
         componentRef.instance.pattern = this.pattern;
         componentRef.instance.placeholder = this.placeholder;
+        componentRef.instance.min = this.min;
+        componentRef.instance.max = this.max;
 
         componentRef.instance.writeValue(this.value);
 
