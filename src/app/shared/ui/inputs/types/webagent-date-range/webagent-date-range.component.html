@@ -1,4 +1,8 @@
-<div class="date-range-container">
+<form [formGroup]="this.dateForm" class="date-input">
+    <webagent-input [type]="InputType.TEXT" [label]="'Start Date'" [placeholder]="'Start Date'" [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="this.calendarOpen = true"></webagent-input>
+    <webagent-input [type]="InputType.TEXT" [label]="'End Date'" [placeholder]="'End Date'" [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="this.calendarOpen = true"></webagent-input>
+</form>
+<div class="date-range-container" *ngIf="calendarOpen">
     <div class="month-control flex-container flex-center flex-middle">
         <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
             <
@@ -20,7 +24,11 @@
         </div>
     </div>
     <div class="calendar-days-container flex-container">
-        <div class="calendar-days flex-container flex-center flex-middle" [ngClass]="{'inactive' : !day, 'today': todayCheck(day)}" *ngFor="let day of daysArray">
+        <div class="calendar-days flex-container flex-center flex-middle" 
+            [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
+            *ngFor="let day of daysArray" (click)="selectedDate(day)"
+            (mouseenter)="this.hoveredDate = day"
+        >
             <div *ngIf="day">{{ day.date() }}</div>
         </div>
     </div>

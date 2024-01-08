@@ -34,7 +34,6 @@ export class FlightSearchFormComponent {
     }
 
     search(): void {
-        console.log("yo wassup")
         const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(this.airSearchRequest);
 
         if (searchId == null) return;
@@ -57,7 +56,6 @@ export class FlightSearchFormComponent {
                 break;
         }
 
-        console.log(this.journey);
     }
 
 }

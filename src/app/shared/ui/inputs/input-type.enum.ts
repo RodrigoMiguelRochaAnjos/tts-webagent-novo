@@ -4,5 +4,5 @@ export enum InputType {
     LOCATION_SEARCH,
     DATE,
     DATE_RANGE,
-    DROPDOWN_INPUT
+    CVV
 }

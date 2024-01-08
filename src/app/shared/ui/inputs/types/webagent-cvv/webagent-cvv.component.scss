@@ -1,0 +1,24 @@
+:host {
+    input {
+        border: 0px;
+        background-color: transparent;
+        outline: none;
+        width: 100%;
+        display: block;
+        height: 34px;
+        padding-left: 13px;
+        color: #11214A;
+        font-size: 0.75rem;
+
+        &::placeholder {
+            color: #969EB0;
+            opacity: .63;
+        }
+    }
+
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
