@@ -9,6 +9,7 @@ import { FormsModule } from "@angular/forms";
 import { WebagentLocationSearchComponent } from './types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from './types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent-date-range.component';
+import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch.component";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent
         WebagentTextComponent,
         WebagentLocationSearchComponent,
         WebagentDateComponent,
-        WebagentDateRangeComponent
+        WebagentDateRangeComponent,
+        WebagentSwitchComponent
     ],
     imports: [
         CommonModule,

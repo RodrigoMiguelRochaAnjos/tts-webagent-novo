@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SelectedLocation } from 'src/app/shared/models/selected-location.model';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 
@@ -8,13 +8,21 @@ import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
   styleUrls: ['./settings-page.component.scss']
 })
 export class SettingsPageComponent {
-    InputType = InputType;
+	InputType = InputType;
 
-    test: SelectedLocation = new SelectedLocation();
-    test2: SelectedLocation = new SelectedLocation();
-    testOld: string = "1234";
+	switch : { [key: string]: boolean } = { 'ROUNDTRIP': false, 'ONEWAY': true };
 
-    showTestValue(): void {
-        console.log(this.test);
-    }
+	currentState = 'oneway';
+	test: SelectedLocation = new SelectedLocation();
+	test2: SelectedLocation = new SelectedLocation();
+	testOld: string = "1234";
+
+	showTestValue(): void {
+		console.log(this.test);
+	}
+
+	onStateChanged(newState: any) {
+		this.currentState = newState;
+		console.log("Current state: ", this.currentState);
+	}
 }

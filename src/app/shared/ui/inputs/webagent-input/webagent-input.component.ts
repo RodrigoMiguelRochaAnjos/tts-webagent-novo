@@ -7,6 +7,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { WebagentLocationSearchComponent } from '../types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from '../types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
+import { WebagentSwitchComponent } from '../types/webagent-switch/webagent-switch.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -75,6 +76,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
+            case InputType.SWITCH:
+                return WebagentSwitchComponent;
             default:
                 throw new Error("Invalid input type");
         }
