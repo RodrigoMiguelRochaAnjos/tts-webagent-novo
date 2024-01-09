@@ -1,22 +1,56 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
+import { InputType } from '../../input-type.enum';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DateRange } from 'src/app/shared/models/date-range.model';
 
 @Component({
   selector: 'app-webagent-date-range',
   templateUrl: './webagent-date-range.component.html',
   styleUrls: ['./webagent-date-range.component.scss']
 })
-export class WebagentDateRangeComponent extends WebagentBaseComponent implements OnInit{
+export class WebagentDateRangeComponent extends WebagentBaseComponent implements OnInit {
+    readonly DATE_PATTERN: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+    
     public date: moment.Moment = moment();
     public daysArray!: moment.Moment[];
+
+    InputType = InputType;
+
+    dateForm!: FormGroup;
+
+    hoveredDate!: moment.Moment;
+
+    calendarOpen: boolean = false;
     
-    constructor() {
+    constructor(
+        private formBuilder: FormBuilder
+    ) {
         super();
+
+        this.initDateForm();
     }
 
     ngOnInit(): void {
+        if (this.value != '' && !(this.value instanceof DateRange)) throw new Error("Value should be of type DateRange");
+
+        if (this.min && !this.DATE_PATTERN.test(this.min)) throw new Error('Invalid [min] format should be DD/MM/YYYY');
+        if (this.max && !this.DATE_PATTERN.test(this.max)) throw new Error('Invalid [max] format should be DD/MM/YYYY');
+        
+        if(this.min) {
+            this.date = moment(this.min, "DD/MM/YYYY");
+        }
+
         this.daysArray = this.createCalendar(this.date);
+
+    }
+
+    public initDateForm(): FormGroup {
+        return this.dateForm = this.formBuilder.group({
+            dateFrom: [null, Validators.required],
+            dateTo: [null, Validators.required]
+        })
     }
 
     public todayCheck(day: moment.Moment): boolean {
@@ -35,7 +69,6 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
             days.unshift(null);
         }
 
-        console.log(lastDay.weekday());
         for(let n = 6; n> lastDay.weekday(); n--) {
             days.push(null);
         }
@@ -54,5 +87,88 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         this.daysArray = this.createCalendar(this.date);
 
+    }
+
+    public selectedDate(day: moment.Moment): void {
+        if (!day || this.withinBounds(day)) return;
+
+        let dayFormatted = day.format('DD/MM/YYYY');
+        
+        if(this.dateForm.valid){
+            this.dateForm.setValue({ dateFrom: '', dateTo: '' });
+        }
+
+        if(!this.dateForm.get('dateFrom')?.value) {
+            this.dateForm.get('dateFrom')?.patchValue(dayFormatted);
+            return;
+        }
+
+        this.dateForm.get('dateTo')?.patchValue(dayFormatted);
+        
+        let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
+        let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
+
+        if (dateTo.isBefore(dateFrom)) {
+            this.dateForm.setValue({ dateFrom: '', dateTo: '' });
+            return;
+        }
+
+        this.value = new DateRange();
+
+        this.value.from = dateFrom;
+        this.value.to = dateFrom;
+
+        this.update();
+
+        this.calendarOpen = false;
+
+    }
+
+    public isSelected(day: moment.Moment): boolean {
+        if(!day) return false;
+
+        let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
+        let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
+
+        if(this.dateForm.valid) return dateFrom.isSameOrBefore(day) && dateTo.isSameOrAfter(day);
+
+        if(this.dateForm.get('dateFrom')?.valid){
+            return dateFrom.isSame(day);
+        }
+
+        return false;
+    }
+
+    public isHovered(day: moment.Moment): boolean {
+        if (!day) return false;
+        if (!this.hoveredDate) return false;
+
+        let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
+
+        if(this.dateForm.valid) return false;
+
+        if (this.dateForm.get('dateFrom')?.valid) {
+            return dateFrom.isBefore(day) && this.hoveredDate.isSameOrAfter(day);
+        }
+
+        return false;
+    }
+
+    withinBounds(day: moment.Moment): boolean {
+        let isWithinBounds: boolean = false;
+
+        if(this.min) {
+            const min: moment.Moment = moment(this.min, "DD/MM/YYYY");
+            
+            isWithinBounds = day.isSameOrBefore(min);
+        }
+
+        if(this.max) {
+            const max: moment.Moment = moment(this.max, "DD/MM/YYYY");
+
+            isWithinBounds = isWithinBounds || day.isSameOrAfter(max);
+        }
+
+        return isWithinBounds;
     }
 }
