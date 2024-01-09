@@ -25,7 +25,7 @@ import { WebagentTextDateInputComponent } from './types/webagent-text-date-input
         WebagentDateComponent,
         WebagentDateRangeComponent,
         WebagentSwitchComponent,
-        WebagentCvvComponent,,
+        WebagentCvvComponent,
         WebagentTextDateInputComponent
     ],
     imports: [

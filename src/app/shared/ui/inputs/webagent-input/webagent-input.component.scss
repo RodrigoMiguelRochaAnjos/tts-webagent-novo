@@ -6,6 +6,11 @@
     box-shadow: 0px 0px 2px #11214a;
     border-radius: 6px;
     margin-top: 19px;
+
+    &.hide-default{
+        box-shadow: none;
+        background-color: transparent;
+    }
     &.ng-invalid {
         box-shadow: 0px 0px 2px #E32C2C;
         label {
