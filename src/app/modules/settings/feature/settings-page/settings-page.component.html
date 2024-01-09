@@ -21,4 +21,4 @@
 
 <webagent-input [type]="InputType.DATE_RANGE" [min]="'01/01/2024'" [max]="'31/01/2024'" [(ngModel)]="test3" (click)="showTestValue()"></webagent-input>
 
-<webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'[\\d]{3,5}'" [label]="'Cvv'"></webagent-input>
+<webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'[\\d]{3,5}'" [label]="'Cvv'" [required]="true"></webagent-input>
