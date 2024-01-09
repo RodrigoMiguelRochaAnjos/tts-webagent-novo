@@ -2,7 +2,7 @@
 
 <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'From'"></webagent-input>
 <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test2" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'To'"></webagent-input>
-<webagent-input [type]="InputType.TEXT" [(ngModel)]="testOld" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Something'" [label]="'First Name'"></webagent-input>
+<webagent-input [type]="InputType.TEXT" [(ngModel)]="testOld1" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Something'" [label]="'First Name'"></webagent-input>
 
 <h1>Hello</h1>
 <h2>Hello</h2>
@@ -21,4 +21,5 @@
 
 <webagent-input [type]="InputType.DATE_RANGE" [min]="'01/01/2024'" [max]="'31/01/2024'" [(ngModel)]="test3" (click)="showTestValue()"></webagent-input>
 
-<webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'[\\d]{3,5}'" [label]="'Cvv'"></webagent-input>
+<webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'^\\d{3,5}$'" [label]="'CVV'"></webagent-input>
+<webagent-input [type]="InputType.DROPDOWN" [options]="options" [required]="false" [label]="'Custom Dropdown'"></webagent-input>

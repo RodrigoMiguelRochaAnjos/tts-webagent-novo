@@ -21,6 +21,7 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     placeholder: string = "";
     min?: string;
     max?: string;
+    options: string[] = [];
 
     writeValue(obj: any): void {
         this.value = obj;
