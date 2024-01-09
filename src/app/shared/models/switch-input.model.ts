@@ -1,0 +1,1 @@
+export declare type SwitchInput = { [key: string]: boolean };
