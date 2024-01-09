@@ -16,6 +16,8 @@ export class SettingsPageComponent {
 
     test3: DateRange = new DateRange();
     testOld: string = "1234";
+    testOld1: string = "123456";
+    options: string[] = ["test", "test2"]
 
     showTestValue(): void {
         console.log(this.test3);

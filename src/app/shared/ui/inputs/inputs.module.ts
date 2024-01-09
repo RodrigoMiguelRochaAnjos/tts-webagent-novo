@@ -20,15 +20,17 @@ import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.componen
         WebagentLocationSearchComponent,
         WebagentDateComponent,
         WebagentDateRangeComponent,
-        WebagentCvvComponent
+        WebagentCvvComponent,
     ],
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     exports: [
-        WebagentInputComponent
+        WebagentInputComponent,
+    ],
+    providers: [
     ],
     bootstrap: [WebagentInputComponent]
 })
