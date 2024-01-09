@@ -19,6 +19,11 @@ export class SettingsPageComponent {
     testOld1: string = "123456";
     options: string[] = ["test", "test2"]
 
+    switch: { [key: string]: boolean} = {
+        'Option 1': false,
+        'Option 2': false
+    }
+
 	showTestValue(): void {
 		console.log(this.test3);
 	}
