@@ -10,7 +10,6 @@ import { InputsModule } from "./inputs/inputs.module";
     declarations: [
         LoadingComponent,
         NewsTemplateComponent,
-        
     ],
     imports: [
         CommonModule,

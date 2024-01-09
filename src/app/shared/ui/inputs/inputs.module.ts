@@ -10,6 +10,8 @@ import { WebagentLocationSearchComponent } from './types/webagent-location-searc
 import { WebagentDateComponent } from './types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent-date-range.component';
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
+import { DirectivesModule } from "../../directives/directive.module";
+import { FieldLimitDirective } from "../../directives/field-limit.directive";
 
 @NgModule({
     declarations: [
@@ -26,11 +28,13 @@ import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.componen
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        DirectivesModule
     ],
     exports: [
         WebagentInputComponent,
     ],
     providers: [
+        DirectivesModule
     ],
     bootstrap: [WebagentInputComponent]
 })
