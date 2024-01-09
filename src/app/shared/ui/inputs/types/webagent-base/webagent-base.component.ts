@@ -15,10 +15,13 @@ const CUSTOM_INPUT_VALUE_ACCESSOR: any = {
 export class WebagentBaseComponent implements ControlValueAccessor{
 
     value?: any;
-    disabled?: boolean;
+    disabled!: boolean;
     required!: boolean;
     pattern: string = ``;
-    placeholder: string = ""
+    placeholder: string = "";
+    min?: string;
+    max?: string;
+    options: string[] = [];
 
     writeValue(obj: any): void {
         this.value = obj;

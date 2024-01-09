@@ -5,11 +5,14 @@ import { CommonModule } from "@angular/common";
 import { BrowserModule } from "@angular/platform-browser";
 import { WebagentBaseComponent } from './types/webagent-base/webagent-base.component';
 import { WebagentTextComponent } from './types/webagent-text/webagent-text.component';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { WebagentLocationSearchComponent } from './types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from './types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent-date-range.component';
 import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch.component";
+import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
+import { DirectivesModule } from "../../directives/directive.module";
+import { FieldLimitDirective } from "../../directives/field-limit.directive";
 
 @NgModule({
     declarations: [
@@ -20,14 +23,20 @@ import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch
         WebagentLocationSearchComponent,
         WebagentDateComponent,
         WebagentDateRangeComponent,
-        WebagentSwitchComponent
+        WebagentSwitchComponent,
+        WebagentCvvComponent,
     ],
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule,
+        DirectivesModule
     ],
     exports: [
-        WebagentInputComponent
+        WebagentInputComponent,
+    ],
+    providers: [
+        DirectivesModule
     ],
     bootstrap: [WebagentInputComponent]
 })

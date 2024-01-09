@@ -1,1 +1,10 @@
-<p>webagent-dropdown works!</p>
+<div class="custom-dropdown">
+    <div class="selected-option" (click)="toggleDropdown()">
+        {{ selectedOption ? selectedOption : 'Select an option' }}
+    </div>
+    <ul class="dropdown-list" [class.active]="isDropdownOpen">
+        <li *ngFor="let option of options" (click)="selectOption(option)">
+            {{ option }}
+        </li>
+    </ul>
+</div>
