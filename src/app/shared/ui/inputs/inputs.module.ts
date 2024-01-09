@@ -10,7 +10,6 @@ import { WebagentLocationSearchComponent } from './types/webagent-location-searc
 import { WebagentDateComponent } from './types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent-date-range.component';
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
-import { WebagentCustomizableDropdownInputComponent } from './types/webagent-customizable-dropdown-input/webagent-customizable-dropdown-input.component';
 
 @NgModule({
     declarations: [
@@ -21,16 +20,17 @@ import { WebagentCustomizableDropdownInputComponent } from './types/webagent-cus
         WebagentLocationSearchComponent,
         WebagentDateComponent,
         WebagentDateRangeComponent,
-        WebagentCustomizableDropdownInputComponent,
-        WebagentCvvComponent
+        WebagentCvvComponent,
     ],
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     exports: [
-        WebagentInputComponent
+        WebagentInputComponent,
+    ],
+    providers: [
     ],
     bootstrap: [WebagentInputComponent]
 })

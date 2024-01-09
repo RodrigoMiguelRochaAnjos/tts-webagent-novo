@@ -1,13 +1,12 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, HostBinding, Input, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, HostBinding, Inject, InjectionToken, Input, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
 import { WebagentBaseComponent } from '../types/webagent-base/webagent-base.component';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms';
 import { WebagentLocationSearchComponent } from '../types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from '../types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
-import { WebagentCustomizableDropdownInputComponent } from '../types/webagent-customizable-dropdown-input/webagent-customizable-dropdown-input.component';
 import { WebagentCvvComponent } from '../types/webagent-cvv/webagent-cvv.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
@@ -16,17 +15,18 @@ const WRAPPER_VALUE_ACCESSOR: any = {
     multi: true,
 };
 
+
 @Component({
     selector: 'webagent-input',
     templateUrl: './webagent-input.component.html',
     styleUrls: ['./webagent-input.component.scss'],
     providers: [WRAPPER_VALUE_ACCESSOR]
 })
-export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit {
+export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @ViewChild('mutableComponentContainer', { read: ViewContainerRef }) private _container!: ViewContainerRef;
     
     @Input() type!: InputType;
-    @Input() value?: string = "";
+    @Input() value?: any = "";
     @Input() label?: string;
     @Input() min?: string;
     @Input() max?: string;
@@ -35,17 +35,24 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() disabled: boolean = false;
 
     @Input() required: boolean = false;
+    
+    @HostBinding("class.ng-invalid")
+    invalid: boolean = false;
+
     @Input() pattern: string = ``;
     @Input() placeholder: string = ``;
     @Input() options: string[] = [];
     
     constructor(
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
     ) {}
+    ngOnInit(): void {
+
+        this.invalid = this.required;
+    }
 
     ngAfterViewInit(): void {
         this.writeValue(this.value);
-
 
 
         this.cdr.detectChanges();
@@ -84,8 +91,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
-            case InputType.DROPDOWN_INPUT:
-                return WebagentCustomizableDropdownInputComponent;
             case InputType.CVV:
                 return WebagentCvvComponent;
             default:
@@ -109,9 +114,18 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         componentRef.instance.writeValue(this.value);
 
         componentRef.instance.setDisabledState!(this.disabled);
-
+        
         componentRef.instance.registerOnChange((value: any) => {
             this.onChange(value);
+
+            this.value = value;
+            
+            const regex: RegExp = new RegExp(this.pattern);
+
+            this.invalid = !regex.test(this.value);
+
+            if(this.value == '') this.invalid = this.required;
+
         });
 
         componentRef.instance.registerOnTouched((value: any) => {
