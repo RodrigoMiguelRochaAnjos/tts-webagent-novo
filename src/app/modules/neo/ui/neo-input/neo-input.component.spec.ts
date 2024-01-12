@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NeoInputComponent } from './neo-input.component';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('NeoInputComponent', () => {
   let component: NeoInputComponent;
@@ -8,7 +9,8 @@ describe('NeoInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NeoInputComponent ]
+      declarations: [ NeoInputComponent ],
+      imports: [HttpClientModule]
     })
     .compileComponents();
 

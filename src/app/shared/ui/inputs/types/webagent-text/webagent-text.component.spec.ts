@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WebagentTextComponent } from './webagent-text.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 describe('WebagentTextComponent', () => {
   let component: WebagentTextComponent;
@@ -8,7 +9,8 @@ describe('WebagentTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WebagentTextComponent ]
+      declarations: [ WebagentTextComponent ],
+      imports: [SharedModule]
     })
     .compileComponents();
 

@@ -1,1 +1,8 @@
-<input type="number" [(ngModel)]="this.value" (input)="update()" [required]="this.required" placeholder="{{ this.placeholder }}" [pattern]="this.pattern">
+
+<form [formGroup]="cvvForm">
+    <input type="number" formControlName="cvv" (input)="update()" [required]="required" placeholder="{{ placeholder }}" [pattern]="pattern">
+
+    <div *ngIf="cvvForm.get('cvv')?.invalid && cvvForm.get('cvv')?.touched">
+        Please enter a valid CVV.
+    </div>
+</form>

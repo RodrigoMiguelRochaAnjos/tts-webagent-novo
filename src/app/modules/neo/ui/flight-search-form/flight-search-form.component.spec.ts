@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FlightSearchFormComponent } from './flight-search-form.component';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('FlightSearchFormComponent', () => {
   let component: FlightSearchFormComponent;
@@ -8,7 +11,8 @@ describe('FlightSearchFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlightSearchFormComponent ]
+      declarations: [ FlightSearchFormComponent ],
+      imports: [HttpClientModule, SharedModule, FormsModule, ReactiveFormsModule ]
     })
     .compileComponents();
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { WebagentDateComponent } from './webagent-date.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 describe('WebagentDateComponent', () => {
   let component: WebagentDateComponent;
@@ -8,7 +9,8 @@ describe('WebagentDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WebagentDateComponent ]
+      declarations: [ WebagentDateComponent ],
+      imports: [SharedModule]
     })
     .compileComponents();
 
