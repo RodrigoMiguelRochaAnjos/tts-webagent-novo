@@ -1,5 +1,4 @@
 :host {
-    background-color: #fff;
     position: relative;
     width: 100%;
     display: block;
@@ -23,11 +22,43 @@
         position: absolute;
         transform: translateY(-50%);
         margin-left: 23px;
-        background-color: inherit;
+        left:0;
+        background-color: #fff;
         padding: 0px 5px;
-        font-size: 13px;
         color:#11214A;
         font-weight: 500;
         opacity: .8;
     }
+    &.dark-theme {
+        box-shadow: 0px 0px 2px #ffff;
+        color: #ffff;
+        label{
+            background-color: #11214A;
+            color: #ffff;
+        }
+
+
+    }
+
+
 }
+
+@media only screen and (max-width: 1280px) {
+    :host{
+        font-size: inherit;
+
+        label{
+            
+        }
+    }
+}
+
+@media only screen and (max-width: 430px) {
+    :host{
+
+        
+    }
+}
+
+
+

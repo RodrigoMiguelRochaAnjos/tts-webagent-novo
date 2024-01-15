@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/core/authentication/auth.service';
 import { Galileo } from 'src/app/core/models/gds/types/galileo.model';
 import { LoginRequest } from 'src/app/core/models/requests/login-request.model';
 import { User } from 'src/app/core/models/user/user.model';
+import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
+import { Theme } from 'src/app/shared/ui/inputs/theme.enum';
 
 export class IpInformation{
     query!: string;
@@ -30,13 +32,21 @@ export class IpInformation{
 })
 export class HomePageComponent implements OnInit{
     
+    InputType = InputType;
+    Theme = Theme;
     public user$!: Observable<User>;
     loginRequest!: LoginRequest;
+    
+    switch: { [key: string]: boolean} = {
+        'Apollo': false,
+        'Galileo': true,
+        'Worldspan': false
+    }
 
     constructor(
         private authService: AuthService,
     ) {  }
-    
+
     ngOnInit(): void {
         this.loginRequest = new LoginRequest();
         this.user$ = this.authService.getUser();
@@ -44,6 +54,7 @@ export class HomePageComponent implements OnInit{
         this.loginRequest.platform = window.navigator.userAgent;
         this.loginRequest.platformVersion = "4.0.1";
         this.loginRequest.product = "WebAgent";
+        this.loginRequest.gds = "Galileo";
     }
 
     login() : void {

@@ -1,27 +1,90 @@
+
 <div class="login">
+    
     <div class="fields">
-        {{ (this.user$ | async)?.name }}
-        <div class="gds">
-            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Galileo'}" (click)="selectGDS('Galileo')">Galileo</div>
-            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Apollo'}" (click)="selectGDS('Apollo')">Apollo</div>
-            <div class="option" [ngClass]="{'active': this.loginRequest.gds === 'Worldspan'}" (click)="selectGDS('Worldspan')">Worldspan</div>
-        </div>
-        <div class="field son">
-            <label for="son">SON</label>
-            <input type="text" [(ngModel)]="this.loginRequest.son" id="son" placeholder=" 123">
-        </div>
-        <div class="field password">
-            <label for="password">Password</label>
-            <input type="password" [(ngModel)]="this.loginRequest.pwd" id="password" placeholder=" ">
-        </div>
-        <div class="field pcc">
-            <label for="pcc">PCC</label>
-            <input type="text" [(ngModel)]="this.loginRequest.pcc" id="pcc" placeholder=" ">
+        <div style="height: 11%;">
+            <img src="../../../../../assets/webagent-logo-white.png" style="max-width: 80%;">
         </div>
 
-        <button class="submit" (click)="this.login()">Login</button>
+        <div class="switch-input">
+            <webagent-input 
+            style="box-shadow: none;border-radius: 22px;"
+            [(ngModel)]="switch"
+            [type]="InputType.SWITCH"
+            [ngClass]="{'active': this.loginRequest.gds === 'Galileo'}" (click)="selectGDS('Galileo')"
+            ></webagent-input>
+        </div>
+
+        <div class="field-container">
+
+            <div class="field son">
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK"/>
+            </div>
+            <div class="field password">
+                <webagent-input [type]="InputType.PASSWORD" [(ngModel)]="this.loginRequest.pwd" id="password" [label]="'Password'" [theme]="Theme.DARK"/>
+            </div>
+            <div class="field pcc">
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.pcc" id="pcc" [label]="'PCC'" [theme]="Theme.DARK"/>
+            </div>
+    
+            <div class="login-buttons">
+                <button class="button-medium">Request access</button>
+                <button class="button-medium call-to-action" (click)="this.login()">Login</button>
+            </div>
+        </div>
+
+        <div class="register-link">
+            <label class="" for="">Don't have an account? Request one</label><a href="http://"> here</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="question-mark">
+            <span>?</span>
+        </div>
     </div>
 </div>
 
+<div class="news">
+    <div class="news-container">
+        <div class="top-section">
+            <webagent-input class="search-input" [type]="InputType.SEARCH" [required]="false" [placeholder]="'Search'"> 
+            </webagent-input>
 
-<news-template [title]="'title'" [text]="'text'"></news-template>
+            <div class="right-side">
+                <label for="">Sort by: <a href="http://">Relevance</a></label>
+                
+                <div class="hamburger-menu">
+                    <span class="large"></span>
+                    <span class="medium"></span>
+                    <span class="small"></span>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="news-wrapper">
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            <news-template [title]="'Something Amazing Happened'" [text]="'Something amazing happened several times over and over again, and no one really knows anything about so we thought about making this the news for all yall to be notified'"/>
+            
+        </div>
+        
+        <div class="bottom-right">
+            <a href=""><b>facebook.com/tts</b></a>
+            <a href=""><b>twitter.com/tts</b></a>
+            <a href=""><b>instagram.com/tts</b></a>
+        </div>
+
+    </div>
+
+    <div class="bottom-filter">
+        <div class="left-side"></div>
+    </div>
+</div>

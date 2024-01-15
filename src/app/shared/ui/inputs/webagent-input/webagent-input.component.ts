@@ -9,6 +9,9 @@ import { WebagentDateComponent } from '../types/webagent-date/webagent-date.comp
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
 import { WebagentSwitchComponent } from '../types/webagent-switch/webagent-switch.component';
 import { WebagentCvvComponent } from '../types/webagent-cvv/webagent-cvv.component';
+import { WebagentSearchComponent } from '../types/webagent-search/webagent-search.component';
+import { WebagentPasswordComponent } from '../types/webagent-password/webagent-password.component';
+import { Theme } from '../theme.enum';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -31,6 +34,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() label?: string;
     @Input() min?: string;
     @Input() max?: string;
+    @Input() theme: Theme = Theme.DEFAULT;
 
     @HostBinding("class.ng-disabled")
     @Input() disabled: boolean = false;
@@ -44,9 +48,15 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() placeholder: string = ``;
     @Input() options: string[] = [];
     
+    @HostBinding("class")
+    get classForTheme(): string {
+        return this.theme;
+    }
+
     constructor(
         private cdr: ChangeDetectorRef,
     ) {}
+
     ngOnInit(): void {
 
         this.invalid = this.required;
@@ -96,6 +106,10 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentSwitchComponent;
             case InputType.CVV:
                 return WebagentCvvComponent;
+            case InputType.SEARCH:
+                return WebagentSearchComponent;
+            case InputType.PASSWORD:
+                return WebagentPasswordComponent;
             default:
                 throw new Error("Invalid input type");
         }
@@ -113,6 +127,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         componentRef.instance.min = this.min;
         componentRef.instance.max = this.max;
         componentRef.instance.options = this.options;
+        componentRef.instance.theme = this.theme;
 
         componentRef.instance.writeValue(this.value);
 

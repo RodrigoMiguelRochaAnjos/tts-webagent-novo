@@ -13,6 +13,8 @@ import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
 import { DirectivesModule } from "../../directives/directive.module";
 import { FieldLimitDirective } from "../../directives/field-limit.directive";
+import { WebagentSearchComponent } from './types/webagent-search/webagent-search.component';
+import { WebagentPasswordComponent } from './types/webagent-password/webagent-password.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +27,8 @@ import { FieldLimitDirective } from "../../directives/field-limit.directive";
         WebagentDateRangeComponent,
         WebagentSwitchComponent,
         WebagentCvvComponent,
+        WebagentSearchComponent,
+        WebagentPasswordComponent,
     ],
     imports: [
         CommonModule,
