@@ -8,9 +8,9 @@ import { NavbarComponent } from './shared/ui/navbar/navbar.component';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
 import { LoadingComponent } from './shared/ui/loading/loading.component';
 import { CommonModule } from '@angular/common';
-import { NeoDatePickerComponent } from './modules/neo/ui/neo-date-picker/neo-date-picker.component';
 import { WebagentInputComponent } from './shared/ui/inputs/webagent-input/webagent-input.component';
 import { SharedModule } from './shared/shared.module';
+import { FlightSearchFormComponent } from './modules/neo/features/search/ui/flight-search-form/flight-search-form.component';
 
 @NgModule({
     declarations: [

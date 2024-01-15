@@ -1,4 +1,6 @@
 :host {
+    position: relative;
+    display: block;
     input {
         border: 0px;
         background-color: transparent;
@@ -15,6 +17,22 @@
             color: #969EB0;
             opacity: .63;
             text-transform: none;
+        }
+    }
+
+    .search-area {
+        top:100%;
+        background-color: #fff;
+        z-index: 99;
+        display: block;
+        width: 100%;
+        position: absolute;
+        display: block;
+        width: 400px;
+        .group{
+            width: 100%;
+            position: relative;
+            display: block;
         }
     }
 }

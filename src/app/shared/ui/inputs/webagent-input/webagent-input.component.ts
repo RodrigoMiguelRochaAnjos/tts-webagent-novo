@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, HostBinding, Inject, InjectionToken, Input, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, HostBinding, Inject, InjectionToken, Input, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
@@ -23,7 +23,7 @@ const WRAPPER_VALUE_ACCESSOR: any = {
     selector: 'webagent-input',
     templateUrl: './webagent-input.component.html',
     styleUrls: ['./webagent-input.component.scss'],
-    providers: [WRAPPER_VALUE_ACCESSOR]
+    providers: [WRAPPER_VALUE_ACCESSOR],
 })
 export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @ViewChild('mutableComponentContainer', { read: ViewContainerRef }) private _container!: ViewContainerRef;
@@ -49,7 +49,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() options: string[] = [];
     
     constructor(
-        private cdr: ChangeDetectorRef,
+        private cdr: ChangeDetectorRef
     ) {}
     ngOnInit(): void {
 
@@ -78,6 +78,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
         this.value = obj;
         this.loadChildComponent();
+
+
     }
     setDisabledState?(isDisabled: boolean): void {
         this.disabled = isDisabled;

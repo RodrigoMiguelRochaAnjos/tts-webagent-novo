@@ -8,8 +8,7 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
   styleUrls: ['./webagent-dropdown.component.scss']
 })
 export class WebagentDropdownComponent extends WebagentBaseComponent{
-    selectionChange!: string;
-    selectedOption: string = "";
+    selectedOption: string = 'Select an option';
     isDropdownOpen: boolean = false;
 
     toggleDropdown(): void {

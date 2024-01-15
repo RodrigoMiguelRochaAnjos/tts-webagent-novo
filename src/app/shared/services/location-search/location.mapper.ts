@@ -18,7 +18,7 @@ export class LocationMapper {
 
         if(airport != null) {
             selectedLocation.isCity = false;
-            selectedLocation.text = airport.code + ' (' + locationSearch.name + ', ' + locationSearch.country.name + ')';
+            selectedLocation.text = airport.code + ' (' + locationSearch.name + ', ' + airport.name + ')';
             selectedLocation.airportName = airport.name
         }
 

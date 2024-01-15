@@ -8,8 +8,6 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
 })
 export class WebagentSwitchComponent extends WebagentBaseComponent implements OnInit {
 
-  currentState = 'oneway'
-
   constructor(){
     super();
   }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import { Observable } from 'rxjs';
 import { Airport, LocationSearch, LocationSearchResponse } from 'src/app/shared/models/location-search-response.model';
@@ -11,7 +11,7 @@ import { LocationMapper } from 'src/app/shared/services/location-search/location
   templateUrl: './webagent-location-search.component.html',
   styleUrls: ['./webagent-location-search.component.scss']
 })
-export class WebagentLocationSearchComponent extends WebagentBaseComponent {
+export class WebagentLocationSearchComponent extends WebagentBaseComponent implements OnInit {
     results$!: Observable<LocationSearchResponse>;
     focused: boolean = false;
 
@@ -24,6 +24,11 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent {
         this.results$ = this.locationSearchService.getResults();
     }
 
+    ngOnInit(): void {
+        if(this.value == '') this.value = new SelectedLocation();
+        if (!(this.value instanceof SelectedLocation)) throw new Error("Invalid value expected type of SelectedLocation");
+    }
+
     searchLocation(event: Event): void {
         this.focused = true;
         if ((event.target as HTMLInputElement).value.length > 2) this.locationSearchService.search((event.target as HTMLInputElement).value)
@@ -31,8 +36,6 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent {
 
     locationSelected(event: Event, location: LocationSearch, airport?: Airport): void {
         event.stopPropagation();
-
-        this.resetSearchField();
 
         const selected: SelectedLocation = LocationMapper.locationSearchToSelectedLocation(location, airport);
 
@@ -53,7 +56,7 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent {
 
     @HostListener('focusout', ['$event'])
     onBlur(event: FocusEvent): void {
-        setTimeout(() => this.focused = false, 100);
+        setTimeout(() => this.focused = false, 300);
     }
 
 }

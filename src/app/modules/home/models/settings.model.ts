@@ -1,11 +1,11 @@
-import { NewsProviders } from "./news-provider.model"
+import { NewsProvider } from "./news-provider.model"
 
 export class Settings {
     lastUpdate!: number;
     enhancedResults!: boolean;
     autoExecuteHistory!: boolean;
     qks!: string[][];
-    newsProviders!: NewsProviders;
+    newsProviders!: NewsProvider;
     hideWhatsNewNotify!: boolean;
     profileUserName!: string;
     profileUserEmail!: string;
@@ -63,7 +63,7 @@ export class Settings {
         settings.lastUpdate = new Date().getTime();
         settings.emailTemplates = [];
 
-        settings.newsProviders = {};
+        // settings.newsProviders = new NewProvider;
 
         settings.default = true;
 

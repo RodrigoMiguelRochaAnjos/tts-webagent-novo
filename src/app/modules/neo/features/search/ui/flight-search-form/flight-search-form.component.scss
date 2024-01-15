@@ -1,0 +1,26 @@
+:host{
+    display: block;
+
+    .form {
+        .row{
+            display: flex;
+            justify-content: space-between;
+    
+            h3{
+                color: #11214A;
+            }
+    
+            webagent-input{
+                width: calc(50% - 10px);
+    
+                &.dates{
+                    width: 100%;
+                }
+            }
+    
+            #flight-switch {
+                width: 28%;
+            }
+        }
+    }
+}
