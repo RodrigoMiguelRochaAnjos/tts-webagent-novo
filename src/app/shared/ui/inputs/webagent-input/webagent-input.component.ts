@@ -7,6 +7,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms
 import { WebagentLocationSearchComponent } from '../types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from '../types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
+import { WebagentIncrementalSelectorComponent } from '../types/webagent-incremental-selector/webagent-incremental-selector.component';
 import { WebagentSwitchComponent } from '../types/webagent-switch/webagent-switch.component';
 import { WebagentCvvComponent } from '../types/webagent-cvv/webagent-cvv.component';
 import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
@@ -96,6 +97,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
+            case InputType.INCREMENTAL_SELECTOR:
+                return WebagentIncrementalSelectorComponent;
             case InputType.SWITCH:
                 this.hideDefault = true;
 
