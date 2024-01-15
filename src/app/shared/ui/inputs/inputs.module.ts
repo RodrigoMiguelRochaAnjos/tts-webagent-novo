@@ -14,6 +14,7 @@ import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
 import { DirectivesModule } from "../../directives/directive.module";
 import { FieldLimitDirective } from "../../directives/field-limit.directive";
+import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { FieldLimitDirective } from "../../directives/field-limit.directive";
         WebagentIncrementalSelectorComponent,
         WebagentSwitchComponent,
         WebagentCvvComponent,
+        WebagentTextDateInputComponent
     ],
     imports: [
         CommonModule,

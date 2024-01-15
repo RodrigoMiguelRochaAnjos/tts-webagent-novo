@@ -1,2 +1,2 @@
-<label *ngIf="this.label">{{ this.label }}</label>
+<label *ngIf="this.label && !this.hideDefault">{{ this.label }}</label>
 <ng-container #mutableComponentContainer></ng-container>

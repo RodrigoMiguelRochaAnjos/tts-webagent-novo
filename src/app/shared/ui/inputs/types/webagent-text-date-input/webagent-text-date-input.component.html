@@ -1,0 +1,10 @@
+<input
+    #dateInput
+    type="text"
+    (input)="onDateInput($event)"
+    placeholder="mm/yyyy"
+    maxlength="7"
+    [pattern]="this.pattern"
+    [(ngModel)]="this.value"
+    [required]="this.required"
+>

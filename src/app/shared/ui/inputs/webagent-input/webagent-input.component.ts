@@ -10,6 +10,7 @@ import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagen
 import { WebagentIncrementalSelectorComponent } from '../types/webagent-incremental-selector/webagent-incremental-selector.component';
 import { WebagentSwitchComponent } from '../types/webagent-switch/webagent-switch.component';
 import { WebagentCvvComponent } from '../types/webagent-cvv/webagent-cvv.component';
+import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -27,6 +28,8 @@ const WRAPPER_VALUE_ACCESSOR: any = {
 export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @ViewChild('mutableComponentContainer', { read: ViewContainerRef }) private _container!: ViewContainerRef;
     
+    @HostBinding("class.hide-default")
+    @Input() hideDefault: boolean = false;
     @Input() type!: InputType;
     @Input() value?: any = "";
     @Input() label?: string;
@@ -55,7 +58,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
     ngAfterViewInit(): void {
         this.writeValue(this.value);
-
 
         this.cdr.detectChanges();
     }
@@ -88,6 +90,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             case InputType.DATE:
                 return WebagentDateComponent;
             case InputType.DATE_RANGE:
+                this.hideDefault = true;
+
                 return WebagentDateRangeComponent;
             case InputType.DROPDOWN:
                 return WebagentDropdownComponent;
@@ -96,9 +100,13 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             case InputType.INCREMENTAL_SELECTOR:
                 return WebagentIncrementalSelectorComponent;
             case InputType.SWITCH:
+                this.hideDefault = true;
+
                 return WebagentSwitchComponent;
             case InputType.CVV:
                 return WebagentCvvComponent;
+            case InputType.TEXT_DATE_INPUT:
+                return WebagentTextDateInputComponent;
             default:
                 throw new Error("Invalid input type");
         }

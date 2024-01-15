@@ -6,5 +6,6 @@ export enum InputType {
     DATE_RANGE,
     INCREMENTAL_SELECTOR,
     SWITCH,
-    CVV
+    CVV,
+    TEXT_DATE_INPUT
 }
