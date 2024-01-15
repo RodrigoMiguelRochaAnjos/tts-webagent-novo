@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { DateRange } from 'src/app/shared/models/date-range.model';
 import { SelectedLocation } from 'src/app/shared/models/selected-location.model';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 
@@ -8,13 +9,22 @@ import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
   styleUrls: ['./settings-page.component.scss']
 })
 export class SettingsPageComponent {
-    InputType = InputType;
+	InputType = InputType;
 
     test: SelectedLocation = new SelectedLocation();
     test2: SelectedLocation = new SelectedLocation();
-    testOld: string = "1234";
 
-    showTestValue(): void {
-        console.log(this.test);
+    test3: DateRange = new DateRange();
+    testOld: string = "1234";
+    testOld1: string = "123456";
+    options: string[] = ["test", "test2"]
+
+    switch: { [key: string]: boolean} = {
+        'Option 1': false,
+        'Option 2': false
     }
+
+	showTestValue(): void {
+		console.log(this.test3);
+	}
 }

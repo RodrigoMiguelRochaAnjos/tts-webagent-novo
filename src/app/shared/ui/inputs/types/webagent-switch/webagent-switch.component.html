@@ -1,0 +1,7 @@
+
+<div class="switch">
+    
+    <span class="label" [ngClass]="{'active': this.value[key]}" *ngFor="let key of getSwitchValues()" (click)="changeSelection(key)">
+        {{ key }}
+    </span>
+  </div>

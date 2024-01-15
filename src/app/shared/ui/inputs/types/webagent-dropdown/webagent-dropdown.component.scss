@@ -1,0 +1,29 @@
+.custom-dropdown {
+    position: relative;
+}
+
+.selected-option {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    display: none;
+    border: 1px solid #ccc;
+}
+
+.dropdown-list.active {
+    display: block;
+}
+
+.dropdown-list li {
+    padding: 8px;
+    cursor: pointer;
+}

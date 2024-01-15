@@ -1,4 +1,4 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { SearchService } from '../../data-access/search.service';
 import { AirSearchRequest } from '../../utils/requests/air-search-request/air-search-request.model';
 import { Observable } from 'rxjs';
@@ -6,6 +6,7 @@ import { AirSearchResults } from 'src/app/modules/neo/models/responses/air-searc
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AirSearchIdResponse } from '../../utils/responses/air-search-id-response.model';
 import { LoadingService } from 'src/app/core/interceptors/loading.service';
+import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 
 @Component({
   selector: 'app-search-page',
