@@ -54,16 +54,17 @@ export class HomePageComponent implements OnInit{
         this.loginRequest.platform = window.navigator.userAgent;
         this.loginRequest.platformVersion = "4.0.1";
         this.loginRequest.product = "WebAgent";
-        this.loginRequest.gds = "Galileo";
     }
 
     login() : void {
+        let selectedGds: string | undefined = Object.keys(this.switch).find(key => this.switch[key] === true);;
+
+        console.log(selectedGds);
+
+        this.loginRequest.gds = selectedGds ? selectedGds : 'Galileo';
+        
         if(!this.loginRequest.isValid()) return;
 
         this.authService.login(this.loginRequest);
-    }
-
-    selectGDS(gds: 'Galileo' | 'Apollo' | 'Worldspan'){
-        this.loginRequest.gds = gds;
     }
 }

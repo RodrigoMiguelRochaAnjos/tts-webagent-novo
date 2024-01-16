@@ -3,15 +3,15 @@
     
     <div class="fields">
         <div style="height: 11%;">
-            <img src="../../../../../assets/webagent-logo-white.png" style="max-width: 80%;">
+            <img src="assets/webagent-logo-white.png" style="max-width: 80%;">
         </div>
 
         <div class="switch-input">
             <webagent-input 
-            style="box-shadow: none;border-radius: 22px;"
-            [(ngModel)]="switch"
-            [type]="InputType.SWITCH"
-            [ngClass]="{'active': this.loginRequest.gds === 'Galileo'}" (click)="selectGDS('Galileo')"
+                [(ngModel)]="switch"
+                [type]="InputType.SWITCH"
+                [hideDefault]="true"
+                [ngClass]="{'active': this.loginRequest.gds === 'Galileo'}"
             ></webagent-input>
         </div>
 
