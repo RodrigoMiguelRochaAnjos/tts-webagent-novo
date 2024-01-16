@@ -1,5 +1,6 @@
 import { Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Theme } from '../../theme.enum';
 
 const CUSTOM_INPUT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -22,6 +23,7 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     min?: string;
     max?: string;
     options: string[] = [];
+    theme?: Theme;
 
     writeValue(obj: any): void {
         this.value = obj;
