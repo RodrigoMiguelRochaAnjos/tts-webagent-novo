@@ -25,7 +25,7 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
     }
 
     ngOnInit(): void {
-        if(this.value == '') this.value = new SelectedLocation();
+        if(this.value == '' || this.value == null) this.value = new SelectedLocation();
         if (!(this.value instanceof SelectedLocation)) throw new Error("Invalid value expected type of SelectedLocation");
     }
 

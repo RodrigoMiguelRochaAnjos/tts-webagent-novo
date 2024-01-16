@@ -1,27 +1,26 @@
 
 <div class="row">
     <h3>Flight Search</h3>
-    <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (ngModelChange)="datesChanged()"/>
+    <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (change)="typeChanged($event)"/>
 </div>
 <div class="row">
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.origin" [label]="'From'" />
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.destination" [label]="'To'"/>
 </div>
 <div class="row">
-    <webagent-input class="dates" [type]="InputType.DATE_RANGE" [(ngModel)]="dates" [hideDefault]="true" (ngModelChange)="datesChanged()" />
+    <webagent-input class="dates" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
 </div>
 
 <div class="row controls">
     <div class="travellers">
         <div class="traveller">
-            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="dates" [hideDefault]="true" />
+            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="adultTravellers" [hideDefault]="true" (change)="logTravellers($event)" />
             <span>Adults (+12 yo)</span>
         </div>
         <div class="traveller">
-            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="dates" [hideDefault]="true"
-                (ngModelChange)="datesChanged()" />
+            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="childTravellers" [hideDefault]="true" (change)="logTravellers($event)" />
             <span>Children (2-12 yo)</span>
         </div>
     </div>
-    <button (click)="search()" class="button-medium">log results</button>
+    <button (click)="search()" class="button-medium call-to-action">Search</button>
 </div>

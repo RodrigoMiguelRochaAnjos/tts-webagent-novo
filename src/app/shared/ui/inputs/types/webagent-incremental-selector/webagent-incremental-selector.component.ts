@@ -1,25 +1,39 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 
 @Component({
-  selector: 'app-webagent-incremental-selector',
-  templateUrl: './webagent-incremental-selector.component.html',
-  styleUrls: ['./webagent-incremental-selector.component.scss']
+    selector: 'app-webagent-incremental-selector',
+    templateUrl: './webagent-incremental-selector.component.html',
+    styleUrls: ['./webagent-incremental-selector.component.scss']
 })
-export class WebagentIncrementalSelectorComponent {
-  @Input() value: number = 0;
-  @Input() min: number = 0;
-  @Input() max: number = 9;
-  @Input() step: number = 1;
+export class WebagentIncrementalSelectorComponent extends WebagentBaseComponent implements OnInit {
+    step: number = 1;
 
-  increment() {
-    if (this.value < this.max) {
-      this.value += this.step;
-    }
-  }
+    maxLimit: number = 9;
+    minLimit: number = 0;
 
-  decrement() {
-    if (this.value > this.min) {
-      this.value -= this.step;
+    ngOnInit(): void {
+        if (this.isNumeric(this.max)) this.maxLimit = Number(this.max);
+        if (this.isNumeric(this.min)) this.minLimit = Number(this.min);
+
+        this.value = 0;
     }
-  }
+
+    increment() {
+        if (this.value >= this.maxLimit) return;
+
+        this.value += this.step;
+        this.update()
+    }
+
+    decrement() {
+        if (this.value <= this.minLimit) return;
+        
+        this.value -= this.step;
+        this.update()
+    }
+
+    isNumeric(value: any): boolean {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+    }
 }

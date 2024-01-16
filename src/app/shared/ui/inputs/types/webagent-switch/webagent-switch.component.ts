@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 
 @Component({
@@ -8,7 +8,9 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
 })
 export class WebagentSwitchComponent extends WebagentBaseComponent implements OnInit {
 
-  constructor(){
+  constructor(
+    
+  ){
     super();
   }
   
@@ -31,5 +33,7 @@ export class WebagentSwitchComponent extends WebagentBaseComponent implements On
     });
 
     this.value[key]= true;
+
+    this.update();
   }
 }

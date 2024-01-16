@@ -1,5 +1,9 @@
 <div class="stepper-input">
-    <button (click)="decrement()">-</button>
+    <button (click)="decrement()">
+        <span>-</span>
+    </button>
     <input type="text" [value]="value" disabled>
-    <button (click)="increment()">+</button>
+    <button (click)="increment()">
+        <span>+</span>
+    </button>
 </div>

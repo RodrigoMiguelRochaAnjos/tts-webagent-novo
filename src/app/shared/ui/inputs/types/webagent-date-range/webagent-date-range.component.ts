@@ -38,8 +38,8 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     ngOnInit(): void {
         if (this.value != '' && !(this.value instanceof DateRange)) throw new Error("Value should be of type DateRange");
 
-        if (this.min && !this.DATE_PATTERN.test(this.min)) throw new Error('Invalid [min] format should be DD/MM/YYYY');
-        if (this.max && !this.DATE_PATTERN.test(this.max)) throw new Error('Invalid [max] format should be DD/MM/YYYY');
+        if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
+        if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
         
         if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
             this.date = moment(this.min, "DD/MM/YYYY");
@@ -125,7 +125,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         this.value = new DateRange();
 
         this.value.from = dateFrom;
-        this.value.to = dateFrom;
+        this.value.to = dateTo;
 
         this.update();
 

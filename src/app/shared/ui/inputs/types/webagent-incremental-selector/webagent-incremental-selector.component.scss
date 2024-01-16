@@ -2,31 +2,33 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 150px;
-    height: 35px;
-    border: 1px solid #ccc;
+    width: fit-content;
+    height: 1.5rem;
     padding: 5px;
     border-radius: 30px;
-    background-color: #12214A;
+    background-color: #414D6E;
 }
 
 .stepper-input button {
     padding: 8px 12px;
-    font-size: 1.5rem;
+    font-size: 1rem;
     cursor: pointer;
     border: none;
     background-color: transparent;
     color: white;
-
+    span{
+        transform: translateY(-10%);
+    }
 }
 
 .stepper-input input {
-    width: 60px;
+    width: 2rem;
     text-align: center;
     border: none;
     outline: none;
     color: white;
     background-color: transparent;
-    font-size: 1.5rem;
+    font-size: 1rem;
+    padding: 2px;
     
 }

@@ -15,6 +15,7 @@ import { AirSearchRequestMapper } from '../../utils/requests/air-search-request/
 import * as moment from 'moment';
 import { DateRange } from 'src/app/shared/models/date-range.model';
 import { RoundTrip } from 'src/app/modules/neo/models/journey/types/round-trip.model';
+import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 
 @Component({
   selector: 'flight-search-form',
@@ -25,16 +26,18 @@ export class FlightSearchFormComponent {
     InputType = InputType;
     LocationType = LocationType;
 
-    public journey: Journey = new OneWay();
-    public dates!: DateRange;
+    public journey: Journey = new RoundTrip();
     public typeSwitch: { [key: string]: boolean } = {
-        'ROUND_TRIP': true,
-        'ONE_WAY': false
+        'ROUNDTRIP': true,
+        'ONEWAY': false
     };
+    public adultTravellers: number = 0;
+    public childTravellers: number = 0;
 
     constructor(
         private searchService: SearchService,
-        private router: Router
+        private router: Router,
+        private travellerService: TravellerService,
     ) {
 
         this.journey.origin = new SelectedLocation();
@@ -42,7 +45,6 @@ export class FlightSearchFormComponent {
     }
 
     search(): void {
-        console.log(this.dates);
         const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
 
         console.log(mapper.map(this.journey));
@@ -58,21 +60,15 @@ export class FlightSearchFormComponent {
         // });
     }
 
-    datesChanged(): void {
-        this.journey.departureDate = this.dates.from.format('YYYY-MM-DD');
-        this.journey.returnDate = this.dates.to.format('YYYY-MM-DD');
+    datesChanged(dates: DateRange): void {
+        this.journey.departureDate = dates.from.format('YYYY-MM-DD');
+        this.journey.returnDate = dates.to.format('YYYY-MM-DD');
     }
 
-    typeChanged(): void {
+    typeChanged(event: { [key: string]: boolean }): void {
+        let selected: string | undefined = Object.keys(event).find(key => event[key] === true);
 
-        let selected: string= '';
-
-        for (let val of Object.keys(this.typeSwitch)) {
-            if (this.typeSwitch[val]) {
-                selected = val;
-                break;
-            }
-        }
+        if(selected == null) return;
 
         switch(selected) {
             case JourneyType.ONE_WAY:
@@ -84,5 +80,9 @@ export class FlightSearchFormComponent {
             default:
                 throw new Error("Invalid type");
         }
+    }
+
+    logTravellers(value: number) {
+        console.log(value);
     }
 }
