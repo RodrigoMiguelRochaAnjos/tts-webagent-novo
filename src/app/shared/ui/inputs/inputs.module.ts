@@ -9,12 +9,14 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { WebagentLocationSearchComponent } from './types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from './types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from './types/webagent-date-range/webagent-date-range.component';
+import { WebagentIncrementalSelectorComponent } from './types/webagent-incremental-selector/webagent-incremental-selector.component';
 import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch.component";
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
 import { DirectivesModule } from "../../directives/directive.module";
 import { FieldLimitDirective } from "../../directives/field-limit.directive";
 import { WebagentSearchComponent } from './types/webagent-search/webagent-search.component';
 import { WebagentPasswordComponent } from './types/webagent-password/webagent-password.component';
+import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
 
 @NgModule({
     declarations: [
@@ -25,10 +27,12 @@ import { WebagentPasswordComponent } from './types/webagent-password/webagent-pa
         WebagentLocationSearchComponent,
         WebagentDateComponent,
         WebagentDateRangeComponent,
+        WebagentIncrementalSelectorComponent,
         WebagentSwitchComponent,
         WebagentCvvComponent,
         WebagentSearchComponent,
         WebagentPasswordComponent,
+        WebagentTextDateInputComponent
     ],
     imports: [
         CommonModule,

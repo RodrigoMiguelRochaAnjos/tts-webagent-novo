@@ -5,7 +5,9 @@ export enum InputType {
     LOCATION_SEARCH,
     DATE,
     DATE_RANGE,
+    INCREMENTAL_SELECTOR,
     SWITCH,
     CVV,
-    SEARCH
+    SEARCH,
+    TEXT_DATE_INPUT
 }

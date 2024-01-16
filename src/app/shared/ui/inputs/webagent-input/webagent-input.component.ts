@@ -7,11 +7,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms
 import { WebagentLocationSearchComponent } from '../types/webagent-location-search/webagent-location-search.component';
 import { WebagentDateComponent } from '../types/webagent-date/webagent-date.component';
 import { WebagentDateRangeComponent } from '../types/webagent-date-range/webagent-date-range.component';
+import { WebagentIncrementalSelectorComponent } from '../types/webagent-incremental-selector/webagent-incremental-selector.component';
 import { WebagentSwitchComponent } from '../types/webagent-switch/webagent-switch.component';
 import { WebagentCvvComponent } from '../types/webagent-cvv/webagent-cvv.component';
 import { WebagentSearchComponent } from '../types/webagent-search/webagent-search.component';
 import { WebagentPasswordComponent } from '../types/webagent-password/webagent-password.component';
 import { Theme } from '../theme.enum';
+import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -29,6 +31,8 @@ const WRAPPER_VALUE_ACCESSOR: any = {
 export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @ViewChild('mutableComponentContainer', { read: ViewContainerRef }) private _container!: ViewContainerRef;
     
+    @HostBinding("class.hide-default")
+    @Input() hideDefault: boolean = false;
     @Input() type!: InputType;
     @Input() value?: any = "";
     @Input() label?: string;
@@ -65,7 +69,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     ngAfterViewInit(): void {
         this.writeValue(this.value);
 
-
         this.cdr.detectChanges();
     }
 
@@ -97,12 +100,18 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             case InputType.DATE:
                 return WebagentDateComponent;
             case InputType.DATE_RANGE:
+                this.hideDefault = true;
+
                 return WebagentDateRangeComponent;
             case InputType.DROPDOWN:
                 return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
+            case InputType.INCREMENTAL_SELECTOR:
+                return WebagentIncrementalSelectorComponent;
             case InputType.SWITCH:
+                this.hideDefault = true;
+
                 return WebagentSwitchComponent;
             case InputType.CVV:
                 return WebagentCvvComponent;
@@ -110,6 +119,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentSearchComponent;
             case InputType.PASSWORD:
                 return WebagentPasswordComponent;
+            case InputType.TEXT_DATE_INPUT:
+                return WebagentTextDateInputComponent;
             default:
                 throw new Error("Invalid input type");
         }

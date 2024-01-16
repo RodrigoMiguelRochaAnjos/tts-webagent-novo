@@ -24,8 +24,16 @@
 <webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'^\\d{3,5}$'" [label]="'CVV'"></webagent-input>
 <webagent-input [type]="InputType.DROPDOWN" [options]="options" [required]="false" [label]="'Custom Dropdown'"></webagent-input>
 <webagent-input 
-    style="box-shadow: none;"
     [(ngModel)]="switch"
     [type]="InputType.SWITCH"
 ></webagent-input>
 
+
+
+<webagent-input [type]="InputType.INCREMENTAL_SELECTOR" [required]="true">
+    [value]="10" 
+    [min]="0" 
+    [max]="9" 
+    [step]="1">
+</webagent-input>
+<webagent-input [type]="InputType.TEXT_DATE_INPUT" [label]="'Expiry date'" [pattern]="'([\\d]{2})\/[\\d]{4}'"></webagent-input>
