@@ -11,14 +11,26 @@
     .left-side {
         h5{
             font-weight: 500;
+            font-size: 0.9375rem;
+        }
+        p {
+            font-size: 0.75rem;
         }
     }
 
     .middle {
         width: 50%;
+        p{
+            font-size: 0.9375rem;
+        }
     }
 
     .right-side {
-
+        .plus{
+            color: #4FBF3D;
+        }
+        .minus {
+            color: #E96565;
+        }
     }
 }

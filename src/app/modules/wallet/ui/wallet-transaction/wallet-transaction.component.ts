@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TransactionType } from 'src/app/shared/models/transaction-type.model';
+import { Transaction } from 'src/app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-wallet-transaction',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./wallet-transaction.component.scss']
 })
 export class WalletTransactionComponent {
+    @Input() public transaction!: Transaction;
 
+    TransactionType= TransactionType;
 }

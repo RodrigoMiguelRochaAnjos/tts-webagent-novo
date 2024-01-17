@@ -18,7 +18,7 @@ import { Transaction, Transactions } from "../models/transaction.model";
 export class BalanceService {
     private readonly ENDPOINT: string = environment.endpoints.CURRENT_ACCOUNT;
 
-    public page: number = 1;
+    public page: number = 0;
     public size: number = 5;
 
     private balance$: BehaviorSubject<Balance> = new BehaviorSubject(new Balance(0, 'USD'));
@@ -35,6 +35,14 @@ export class BalanceService {
 
     public getBalanceValue(): Balance {
         return this.balance$.value;
+    }
+
+    public getTransactions(): Observable<Transactions> {
+        return this.transactions$;
+    }
+
+    public getTransactionsValue(): Transactions {
+        return this.transactions$.value;
     }
 
     public fetchAccountBalance(): void { 
