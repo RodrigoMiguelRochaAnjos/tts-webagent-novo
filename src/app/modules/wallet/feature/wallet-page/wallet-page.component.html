@@ -1,0 +1,19 @@
+<div class="wallet-container">
+    <div class="top-bar">
+        <h4>Transactions</h4>
+        <div class="date-filter">
+            <span>Last 90 days</span>
+
+            <webagent-input [type]="InputType.DATE_RANGE"  />
+
+        </div>
+    </div>
+
+    <div class="transaction-container">
+        <ng-container *ngFor="let transaction of (this.transactions$ | async)">
+            <app-wallet-transaction [transaction]="transaction" />
+        </ng-container>
+    </div>
+
+
+</div>

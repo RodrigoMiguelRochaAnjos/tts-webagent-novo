@@ -1,5 +1,6 @@
 export enum InputType {
     TEXT,
+    PASSWORD,
     DROPDOWN,
     LOCATION_SEARCH,
     DATE,
@@ -7,5 +8,6 @@ export enum InputType {
     INCREMENTAL_SELECTOR,
     SWITCH,
     CVV,
+    SEARCH,
     TEXT_DATE_INPUT
 }

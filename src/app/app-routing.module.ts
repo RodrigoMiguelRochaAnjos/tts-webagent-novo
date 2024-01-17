@@ -30,6 +30,12 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () => import('./modules/settings/feature/settings-shell/settings-shell.module').then((m) => m.SettingsShellModule),
         title: 'Settings'
+    },
+    {
+        path: 'wallet',
+        loadChildren: () => import('./modules/wallet/feature/wallet-shell/wallet-shell.module').then((m) => m.WalletShellModule),
+        canActivateChild: [AuthGuardService],
+        title: 'Wallet'
     }
 ];
 

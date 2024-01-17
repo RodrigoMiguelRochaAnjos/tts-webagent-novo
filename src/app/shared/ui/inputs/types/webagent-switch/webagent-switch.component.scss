@@ -1,13 +1,16 @@
 :host{
-
+    display: flex;
+    justify-content: center;
+    font-size: inherit;
     .switch{
-
+        
+        width: 80%;
         position: relative;
         display: flex;
         cursor: pointer;
         user-select: none;
         border-radius: 22px;
-        background-color: #C8D8E9;
+        background-color: #ffff;
 
         .label {
             flex: 1;
@@ -15,12 +18,27 @@
             padding: 5px;
             z-index: 1;
             border-radius: 22px;
-            font-size: 13px;
+            font-size: inherit;
+            color: #11214A;
+
             &.active{
-                background-color: #414D6E;
+                background-color: #1F75AE;
                 color: #ffff;
+                transform: scale(1.01);
             }
         }
         
+    }
+}
+
+@media only screen and (max-width: 1920px) {
+    :host{
+        font-size: 13px;
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+    :host{
+        font-size: 10px;
     }
 }

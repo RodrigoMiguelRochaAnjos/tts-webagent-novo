@@ -1,0 +1,18 @@
+<div class="left-side">
+    <h5>Transaction {{ transaction.id }}</h5>
+    <p>{{ transaction.dateTime }}</p>
+</div>
+
+<div class="middle">
+    <p>
+        {{ transaction.description }}
+    </p>
+</div>
+
+<div class="right-side">
+    <span *ngIf="transaction.type == TransactionType.C" class="plus">{{ transaction.amount }}$</span>
+    <span *ngIf="transaction.type == TransactionType.D" class="minus">{{ transaction.amount }}$</span>
+    <span *ngIf="transaction.type == TransactionType.F" class="plus">{{ transaction.amount }}$</span>
+</div>
+
+

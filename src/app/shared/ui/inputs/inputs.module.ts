@@ -14,6 +14,8 @@ import { WebagentSwitchComponent } from "./types/webagent-switch/webagent-switch
 import { WebagentCvvComponent } from "./types/webagent-cvv/webagent-cvv.component";
 import { DirectivesModule } from "../../directives/directive.module";
 import { FieldLimitDirective } from "../../directives/field-limit.directive";
+import { WebagentSearchComponent } from './types/webagent-search/webagent-search.component';
+import { WebagentPasswordComponent } from './types/webagent-password/webagent-password.component';
 import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
 
 @NgModule({
@@ -28,6 +30,8 @@ import { WebagentTextDateInputComponent } from './types/webagent-text-date-input
         WebagentIncrementalSelectorComponent,
         WebagentSwitchComponent,
         WebagentCvvComponent,
+        WebagentSearchComponent,
+        WebagentPasswordComponent,
         WebagentTextDateInputComponent
     ],
     imports: [
