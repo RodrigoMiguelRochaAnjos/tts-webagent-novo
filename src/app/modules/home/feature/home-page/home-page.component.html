@@ -15,7 +15,7 @@
             ></webagent-input>
         </div>
 
-        <div class="field-container">
+        <div class="field-container" (keyup.enter)="this.login()">
 
             <div class="field son">
                 <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK"/>
