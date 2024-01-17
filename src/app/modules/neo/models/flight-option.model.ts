@@ -13,6 +13,7 @@ export abstract class FlightOption {
     searchId!: string;
     segments!: AirSegment[];
     show: boolean = true;
+    tags!: string[];
 
     constructor() {
         this.show = true;

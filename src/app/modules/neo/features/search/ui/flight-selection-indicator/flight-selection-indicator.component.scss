@@ -1,0 +1,16 @@
+:host {
+    width: 15px;
+    height: 15px;
+    position: relative;
+    background: #3333;
+    border-radius: 50%;
+
+    >.inside-fill {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: var(--tma-color-secondary);
+        border-radius: 50%;
+        position: absolute;
+    }
+}

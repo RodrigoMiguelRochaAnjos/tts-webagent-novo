@@ -1,0 +1,142 @@
+:host {
+    .info-segments {
+        width: 100%;
+
+        .segment {
+            border-bottom: 1px solid #11214a17;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .segment-date {
+                font-size: 11px;
+                width: 90%;
+                margin: 0px auto;
+                padding-top: 13px;
+            }
+
+            .travel-path {
+                display: flex;
+                margin: 20px auto;
+                width: 90%;
+
+                .departure,
+                .arrival {
+                    width: 23%;
+                    font-size: 13px;
+                }
+
+                .departure {
+                    text-align: left;
+                }
+
+                .arrival {
+                    text-align: right;
+                }
+
+                .duration {
+                    width: 54%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 13px;
+                    position: relative;
+
+                    .flight-duration {
+                        background-color: var(--tma-color-background-dark);
+                        color: var(--tma-color-primary);
+                        padding: 0px 5px;
+                        z-index: 1;
+                    }
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        width: 100%;
+                        height: 1px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background-color: var(--tma-color-primary);
+                    }
+                }
+            }
+
+            .info {
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                flex-direction: column;
+                width: 90%;
+                margin: 0px auto;
+
+                .flight-number {
+                    font-size: 15px;
+                }
+
+                .carrier-info {
+
+                    .operating-carrier,
+                    .marketing-carrier {
+                        text-align: right;
+
+                        h5 {
+                            margin-top: 0px;
+                            margin-bottom: 0px;
+                            font-size: 14px;
+                            color: var(--tma-color-primary);
+                        }
+
+                        .carrier-content {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-around;
+                            font-size: 13px;
+
+                            .carrier-image {
+                                display: block;
+                                width: 31px;
+                                height: 31px;
+                                background-repeat: no-repeat;
+                                background-size: contain;
+                                background-position: center;
+                                margin-right: 5px;
+                                margin-bottom: 5px;
+                                margin-top: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .line-flight-details {
+        position: relative;
+
+        span {
+            display: block;
+            width: fit-content;
+            margin: 0px auto;
+            padding: 0px 10px;
+            position: relative;
+            z-index: 1;
+            background-color: var(--tma-color-background-dark);
+            color: #738FC6 !important;
+            font-size: 12px;
+        }
+
+        &::after {
+            content: '';
+            height: 1px;
+            width: 100%;
+            opacity: 1;
+            background-color: var(--tma-color-c2a-transparent);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+    }
+}

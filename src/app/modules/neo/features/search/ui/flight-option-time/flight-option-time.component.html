@@ -1,0 +1,6 @@
+<div class="time">
+    <div>{{ timeDeparture | date: 'HH:mm' }}</div>
+    <div>-</div>
+    <div>{{ timeArrival | date: 'HH:mm' }}</div>
+    <div class="next-day" *ngIf="daysDifference > 0">+{{daysDifference}}</div>
+</div>

@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { DateRange } from 'src/app/shared/models/date-range.model';
 import { RoundTrip } from 'src/app/modules/neo/models/journey/types/round-trip.model';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
+import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 
 @Component({
   selector: 'flight-search-form',
@@ -25,14 +26,13 @@ import { TravellerService } from 'src/app/modules/neo/data-access/traveller.serv
 export class FlightSearchFormComponent {
     InputType = InputType;
     LocationType = LocationType;
+    TravellerTypes = TravellerTypes;
 
     public journey: Journey = new RoundTrip();
     public typeSwitch: { [key: string]: boolean } = {
         'ROUNDTRIP': true,
         'ONEWAY': false
     };
-    public adultTravellers: number = 0;
-    public childTravellers: number = 0;
 
     constructor(
         private searchService: SearchService,
@@ -42,22 +42,28 @@ export class FlightSearchFormComponent {
 
         this.journey.origin = new SelectedLocation();
         this.journey.destination = new SelectedLocation();
+
+        if (this.travellerService.getTravellers().length === 0) this.travellerService.addTraveller(TravellerTypes.ADULTS);
+    }
+
+    private saveTravellers(): void {
+        this.journey.travellers = this.travellerService.getTravellers();
     }
 
     search(): void {
+        this.saveTravellers();
+
         const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
 
-        console.log(mapper.map(this.journey));
+        const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(mapper.map(this.journey));
 
-        // const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(this.airSearchRequest);
+        if (searchId == null) return;
 
-        // if (searchId == null) return;
-
-        // searchId.subscribe({
-        //     next: (response: AirSearchIdResponse) => {
-        //         this.router.navigate([`neo/search/${response.id}`]);
-        //     },
-        // });
+        searchId.subscribe({
+            next: (response: AirSearchIdResponse) => {
+                this.router.navigate([`neo/search/${response.id}`]);
+            },
+        });
     }
 
     datesChanged(dates: DateRange): void {
@@ -82,7 +88,20 @@ export class FlightSearchFormComponent {
         }
     }
 
-    logTravellers(value: number) {
-        console.log(value);
+    decrease(field: TravellerTypes): void {
+        if (this.travellerService.numTravellers() <= 1) return;
+        if (this.counterNumber(field) <= 0) return;
+
+        this.travellerService.removeTraveller(field);
+    }
+
+    increase(field: TravellerTypes): void {
+        if (this.travellerService.numTravellers() >= 9) return;
+
+        this.travellerService.addTraveller(field);
+    }
+
+    counterNumber(field: TravellerTypes): number {
+        return this.travellerService.numTravellers(field)
     }
 }

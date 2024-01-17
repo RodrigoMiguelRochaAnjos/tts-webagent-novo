@@ -1,0 +1,81 @@
+
+
+<div class="search-result-info">
+    <span class="exchange" *ngIf="!isOriginalCurrency">
+        {{ 'CURRENCY_EXCHANGE' }}
+    </span>
+    <div class="search-result-flight-group">
+        <div class="split-ticketing" *ngIf="result.splitTicketing">
+            {{ 'SPLIT_TICK' }}
+        </div>
+        <div class="search-result-left">
+            <div class="outbound">
+                <h3 *ngIf="this.hasInbounds">
+                    <span>OUTBOUNDS</span>
+                </h3>
+                <ng-container *ngFor="let outbound of result.outbounds">
+                    <app-flight-option (click)="toggleTab('FLIGHT_DETAILS')" *ngIf="outbound.show" [result]="result" [option]="outbound" (flightSelectEvent)="this.selectOptions($event)" [outbound]="true">
+                    </app-flight-option>
+                </ng-container>
+            </div>
+            <div class="inbound">
+                <h3 *ngIf="this.hasInbounds">
+                    <span>INBOUNDS</span>
+                </h3>
+                <ng-container *ngFor="let inbound of result.inbounds">
+                    <app-flight-option (click)="toggleTab('FLIGHT_DETAILS')" *ngIf="inbound.show" [result]="result" [option]="inbound" (flightSelectEvent)="this.selectOptions($event)" [outbound]="false">
+                    </app-flight-option>
+                </ng-container>
+            </div>
+        </div>
+        <div class="search-result-right">
+            <div class="search-result-right-content">
+                <div class="price">
+                    <span>
+                        {{ result.price.totalAmount.toFixed(2) }}
+                        <span class="CUR">{{ result.price.preferredCurrency }}</span>
+                    </span>
+                    <div class="tooltip-currency-exchange">
+                        <!-- <ion-icon name="information-circle-outline" size="small" (click)="toggleTooltip()"
+                            *ngIf="!isOriginalCurrency && result.price.amount"></ion-icon> -->
+                        <span class="tooltip-info" *ngIf="tooltipOpen">
+                            Original Price 
+                            <span class="tooltip-price"> {{ result.price.amount.toFixed(2) +' '+ result.price.currency}}</span>
+                            <div class="tooltip-triangle">
+                            </div>
+                        </span>
+                       
+                    </div>
+                </div>
+                <div class="provider">
+                    {{ 'TOTAL_INCLUDES_TAXES' }}
+                </div>
+                <div [ngClass]="{'search-result-info-select': true, 'disabled': !canBook}" (click)="advance()">
+                    <span>{{ 'SELECT' }}&nbsp;</span>
+                    <!-- <ion-icon name="cart-outline" size="small"></ion-icon> -->
+                </div>
+            </div>
+        </div>
+        <div class="search-result-info-tab-opened" *ngIf="this.showDestInfo || this.showFlightDetails || this.showPriceDetails">
+
+            <div class="search-result-info-tabs">
+                <div [ngClass]="{'search-result-info-tab': true, 'selected': showFlightDetails}" (click)="toggleTab('FLIGHT_DETAILS')">
+                    {{ 'FLIGHT_DETAILS' }}
+                </div>
+                <div [ngClass]="{'search-result-info-tab': true, 'selected': showPriceDetails}" (click)="toggleTab('PRICE_DETAILS')">
+                    {{ 'PRICE_DETAILS' }}
+                </div>
+                <div [ngClass]="{'search-result-info-tab': true, 'selected': showDestInfo}" (click)="toggleTab('DEST_INFO')">
+                    {{ 'DEST_INFO' }}
+                </div>
+            </div>
+
+            <app-tab-flight-details *ngIf="this.isOutboundDetailsValid && this.selectedOptions['OUTBOUND']" [option]="this.selectedOptions['OUTBOUND']" [outbound]="true"></app-tab-flight-details>
+            
+            <app-tab-flight-details *ngIf="this.showFlightDetails && this.selectedOptions != null && this.selectedOptions['INBOUND'] != null" [option]="this.selectedOptions['INBOUND']" [outbound]="false"></app-tab-flight-details>
+            <app-tab-price-details *ngIf="this.showPriceDetails" [result]="result" [selected]="this.selectedOptions"></app-tab-price-details>
+            <app-tab-dest-info *ngIf="this.showDestInfo" [destinations]="destinations"></app-tab-dest-info>
+        </div>
+    </div>
+    
+</div>

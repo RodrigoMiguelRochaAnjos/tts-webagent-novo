@@ -8,6 +8,7 @@ import { AuthService } from "src/app/core/authentication/auth.service";
 import { AuthenticatedUser } from "src/app/core/models/user/types/authenticated-user.model";
 import { AirSearchResponse, AirSearchResults } from "../../../models/responses/air-search-result/air-search-result-response.model";
 import { EventSourcePolyfill, OnMessageEvent } from "ng-event-source";
+import { FlightOption } from "../../../models/flight-option.model";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,9 @@ export class SearchService {
 
     previousSearchId!: string;
     public isLoading: boolean = false;
+
+    public itemsPerPage: number = 30;
+    public page: number = 1;
 
     private results$: BehaviorSubject<AirSearchResults> = new BehaviorSubject<AirSearchResults>([]);
 
@@ -74,7 +78,16 @@ export class SearchService {
 
             eventSource.onmessage = (message: OnMessageEvent) => {
                 const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
-
+                
+                result.show = true;
+                result.outbounds = result.outbounds.map((option: FlightOption) => {
+                    option.show= true
+                    return option;
+                });
+                result.inbounds = result.inbounds.map((option: FlightOption) => {
+                    option.show = true
+                    return option;
+                });
                 observer.next(result);
             }
 

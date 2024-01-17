@@ -1,0 +1,49 @@
+<div class="line-flight-details"
+    *ngIf="!this.outbound">
+    <span>INBOUNDS</span>
+</div>
+
+<div class="info-segments">
+    <div class="segment" *ngFor="let segment of this.option.segments">
+        <div class="segment-date">
+            {{ segment.departureDatetime | date:'fullDate' }}
+            <ng-container *ngIf="!isSameDay(segment.arrivalDatetime, segment.departureDatetime)">
+                - {{ segment.arrivalDatetime | date:'fullDate' }}
+            </ng-container>
+        </div>
+        <div class="travel-path">
+            <div class="departure">
+                <div class="name">{{ segment.origin.code }}</div>
+                <div>{{ segment.departureDatetime | date:'HH:mm' }}</div>
+                <div *ngIf="segment.departureTerminal">Terminal: {{ segment.departureTerminal }}</div>
+            </div>
+            <div class="duration">
+                <div class="flight-duration">{{ segmentDuration(segment) }}</div>
+            </div>
+            <div class="arrival">
+                <div>{{ segment.destination.code }}</div>
+                <div>{{ segment.arrivalDatetime | date:'HH:mm' }}</div>
+                <div *ngIf="segment.departureTerminal">Terminal: {{ segment.arrivalTerminal }}</div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="flight-number">Flight number: {{ segment.flightNumber }}</div>
+            <div class="carrier-info">
+                <div class="operating-carrier">
+                    <h5 *ngIf="segment.marketingCarrier.name != segment.operatingCarrier.name && segment.marketingCarrier.code != segment.operatingCarrier.code">Operating carrier</h5>
+                    <div class="carrier-content">
+                        <div class="carrier-image" [title]="segment.operatingCarrier.name" [ngStyle]="{ 'background-image': 'url(' + segment.operatingCarrier.logo_url + ')' }"></div>
+                        <div>{{ segment.operatingCarrier.name }} ({{ segment.operatingCarrier.code }})</div>
+                    </div>
+                </div>
+                <div class="marketing-carrier" *ngIf="segment.marketingCarrier.name != segment.operatingCarrier.name && segment.marketingCarrier.code != segment.operatingCarrier.code">
+                    <h5>Marketing carrier</h5>
+                    <div class="carrier-content">
+                        <div class="carrier-image" [title]="segment.marketingCarrier.name" [ngStyle]="{ 'background-image': 'url(' + segment.marketingCarrier.logo_url + ')' }"> </div>
+                        <div>{{ segment.marketingCarrier.name }} ({{ segment.marketingCarrier.code }})</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

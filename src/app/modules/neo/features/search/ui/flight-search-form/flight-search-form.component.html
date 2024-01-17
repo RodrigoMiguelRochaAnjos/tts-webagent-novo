@@ -14,11 +14,27 @@
 <div class="row controls">
     <div class="travellers">
         <div class="traveller">
-            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="adultTravellers" [hideDefault]="true" (change)="logTravellers($event)" />
+            <div class="counter">
+                <button (click)="decrease(TravellerTypes.ADULTS)">
+                    <span>-</span>
+                </button>
+                <span>{{ counterNumber(TravellerTypes.ADULTS) }}</span>
+                <button (click)="increase(TravellerTypes.ADULTS)">
+                    <span>+</span>
+                </button>
+            </div>
             <span>Adults (+12 yo)</span>
         </div>
         <div class="traveller">
-            <webagent-input class="dates" [type]="InputType.INCREMENTAL_SELECTOR" [(ngModel)]="childTravellers" [hideDefault]="true" (change)="logTravellers($event)" />
+            <div class="counter">
+                <button (click)="decrease(TravellerTypes.CHILDREN)">
+                    <span>-</span>
+                </button>
+                <span>{{ counterNumber(TravellerTypes.CHILDREN) }}</span>
+                <button (click)="increase(TravellerTypes.CHILDREN)">
+                    <span>+</span>
+                </button>
+            </div>
             <span>Children (2-12 yo)</span>
         </div>
     </div>

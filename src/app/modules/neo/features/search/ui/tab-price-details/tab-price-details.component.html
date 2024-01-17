@@ -1,0 +1,52 @@
+<div class="price-details" *ngIf="hasPassengersPrice">
+    <div>{{ result.price.totalAmount.toFixed(2) }} {{ result.price.preferredCurrency }}</div>
+    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' }}</div>
+    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' }}</div>
+    <br>
+    <div class="passenger-price-details" *ngFor="let price of passengersPrices">
+        <div class="passenger-type">{{ price.ptc }}</div>
+        <ng-container *ngIf="outbound">
+            <div class="segment" *ngFor="let segment of outbound.segments">
+                <div class="segment-label">{{ segment.origin.code }}-{{ segment.destination.code }}</div>
+                <div class="segment-info">{{ fareDetails(price.ptc, segment).bookingClass }} | {{
+                    fareDetails(price.ptc,
+                    segment).cabinClass }} | {{ fareDetails(price.ptc, segment).fareBasis }}</div>
+                <div class="segment-desc">{{ fareDetails(price.ptc, segment).description }}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isRoundTrip">
+            <ng-container *ngIf="inbound">
+                <div class="segment" *ngFor="let segment of inbound.segments">
+                    <div class="segment-label">{{ segment.origin.code }}-{{ segment.destination.code }}</div>
+                    <div class="segment-info">{{ fareDetails(price.ptc, segment).bookingClass }} | {{
+                        fareDetails(price.ptc,
+                        segment).cabinClass }} | {{ fareDetails(price.ptc, segment).fareBasis }}</div>
+                    <div class="segment-desc">{{ fareDetails(price.ptc, segment).description }}</div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+<div class="no-price-details" *ngIf="!hasPassengersPrice">
+    <div>{{ result.price.totalAmount.toFixed(2) }} {{ result.price.preferredCurrency }}</div>
+    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' }}</div>
+    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' }}</div>
+    <ng-container *ngIf="outbound">
+        <div class="segment" *ngFor="let segment of outbound.segments">
+            <div class="segment-label">{{ segment.origin.code }}-{{ segment.destination.code }}</div>
+            <div class="segment-info">{{ segment.fareDetailsList[0].bookingClass }} | {{
+                segment.fareDetailsList[0].cabinClass }} | {{ segment.fareDetailsList[0].fareBasis }}</div>
+            <div class="segment-desc">{{ segment.fareDetailsList[0].description }}</div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="isRoundTrip">
+        <ng-container *ngIf="inbound">
+            <div class="segment" *ngFor="let segment of inbound.segments">
+                <div class="segment-label">{{ segment.origin.code }}-{{ segment.destination.code }}</div>
+                <div class="segment-info">{{ segment.fareDetailsList[0].bookingClass }} | {{
+                    segment.fareDetailsList[0].cabinClass }} | {{ segment.fareDetailsList[0].fareBasis }}</div>
+                <div class="segment-desc">{{ segment.fareDetailsList[0].description }}</div>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
