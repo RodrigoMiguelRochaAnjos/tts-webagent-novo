@@ -1,4 +1,4 @@
 export enum JourneyType {
-    OneWay = 'ONEWAY',
-    RoundTrip = 'ROUNDTRIP',
+    ONE_WAY = 'ONEWAY',
+    ROUND_TRIP = 'ROUNDTRIP',
 }

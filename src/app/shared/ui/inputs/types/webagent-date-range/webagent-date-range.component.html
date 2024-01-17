@@ -1,35 +1,61 @@
 <form [formGroup]="this.dateForm" class="date-input">
-    <webagent-input [type]="InputType.TEXT" [label]="'Start Date'" [placeholder]="'Start Date'" [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="this.calendarOpen = true"></webagent-input>
-    <webagent-input [type]="InputType.TEXT" [label]="'End Date'" [placeholder]="'End Date'" [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="this.calendarOpen = true"></webagent-input>
+    <webagent-input [type]="InputType.TEXT" [label]="'Start Date'" [placeholder]="'Start Date'"
+        [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="this.calendarOpen = true"></webagent-input>
+    <webagent-input [type]="InputType.TEXT" [label]="'End Date'" [placeholder]="'End Date'"
+        [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="this.calendarOpen = true"></webagent-input>
 </form>
-<div class="date-range-container" *ngIf="calendarOpen">
-    <div class="month-control flex-container flex-center flex-middle">
-        <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
-            <
+<div class="calendar-container" *ngIf="calendarOpen">
+    <div class="date-range-container">
+        <div class="month-control flex-container flex-center flex-middle">
+            <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
+                <
+            </div>
+            <div>{{ date.format('MMMM') }} {{ date.format('YYYY') }}</div>
+            </div>
+            <div class="flex-container flex-center">
+                <div class="flex-container flex-center flex-middle calendar-days-container">
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                </div>
+            </div>
+            <div class="calendar-days-container flex-container">
+                <div class="calendar-days flex-container flex-center flex-middle"
+                    [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
+                    *ngFor="let day of daysArray" (click)="selectedDate(day)" (mouseenter)="this.hoveredDate = day">
+                    <div *ngIf="day">{{ day.date() }}</div>
+                </div>
+            </div>
         </div>
-        <div>{{ date.format('MMMM') }} {{ date.format('YYYY') }}</div>
-        <div class="right-control flex-container flex-middle flex-right" (click)="nextMonth()">
-            >
+        <div class="date-range-container">
+            <div class="month-control flex-container flex-center flex-middle">
+
+                <div>{{ dateNext.format('MMMM') }} {{ dateNext.format('YYYY') }}</div>
+                <div class="right-control flex-container flex-middle flex-right" (click)="nextMonth()">
+                    >
+                </div>
+            </div>
+            <div class="flex-container flex-center">
+                <div class="flex-container flex-center flex-middle calendar-days-container">
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                </div>
+            </div>
+            <div class="calendar-days-container flex-container">
+                <div class="calendar-days flex-container flex-center flex-middle"
+                    [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
+                    *ngFor="let day of daysNextArray" (click)="selectedDate(day)" (mouseenter)="this.hoveredDate = day">
+                    <div *ngIf="day">{{ day.date() }}</div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="flex-container flex-center">
-        <div class="flex-container flex-center flex-middle calendar-days-container">
-            <div class="flex-container flex-center flex-middle calendar-days">S</div>
-            <div class="flex-container flex-center flex-middle calendar-days">M</div>
-            <div class="flex-container flex-center flex-middle calendar-days">T</div>
-            <div class="flex-container flex-center flex-middle calendar-days">W</div>
-            <div class="flex-container flex-center flex-middle calendar-days">T</div>
-            <div class="flex-container flex-center flex-middle calendar-days">F</div>
-            <div class="flex-container flex-center flex-middle calendar-days">S</div>
-        </div>
-    </div>
-    <div class="calendar-days-container flex-container">
-        <div class="calendar-days flex-container flex-center flex-middle" 
-            [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
-            *ngFor="let day of daysArray" (click)="selectedDate(day)"
-            (mouseenter)="this.hoveredDate = day"
-        >
-            <div *ngIf="day">{{ day.date() }}</div>
-        </div>
-    </div>
-</div>

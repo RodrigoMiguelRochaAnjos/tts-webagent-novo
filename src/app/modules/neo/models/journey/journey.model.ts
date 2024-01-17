@@ -1,4 +1,5 @@
 
+import { JourneyType } from "../../features/search/utils/journey-type.enum";
 import { SelectedLocation } from "../selected-location.model";
 import { Travellers } from "../traveller/traveller.model";
 
@@ -26,6 +27,6 @@ export abstract class Journey {
 
         this.minDate = this.currentDate;
     }
-    public abstract toString(): string;
+    public abstract toString(): JourneyType;
 
 }

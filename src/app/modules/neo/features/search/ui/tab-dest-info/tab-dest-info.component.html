@@ -1,0 +1,47 @@
+<p *ngIf="information != null && information.length === 0;else infoList" style="text-align: center;">No information
+    available.</p>
+<ng-template #infoList>
+    <ul>
+        <ng-container *ngFor="let info of information">
+            <li (click)="toggleMoreInformation(info)" >
+                <label>{{ info.CountryName }}</label>
+        </li>
+            <ng-container *ngIf="info.ShowingMore">
+                <div class="ion-padding content">
+                    <p><b>Type: </b>{{ info.Type }}</p>
+                    <p><b>Source: </b>{{ info.Source }}</p>
+                    <p><b>Published Date: </b>{{ info.PublishedDate }}</p>
+                    <p style="text-align: justify;" [innerHTML]="info.Content"></p>
+                </div>
+            </ng-container>
+        </ng-container>
+    </ul>
+</ng-template>
+<div class="ion-padding credits">
+    <p>
+        This information is provided by IATA via the TIMATIC GDS.<br />This information is only provided during the
+        COVID-19 crisis as a
+        service to the industry, however user and any other third parties shall not without the prior written permission
+        of IATA: re-sell or
+        otherwise commercialise, make mass, automated or systematic extractions from, or otherwise transfer to any other
+        person or
+        organization, the information contained therein; store any of the information in such a manner that enables such
+        stored information to
+        be retrieved, manually, mechanically or systematically by any user or third party; or include it within, or
+        merge it with, or permit
+        such inclusion in or merge with, another archival or searchable system.
+    </p>
+    <p>
+        The information is correct to the best of IATA's knowledge at the time of publication and is being reviewed and
+        updated on an ongoing
+        basis by IATA staff, given the rapidly evolving nature of the international response to the COVID-19 outbreak
+        IATA cannot guarantee
+        its accuracy and can accept no liability for any errors or omissions. IATA reserves the right to add or change
+        information at any
+        time. Links to third party websites of third parties are offered as a courtesy. IATA expresses no opinion on the
+        content of the
+        websites of third parties and does not accept any responsibility for third-party information. You should make
+        your own independent
+        inquiries before relying on any information or materials contained on these pages.
+    </p>
+</div>

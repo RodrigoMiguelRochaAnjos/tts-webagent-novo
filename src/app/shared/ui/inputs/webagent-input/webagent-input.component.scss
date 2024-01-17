@@ -6,16 +6,15 @@
     border-radius: 6px;
     margin-top: 19px;
 
-    &.hide-default{
-        box-shadow: none;
-        background-color: transparent;
-    }
+
     &.ng-invalid {
         box-shadow: 0px 0px 2px #E32C2C;
+
         label {
             color: #E32C2C;
         }
     }
+
     &.ng-disabled {
         box-shadow: 0px 0px 2px #11214a4d;
 
@@ -23,35 +22,39 @@
             color: #11214a5b;
         }
     }
+
     label {
         position: absolute;
         transform: translateY(-50%);
         margin-left: 23px;
-        left:0;
+        left: 0;
         background-color: #fff;
         padding: 0px 5px;
-        color:#11214A;
+        color: #11214A;
         font-weight: 500;
         opacity: .8;
     }
+
     &.dark-theme {
         box-shadow: 0px 0px 2px #ffff;
         color: #ffff;
-        label{
+
+        label {
             background-color: #11214A;
             color: #ffff;
         }
     }
+
+    &.hide-default {
+        box-shadow: none;
+        background-color: transparent;
+        margin-top: 0px;
+    }
 }
 
 @media only screen and (max-width: 1280px) {
-    :host{
+    :host {
         font-size: inherit;
 
     }
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentRef, HostBinding, Inject, InjectionToken, Input, OnInit, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, EventEmitter, HostBinding, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
@@ -26,7 +26,7 @@ const WRAPPER_VALUE_ACCESSOR: any = {
     selector: 'webagent-input',
     templateUrl: './webagent-input.component.html',
     styleUrls: ['./webagent-input.component.scss'],
-    providers: [WRAPPER_VALUE_ACCESSOR]
+    providers: [WRAPPER_VALUE_ACCESSOR],
 })
 export class WebagentInputComponent implements ControlValueAccessor, AfterViewInit, OnInit {
     @ViewChild('mutableComponentContainer', { read: ViewContainerRef }) private _container!: ViewContainerRef;
@@ -57,8 +57,14 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         return this.theme;
     }
 
+
+
+    private loaded: Promise<void> = Promise.resolve();
+    
+
+    @Output() change: EventEmitter<any> = new EventEmitter<any>();
     constructor(
-        private cdr: ChangeDetectorRef,
+        private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
@@ -68,6 +74,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
     ngAfterViewInit(): void {
         this.writeValue(this.value);
+
+        this.loaded = Promise.resolve();
 
         this.cdr.detectChanges();
     }
@@ -84,10 +92,11 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     }
 
     writeValue(obj: any): void {
-        if(obj == null) return;
+        this.loaded.then(() => {
+            this.value = obj;
 
-        this.value = obj;
-        this.loadChildComponent();
+            this.loadChildComponent();
+        })
     }
     setDisabledState?(isDisabled: boolean): void {
         this.disabled = isDisabled;
@@ -155,6 +164,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
             if(this.value == '') this.invalid = this.required;
 
+            this.change.emit(value);
         });
 
         componentRef.instance.registerOnTouched((value: any) => {

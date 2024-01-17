@@ -1,0 +1,17 @@
+.time {
+    text-align: center;
+    display: flex;
+    div{
+        display: flex;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tma-color-text);
+        div:nth-child(2){
+            padding: 0 5px;
+        }
+        
+    }
+    .next-day{
+        font-size: 7px;
+    }
+}

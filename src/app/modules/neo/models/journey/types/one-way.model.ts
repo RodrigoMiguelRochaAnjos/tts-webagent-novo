@@ -2,7 +2,7 @@ import { JourneyType } from "src/app/modules/neo/features/search/utils/journey-t
 import { Journey } from "../journey.model";
 
 export class OneWay extends Journey {
-    public override toString= ():string => {
-        return JourneyType.OneWay;
+    public override toString= ():JourneyType => {
+        return JourneyType.ONE_WAY;
     }
 }

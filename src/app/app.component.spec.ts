@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { DebugElement } from '@angular/core';
 import { AppModule } from './app.module';
-import { AuthService } from './shared/data-access/auth.service';
 import { KeepAliveService } from './core/authentication/keep-alive.service';
 import { AuthService } from './core/authentication/auth.service';
 

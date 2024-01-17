@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Theme } from '../../theme.enum';
 
@@ -20,10 +20,15 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     required!: boolean;
     pattern: string = ``;
     placeholder: string = "";
-    min?: string;
-    max?: string;
+    min?: string | number;
+    max?: string | number;
     options: string[] = [];
     theme?: Theme;
+
+    constructor(
+    ) {
+
+    }
 
     writeValue(obj: any): void {
         this.value = obj;

@@ -1,0 +1,17 @@
+ion-list {
+	padding: 0;
+}
+
+ion-item-divider {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	background-color: transparent;
+}
+
+.credits {
+	font-size: 0.75em;
+	text-align: justify;
+	padding-top: 0;
+}

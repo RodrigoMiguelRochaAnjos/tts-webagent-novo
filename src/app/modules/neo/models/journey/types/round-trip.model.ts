@@ -2,7 +2,7 @@ import { JourneyType } from "src/app/modules/neo/features/search/utils/journey-t
 import { Journey } from "../journey.model";
 
 export class RoundTrip extends Journey {
-    public override toString= ():string => {
-        return JourneyType.RoundTrip;
+    public override toString = (): JourneyType => {
+        return JourneyType.ROUND_TRIP;
     }
 }

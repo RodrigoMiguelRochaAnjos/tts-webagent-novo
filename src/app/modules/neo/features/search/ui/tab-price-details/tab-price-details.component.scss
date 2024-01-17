@@ -1,0 +1,63 @@
+.price-details {
+	padding: 5px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	> .passenger-price-details {
+		margin-bottom: 16px;
+
+		> .passenger-type {
+			font-weight: bold;
+			text-transform: uppercase;
+			margin-bottom: 16px;
+		}
+
+		> .segment {
+			border-bottom: 1px dashed gray;
+			padding-bottom: 5px;
+
+			> .segment-label {
+				font-weight: 600;
+				color: gray;
+				text-transform: uppercase;
+				margin: 5px 0;
+			}
+
+			> .segment-info {
+				color: gray;
+				margin: 5px 0;
+			}
+
+			> .segment-desc {
+				color: gray;
+			}
+		}
+	}
+}
+
+.no-price-details {
+	padding: 5px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	> .segment {
+		border-bottom: 1px dashed gray;
+		padding-bottom: 5px;
+
+		> .segment-label {
+			font-weight: 600;
+			color: gray;
+			text-transform: uppercase;
+			margin: 5px 0;
+		}
+
+		> .segment-info {
+			color: gray;
+			margin: 5px 0;
+		}
+
+		> .segment-desc {
+			color: gray;
+		}
+	}
+}

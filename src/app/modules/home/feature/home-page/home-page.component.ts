@@ -7,23 +7,8 @@ import { LoginRequest } from 'src/app/core/models/requests/login-request.model';
 import { User } from 'src/app/core/models/user/user.model';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { Theme } from 'src/app/shared/ui/inputs/theme.enum';
-
-export class IpInformation{
-    query!: string;
-    status!: string;
-    country!: string;
-    countryCode!: string;
-    region!: string;
-    regionName!: string;
-    city!: string;
-    zip!: string;
-    lat!: number;
-    lon!: number;
-    timezone!: string;
-    isp!: string;
-    org!: string;
-    as!: string;
-}
+import { New, News } from '../../models/new.model';
+import { NewsService } from '../../data-access/news.service';
 
 @Component({
   selector: 'app-home-page',
@@ -35,6 +20,8 @@ export class HomePageComponent implements OnInit{
     InputType = InputType;
     Theme = Theme;
     public user$!: Observable<User>;
+    public news$!: Observable<News>
+
     loginRequest!: LoginRequest;
     
     switch: { [key: string]: boolean} = {
@@ -45,11 +32,17 @@ export class HomePageComponent implements OnInit{
 
     constructor(
         private authService: AuthService,
+        private newsService: NewsService
     ) {  }
 
     ngOnInit(): void {
         this.loginRequest = new LoginRequest();
         this.user$ = this.authService.getUser();
+        this.news$ = this.newsService.getNews();
+
+        // this.newsService.loadProviders().then(() => {
+        //     this.newsService.loadNews();
+        // });
 
         this.loginRequest.platform = window.navigator.userAgent;
         this.loginRequest.platformVersion = "4.0.1";
