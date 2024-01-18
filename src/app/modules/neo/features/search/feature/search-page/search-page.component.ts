@@ -8,13 +8,14 @@ import { AirSearchIdResponse } from '../../utils/responses/air-search-id-respons
 import { LoadingService } from 'src/app/core/interceptors/loading.service';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
+import { trigger, transition, query, stagger, animate, style } from '@angular/animations';
 
 @Component({
-  selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.scss']
+    selector: 'app-search-page',
+    templateUrl: './search-page.component.html',
+    styleUrls: ['./search-page.component.scss'],
 })
-export class SearchPageComponent implements OnInit{
+export class SearchPageComponent implements OnInit {
 
     public results$!: Observable<AirSearchResults>;
 
@@ -24,30 +25,25 @@ export class SearchPageComponent implements OnInit{
         private searchService: SearchService,
         private router: Router,
         private route: ActivatedRoute,
-        
+
     ) {
         this.results$ = this.searchService.getResults();
-        
+
         this.id = this.route.snapshot.paramMap.get("id");
 
         if (this.id == null) return;
 
-        this.searchService.search(this.id);
+        this.searchService.search(this.id).then((success: boolean) => {
+            if (success === false && this.searchService.getResultsValue().length <= 0) this.router.navigate(['dashboard']);
+        });
 
-    }
-
-    ngAfterContentInit(): void {
-        if (!this.searchService.isLoading && this.searchService.getResultsValue().length <= 0 && this.router.url != '/neo/search') {
-            this.router.navigate(['neo/search']);
-            return;
-        }
     }
 
     ngOnInit(): void {
         if (this.searchService.previousSearchId != null) this.router.navigate([`neo/search/${this.searchService.previousSearchId}`]);
     }
 
-    get hasResults() : boolean {
+    get hasResults(): boolean {
         return this.searchService.getResultsValue().length > 0
     }
 

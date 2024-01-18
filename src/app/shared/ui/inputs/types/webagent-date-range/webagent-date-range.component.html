@@ -1,10 +1,10 @@
 <form [formGroup]="this.dateForm" class="date-input">
     <webagent-input [type]="InputType.TEXT" [label]="'Start Date'" [placeholder]="'Start Date'"
-        [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="this.calendarOpen = true"></webagent-input>
+        [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="openCalendar()"></webagent-input>
     <webagent-input [type]="InputType.TEXT" [label]="'End Date'" [placeholder]="'End Date'"
-        [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="this.calendarOpen = true"></webagent-input>
+        [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="openCalendar()"></webagent-input>
 </form>
-<div class="calendar-container" *ngIf="calendarOpen">
+<div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">
     <div class="date-range-container">
         <div class="month-control flex-container flex-center flex-middle">
             <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">

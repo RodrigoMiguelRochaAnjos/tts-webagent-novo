@@ -64,7 +64,7 @@ export class BalanceService {
         });
     }
 
-    loadTransactions(numberOfDays: number) {
+    loadTransactions(numberOfDays?: number, startDate?: string, endDate?: string) {
         this.authService.getUser().subscribe((user: User) => {
             if (!(user instanceof AuthenticatedUser)) return;
 
@@ -76,17 +76,19 @@ export class BalanceService {
 
             if (numberOfDays != null) remoteUrl += `&limit=${numberOfDays}`;
 
-            this.httpClient.get<PageableWrapper<Transactions>>(remoteUrl, { headers: headers }).subscribe({
-                next: (data: PageableWrapper<Transactions>) => {
+            if (startDate != null) remoteUrl += `&startdate=${startDate}`;
 
-                    this.transactions$.next(this.transactions$.value.concat(data.content));
-                    this.page++;
-                },
-                error: (error) => {
-                    console.error('An error occurred:', error);
-                }
+            if (endDate != null) remoteUrl += `&enddate=${endDate}`;
+
+            this.httpClient.get<PageableWrapper<Transactions>>(remoteUrl, { headers: headers }).subscribe({
+                next: (data: PageableWrapper<Transactions>) =>  this.transactions$.next(this.transactions$.value.concat(data.content)),
+                error: (error) => console.error('An error occurred:', error)
             });
         });
+    }
+
+    resetTransactions(): void{
+        this.transactions$.next([]);
     }
 }
 

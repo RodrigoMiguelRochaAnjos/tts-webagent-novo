@@ -8,16 +8,16 @@
         transform: translateY(-50%);
 
         transition-delay: 1s;
-        transition: top 1s ease-in-out, transform 1s ease-in-out;
+        transition: top 1s ease-in-out, transform 1s ease-in-out, left 1s ease-in-out;
 
         z-index: 999;
 
         &.with-results {
-            top: 0%;
+            top: 1%;
             transform: translateY(0%);
 
             flight-search-form {
-                width: 100%;
+                width: 70%;
                 margin: 0px auto;
                 box-shadow: 0px 0px 5px #33333300;
             }
@@ -27,8 +27,40 @@
             width: 80%;
             margin: 0px auto;
             box-shadow: 0px 0px 5px #3333331a;
-
+            background-color: #fff;
             transition: width ease-in-out 1s, box-shadow ease-in-out .3s;
         }
+    }
+
+    .result-section {
+        width: 70%;
+        margin: 0px auto;
+        padding-top: 30px;
+        .results {
+            app-search-result {
+                transform: translateX(-100%);
+                transition: opacity 0.5s, transform 0.5s;
+
+                animation: slideInFromLeft 0.5s ease-in-out forwards;
+                animation-delay: calc(.55s * var(--index));
+
+                // &:nth-child(odd) {
+                //     animation: slideInFromLeftOdd 0.5s ease-in-out forwards;
+                //     animation-delay: .5s;
+                // }
+
+                // &:nth-child(even) {
+                //     animation: slideInFromLeftEven 0.5s ease-in-out forwards;
+                //     animation-delay: .5s;
+                // }
+            }
+        }
+    }
+}
+
+
+@keyframes slideInFromLeft{
+    to {
+        transform: translateX(0);
     }
 }

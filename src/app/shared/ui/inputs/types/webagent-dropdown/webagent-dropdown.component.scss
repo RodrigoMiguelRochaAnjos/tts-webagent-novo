@@ -1,9 +1,11 @@
 :host {
     position: relative;
     display: block;
+    font-size: inherit;
     .selected-option {
         padding: 8px;
         cursor: pointer;
+        font-size: .85rem;
     }
     .dropdown-list {
         list-style: none;
