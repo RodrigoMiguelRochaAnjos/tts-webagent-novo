@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
@@ -6,13 +6,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DateRange } from 'src/app/shared/models/date-range.model';
 
 @Component({
-  selector: 'app-webagent-date-range',
-  templateUrl: './webagent-date-range.component.html',
-  styleUrls: ['./webagent-date-range.component.scss']
+    selector: 'app-webagent-date-range',
+    templateUrl: './webagent-date-range.component.html',
+    styleUrls: ['./webagent-date-range.component.scss']
 })
 export class WebagentDateRangeComponent extends WebagentBaseComponent implements OnInit {
+    @ViewChild("calendar") calendar!: ElementRef;
     readonly DATE_PATTERN: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-    
+
     public date: moment.Moment = moment();
     public dateNext: moment.Moment = moment().add(1, 'M');
 
@@ -26,9 +27,16 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     hoveredDate!: moment.Moment;
 
     calendarOpen: boolean = false;
-    
+
+
+    @HostBinding("class.align-left")
+    alignLeft: boolean = false;
+
+    @HostBinding("class.align-top")
+    alignTop: boolean = false;
+
     constructor(
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
     ) {
         super();
 
@@ -40,7 +48,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
         if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
-        
+
         if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
             this.date = moment(this.min, "DD/MM/YYYY");
             this.dateNext = moment(this.min, "DD/MM/YYYY").add(1, 'M');
@@ -48,7 +56,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);
-
+        
     }
 
     public initDateForm(): FormGroup {
@@ -59,7 +67,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     }
 
     public todayCheck(day: moment.Moment): boolean {
-        if(!day) return false;
+        if (!day) return false;
 
         return moment().format('L') === day.format('L');
     }
@@ -70,11 +78,11 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         let days: any[] = Array.from({ length: month.daysInMonth() }).map(Number.call, Number).map((n: unknown) => moment(firstDay).add((n as number), 'd'));
 
-        for(let n = 0; n < firstDay.weekday(); n++) {
+        for (let n = 0; n < firstDay.weekday(); n++) {
             days.unshift(null);
         }
 
-        for(let n = 6; n> lastDay.weekday(); n--) {
+        for (let n = 6; n > lastDay.weekday(); n--) {
             days.push(null);
         }
 
@@ -102,18 +110,18 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         if (!day || this.withinBounds(day)) return;
 
         let dayFormatted = day.format('DD/MM/YYYY');
-        
-        if(this.dateForm.valid){
+
+        if (this.dateForm.valid) {
             this.dateForm.setValue({ dateFrom: '', dateTo: '' });
         }
 
-        if(!this.dateForm.get('dateFrom')?.value) {
+        if (!this.dateForm.get('dateFrom')?.value) {
             this.dateForm.get('dateFrom')?.patchValue(dayFormatted);
             return;
         }
 
         this.dateForm.get('dateTo')?.patchValue(dayFormatted);
-        
+
         let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
         let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
 
@@ -134,14 +142,14 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     }
 
     public isSelected(day: moment.Moment): boolean {
-        if(!day) return false;
+        if (!day) return false;
 
         let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
         let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
 
-        if(this.dateForm.valid) return dateFrom.isSameOrBefore(day) && dateTo.isSameOrAfter(day);
+        if (this.dateForm.valid) return dateFrom.isSameOrBefore(day) && dateTo.isSameOrAfter(day);
 
-        if(this.dateForm.get('dateFrom')?.valid){
+        if (this.dateForm.get('dateFrom')?.valid) {
             return dateFrom.isSame(day);
         }
 
@@ -154,7 +162,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
 
-        if(this.dateForm.valid) return false;
+        if (this.dateForm.valid) return false;
 
         if (this.dateForm.get('dateFrom')?.valid) {
             return dateFrom.isBefore(day) && this.hoveredDate.isSameOrAfter(day);
@@ -166,18 +174,45 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     withinBounds(day: moment.Moment): boolean {
         let isWithinBounds: boolean = false;
 
-        if(this.min) {
+        if (this.min) {
             const min: moment.Moment = moment(this.min, "DD/MM/YYYY");
-            
+
             isWithinBounds = day.isSameOrBefore(min);
         }
 
-        if(this.max) {
+        if (this.max) {
             const max: moment.Moment = moment(this.max, "DD/MM/YYYY");
 
             isWithinBounds = isWithinBounds || day.isSameOrAfter(max);
         }
 
         return isWithinBounds;
+    }
+
+    public openCalendar(): void {
+        this.calendarOpen = true;
+
+        this.detectInterception();
+
+    }
+
+    public detectInterception(): void {
+
+        const observer = new IntersectionObserver(entries => this.handleIntersection(entries), {
+            threshold: .5,
+            root: document.body,
+            rootMargin: '0px'
+        });
+
+        observer.observe(this.calendar.nativeElement);
+    }
+
+    private handleIntersection(entries: IntersectionObserverEntry[]): void {
+        entries.forEach(entry => {
+            if ((entry.boundingClientRect.x + entry.boundingClientRect.width) > entry.rootBounds!.right) this.alignLeft = true;
+
+            console.log(`${(entry.boundingClientRect.y + entry.boundingClientRect.height)} >= ${entry.rootBounds!.bottom}`)
+            if ((entry.boundingClientRect.y + entry.boundingClientRect.height) > entry.rootBounds!.bottom) this.alignTop = true;
+        });
     }
 }

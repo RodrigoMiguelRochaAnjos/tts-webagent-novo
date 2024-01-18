@@ -2,9 +2,8 @@
     <div class="top-bar">
         <h4>Transactions</h4>
         <div class="date-filter">
-            <span>Last 90 days</span>
-
-            <webagent-input [type]="InputType.DATE_RANGE"  />
+            <webagent-input [type]="InputType.DROPDOWN" [options]="dayIntervals" (change)="updateDays($event)"/>
+            <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRange" (change)="updateTransactions()" />
 
         </div>
     </div>
