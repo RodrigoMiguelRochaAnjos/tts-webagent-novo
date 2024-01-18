@@ -1,35 +1,53 @@
+<div class="card">
+    <h4>User Profile</h4>
 
+    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [placeholder]="'Name'" [label]="'Name'" />
 
-<webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'From'"></webagent-input>
-<webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="test2" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Select location'" [label]="'To'"></webagent-input>
-<webagent-input [type]="InputType.TEXT" [(ngModel)]="testOld1" (input)="showTestValue()" [required]="true" [pattern]="'[a-z]'" [placeholder]="'Something'" [label]="'First Name'"></webagent-input>
+    <div class="double-fields">
+        <webagent-input [type]="InputType.TEXT" [required]="true" [placeholder]="'dd/mm/yyyy'"
+            [label]="'Data de nascimento'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.email.source"
+            [placeholder]="'Insert your email address'" [label]="'Email'" />
+    </div>
 
-<h1>Hello</h1>
-<h2>Hello</h2>
-<h3>Hello</h3>
-<h4>Hello</h4>
-<h5>Hello</h5>
-<h6>Hello</h6>
+    <div class="double-fields">
+        <webagent-input [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
+            [pattern]="'[a-z]'" [label]="'Country Dial Code'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="'[a-z]'" [label]="'Phone number'" [placeholder]="'Insert your first name'" />
+    </div>
+</div>
 
-<button class="button-medium call-to-action">Login</button>
-<button class="button-large call-to-action">Request access</button>
-<button class="button-large call-to-action">Finish booking</button>
+<div class="card address">
+    <h4>Address</h4>
+    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
+        [placeholder]="'Insert the name of your entity'" [label]="'Entity Name'" />
+    
+    <div class="address-column">
+        <webagent-input class="street" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
+            [placeholder]="'Insert the street name and number'" [label]="'Street'" />
+        <webagent-input class="flat" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
+            [placeholder]="'Flat number'" [label]="'Flat'" />
+        <webagent-input class="post-code" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.postCode.source"
+            [placeholder]="'Post Code'" [label]="'Post Code'" />
 
-<button class="button-large">Hello</button>
-<button class="button-medium">Hello</button>
-<button class="button-small">Hello</button>
+    </div>
 
-<webagent-input [hideDefault]="true" [type]="InputType.DATE_RANGE" [min]="'01/01/2022'" [max]="'28/02/2024'" [(ngModel)]="test3" (click)="showTestValue()"></webagent-input>
+    <div class="triple-fields">
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
+            [placeholder]="'Insert the locality'" [label]="'Locality'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.city.source"
+            [placeholder]="'Insert the city'" [label]="'City'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.countryCode.source"
+            [placeholder]="'E.g. PT'" [label]="'Country Code'" />
+    </div>
 
-<webagent-input [type]="InputType.CVV" [placeholder]="'0000'" [pattern]="'^\\d{3,5}$'" [label]="'CVV'"></webagent-input>
-<webagent-input [type]="InputType.DROPDOWN" [options]="options" [required]="false" [label]="'Custom Dropdown'"></webagent-input>
-<webagent-input
-    [hideDefault]="true"
-    [(ngModel)]="switch"
-    [type]="InputType.SWITCH"
-></webagent-input>
+</div>
 
+<div class="card">
+    <h4>App Settings</h4>
 
-
-<webagent-input [type]="InputType.INCREMENTAL_SELECTOR" [required]="true" [hideDefault]="true"/>
-<webagent-input [type]="InputType.TEXT_DATE_INPUT" [label]="'Expiry date'" [pattern]="'([\\d]{2})\/[\\d]{4}'"></webagent-input>
+    <div class="double-fields">
+        <webagent-input [label]="'Select a language'" [type]="InputType.DROPDOWN" [options]="['English', 'Portuguese']" />
+        <webagent-input [label]="'Select a currency'" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" />
+    </div>
+</div>
