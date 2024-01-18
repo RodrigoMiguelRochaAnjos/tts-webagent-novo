@@ -21,7 +21,9 @@
                     {{ (this.balance$ | async)?.amount }} {{ (balance$ | async)?.currency }}
                 </div>
             </div>
-            <div class="image">
+            <div class="image" (click)="this.toggleModal()">
+                <div class="vertical"></div>
+                <div class="horizontal"></div>
             </div>
         </div>
     </ng-container>

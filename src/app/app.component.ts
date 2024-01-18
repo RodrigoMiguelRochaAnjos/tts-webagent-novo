@@ -13,10 +13,17 @@ import { AuthenticatedUser } from './core/models/user/types/authenticated-user.m
 export class AppComponent{
     title = 'tts-webagent-web';
 
+    isModalOpen = false;
+
     constructor(
         private authService: AuthService,
     ) {
         this.authService.loadUserFromStorage();
     }
+
+    toggleModal() {
+        this.isModalOpen = !this.isModalOpen;
+        console.log(this.isModalOpen);
+      }
 
 }
