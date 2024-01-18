@@ -37,12 +37,12 @@
         margin: 0px auto;
         padding-top: 30px;
         .results {
-            app-search-result {
-                transform: translateX(-100%);
-                transition: opacity 0.5s, transform 0.5s;
+            .result {
+                transform: translate(-100%);
+                opacity: 0;
 
-                animation: slideInFromLeft 0.5s ease-in-out forwards;
-                animation-delay: calc(.55s * var(--index));
+                animation: slideInFromLeft 1s ease-in-out forwards;
+                animation-delay: calc(.055s * var(--index));
 
                 // &:nth-child(odd) {
                 //     animation: slideInFromLeftOdd 0.5s ease-in-out forwards;
@@ -62,5 +62,6 @@
 @keyframes slideInFromLeft{
     to {
         transform: translateX(0);
+        opacity: 1;
     }
 }

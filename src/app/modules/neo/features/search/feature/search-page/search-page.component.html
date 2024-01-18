@@ -7,7 +7,9 @@
 
     <div class="results">
         <ng-container *ngFor="let result of (this.results$ | async); let i = index">
-            <app-search-result style="--index: {{i}}"  *ngIf="result.show && hasOptions(result)" [result]="result"></app-search-result>
+            <div class="result" style="--index: {{i}}" *ngIf="result.show && hasOptions(result)">
+                <app-search-result [result]="result"></app-search-result>
+            </div>
         </ng-container>
     </div>
 </div>

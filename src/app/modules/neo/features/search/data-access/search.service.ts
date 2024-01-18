@@ -17,7 +17,7 @@ export class SearchService {
     private readonly VERSION: string = 'v1';
     private readonly ENDPOINT: string = environment.endpoints.NEO;
 
-    previousSearchId!: string;
+    previousSearchId?: string;
     public isLoading: boolean = false;
 
     public itemsPerPage: number = 30;
@@ -78,11 +78,15 @@ export class SearchService {
                         },
                     }
                 );
-    
+                let index = 0;
                 eventSource.onmessage = (message: OnMessageEvent) => {
                     const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
-                    
                     result.show = true;
+
+                    if (index >= (this.page * this.itemsPerPage)) {
+                        result.show = false;
+                        return;
+                    }
                     result.outbounds = result.outbounds.map((option: FlightOption) => {
                         option.show= true
                         return option;
@@ -92,6 +96,8 @@ export class SearchService {
                         return option;
                     });
                     observer.next(result);
+
+                    index++;
 
                     resolve(true);
                 }
@@ -117,7 +123,22 @@ export class SearchService {
                 }
             })
         });
-    } 
+    }
+
+    nextPage(): void {
+        this.page++;
+        this.results$.next(
+            this.results$.value.map((value: AirSearchResponse, index: number) => {
+                value.show = true;
+
+                if (index >= (this.page * this.itemsPerPage)) {
+                    value.show = false;
+                    return value;
+                }
+                return value;
+            })
+        )
+    }
 
     
 }
