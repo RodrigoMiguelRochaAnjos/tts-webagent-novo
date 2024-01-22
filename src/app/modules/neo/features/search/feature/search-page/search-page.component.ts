@@ -1,7 +1,7 @@
 import { Component, HostBinding, HostListener, Input, OnInit } from '@angular/core';
 import { SearchService } from '../../data-access/search.service';
 import { AirSearchRequest } from '../../utils/requests/air-search-request/air-search-request.model';
-import { Observable } from 'rxjs';
+import { Observable, elementAt } from 'rxjs';
 import { AirSearchResponse, AirSearchResults } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AirSearchIdResponse } from '../../utils/responses/air-search-id-response.model';
@@ -73,8 +73,13 @@ export class SearchPageComponent implements OnInit {
             window.innerHeight + window.scrollY >=
             document.body.offsetHeight - 100
         ) {
-            console.log("reached");
             this.searchService.nextPage();
+        }
+    }
+
+    onScreen(event: {isOnScreen: boolean, element: HTMLElement}) : void {
+        if (event.isOnScreen) {
+            event.element.classList.toggle("on-screen");
         }
     }
 }

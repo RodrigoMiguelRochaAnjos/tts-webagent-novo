@@ -24,6 +24,7 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     max?: string | number;
     options: string[] = [];
     theme?: Theme;
+    label?: string
 
     constructor(
     ) {
@@ -52,5 +53,9 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     update(){
         this.onChange(this.value);
         this.onTouched();
+    }
+
+    isNumeric(value: any): boolean {
+        return !isNaN(parseFloat(value)) && isFinite(value);
     }
 }

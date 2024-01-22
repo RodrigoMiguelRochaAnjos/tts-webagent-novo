@@ -21,7 +21,16 @@
                     {{ (this.balance$ | async)?.amount }} {{ (balance$ | async)?.currency }}
                 </div>
             </div>
-            <div class="image" (click)="this.toggleModal()">
+
+            <ng-template #customContent1>
+                <h3>Add funds</h3>
+                <div class="payment-wrapper" style="display: flex; align-items: flex-end; justify-content: space-between;">
+                    <webagent-input style="width: 300px; margin-right: 10px;" [type]="InputType.NUMBER" [label]="'Amount'" [(ngModel)]="this.deposit.amount"  [placeholder]="'Minimum of 50$'" [max]="10" [pattern]="patterns.amount.source"/>
+                    <button class="button-medium" style="transform: translateY(-1px);" (click)="addFunds()">Add funds</button>
+                </div>
+            </ng-template>
+
+            <div class="image" (click)="this.toggleModal(customContent1, 'modal1')">
                 <div class="vertical"></div>
                 <div class="horizontal"></div>
             </div>

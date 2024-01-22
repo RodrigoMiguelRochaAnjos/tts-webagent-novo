@@ -6,7 +6,7 @@ export class LicenseValidator extends Middleware {
 
     public override check(loginResponse: LoginResponse): Validators {
 
-        if (!loginResponse.addOns.WebAgent.activeOnUser || !loginResponse.addOns.WebAgent.addOnGloballyActive){
+        if (!loginResponse.addOns?.WebAgent?.activeOnUser || !loginResponse.addOns?.WebAgent?.addOnGloballyActive){
             return Validators.INVALID_LICENSE;
         }
 

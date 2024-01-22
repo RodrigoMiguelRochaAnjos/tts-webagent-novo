@@ -7,7 +7,10 @@ import { Route, Router } from '@angular/router';
 import { IncompleteUser } from '../../../core/models/user/types/incomplete-user.model';
 import { Balance } from '../../models/balance.model';
 import { BalanceService } from '../../services/balance.service';
-import { ModalControllerService } from '../../services/modal-controller.service';
+import { ModalControllerService } from '../../../core/services/modal-controller.service';
+import { InputType } from '../inputs/input-type.enum';
+import { patterns } from '../../utils/validation-patterns';
+import { Deposit } from '../../models/deposit.model';
 
 @Component({
   selector: 'navbar',
@@ -15,8 +18,12 @@ import { ModalControllerService } from '../../services/modal-controller.service'
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy{
+    InputType = InputType
+    patterns = patterns
+
     user$!: Observable<User>;
     public routes: NavItem[] = [];
+    public deposit: Deposit = new Deposit();
 
     @Input() side!: boolean;
 
@@ -80,8 +87,16 @@ export class NavbarComponent implements OnInit, OnDestroy{
         this.authService.logout();
     }
     
-    toggleModal() {
-        this.modalService.toggleModal();
+    toggleModal(content: any, modalId: string) {
+        this.modalService.showModal(content, modalId);
+    }
+
+    addFunds(): void {
+        this.deposit.currency = "USD";
+        if(!this.deposit.isValid()) return;
+
+        this.balanceService.addFunds(this.deposit);
+
     }
 }
 

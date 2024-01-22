@@ -1,30 +1,33 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { ModalControllerService } from '../../services/modal-controller.service';
+import { Component, ElementRef, HostBinding, Input } from '@angular/core';
+import { ModalControllerService } from '../../../core/services/modal-controller.service';
 
 @Component({
-  selector: 'modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+    selector: 'modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent {
+    modalId!: string;
+    content: any;
 
-  constructor(
-    private modalService: ModalControllerService
-  ){
+    @HostBinding("class.closed")
+    isModalOpen: boolean = false;
 
-  }
+    constructor(
+        private modalService: ModalControllerService,
+        private elementRef: ElementRef
+    ) {
+        this.modalService.getModal().subscribe({
+            next: (value: boolean) => {
+                this.isModalOpen = !value;
+            }
+        });
+    }
 
-  @Input() title!: string;
-  
-  toggleModal() {
-    this.modalService.toggleModal();
-    console.log(this.isModalOpen);
-  }
-  
-  
-  @HostBinding("class.closed")
-  get isModalOpen(): boolean {
-    return !this.modalService.getModalValue()
-  }
+    close(): void {
+        this.modalService.hideModal(this.modalId);
+    }
+
+
 
 }

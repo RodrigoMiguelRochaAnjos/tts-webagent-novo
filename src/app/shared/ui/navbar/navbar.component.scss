@@ -90,6 +90,8 @@
                 align-items: center;
                 justify-content: center;
 
+                cursor: pointer;
+
                 .vertical{
                     position: absolute;
                     height: 15px;
@@ -105,6 +107,12 @@
 
                 }
             }
+        }
+    }
+
+    #customContent1{
+        p {
+            margin-top: 50px;
         }
     }
 }

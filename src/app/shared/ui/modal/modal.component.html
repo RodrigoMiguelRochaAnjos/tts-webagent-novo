@@ -1,11 +1,10 @@
 <div class="modal-container">
-    <div class="top-bar">
-        <h5> {{ title }} </h5>
-
-        <div class="close" [ngClass]="{'open': isModalOpen == true}" (click)="toggleModal()">
-            <span class="arrow left"></span>
-            <span class="arrow right"></span>
-        </div>
+    <div class="close" [ngClass]="{'open': isModalOpen}" (click)="close()">
+        <span class="arrow left"></span>
+        <span class="arrow right"></span>
+    </div>
+    <div class="modal-content">
+        <ng-container *ngIf="content" [ngTemplateOutlet]="this.content"></ng-container>
     </div>
 
 </div>

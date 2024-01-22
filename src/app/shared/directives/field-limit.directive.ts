@@ -17,6 +17,8 @@ export class FieldLimitDirective {
         
         if (element.type == "number" && /\D/g.test(event.data) && event.data != null) {
             event.target.value = this.oldValue.replace(/\D/g, "");
+            event.target.value = this.oldValue.slice(0, this.fieldLimit);
+
             return;
         }
 

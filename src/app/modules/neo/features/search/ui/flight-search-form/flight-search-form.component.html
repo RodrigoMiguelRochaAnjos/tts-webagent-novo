@@ -1,7 +1,7 @@
 
 <div class="row">
     <h3>Flight Search</h3>
-    <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (change)="typeChanged($event)"/>
+    <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (change)="typeChanged($event)" />
 </div>
 <div class="row">
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.origin" [label]="'From'" />

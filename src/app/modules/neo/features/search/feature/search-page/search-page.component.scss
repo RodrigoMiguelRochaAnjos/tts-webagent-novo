@@ -38,21 +38,14 @@
         padding-top: 30px;
         .results {
             .result {
-                transform: translate(-100%);
+                transform: translateX(-100%);
                 opacity: 0;
 
-                animation: slideInFromLeft 1s ease-in-out forwards;
                 animation-delay: calc(.055s * var(--index));
 
-                // &:nth-child(odd) {
-                //     animation: slideInFromLeftOdd 0.5s ease-in-out forwards;
-                //     animation-delay: .5s;
-                // }
-
-                // &:nth-child(even) {
-                //     animation: slideInFromLeftEven 0.5s ease-in-out forwards;
-                //     animation-delay: .5s;
-                // }
+                &.on-screen{
+                    animation: slideInFromLeft 1s ease-in-out forwards;
+                }
             }
         }
     }

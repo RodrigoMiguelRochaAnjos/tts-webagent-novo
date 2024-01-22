@@ -1,54 +1,62 @@
-:host{
+:host {
 
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 999;
     width: 100%;
     height: 100%;
-    background: radial-gradient(85.65% 85.65% at 50% 48.38%, rgba(5, 9, 33, 0.65) 0%, rgba(0, 0, 0, 0.65) 100%); ;
+    background: radial-gradient(85.65% 85.65% at 50% 48.38%, rgba(5, 9, 33, 0.65) 0%, rgba(0, 0, 0, 0.65) 100%);
+    ;
     color: #11214A;
 
-    
 
-    .modal-container{
-        width: 50%;
-        height: 60%;
+
+    .modal-container {
+        width: auto;
+        max-width: 50%;
+        height: auto;
         background-color: #ffff;
         border-radius: 11px;
-        padding: 20px 13.5px 16px 13.5px;
+        padding: 40px 13.5px 16px 13.5px;
+        position: relative;
 
-        .top-bar{
+        .close {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            right: 20px;
+            top: 8px;
+            right: 8px;
             display: flex;
-            justify-content: space-between;
-            position: relative;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
 
-            .close{
-                cursor: pointer;
-                width: 1px;
-                right: 20px;
-                top: 25%;
+            .arrow {
                 display: block;
                 position: absolute;
-                .arrow{
-                    display: block;
-                    position: absolute;
-                    height: 13.2px;
-                    width: 1px;
-                    background-color: #11214A;
-                }
-
-                .right{
-                    transform: rotate(45deg);
-                }
-
-                .left{
-                    transform: rotate(-45deg);
-                }
-
+                height: 13.2px;
+                width: 1px;
+                background-color: #11214A;
             }
+
+            .right {
+                transform: rotate(45deg);
+            }
+
+            .left {
+                transform: rotate(-45deg);
+            }
+
         }
+    }
+
+    &.closed {
+        display: none;
     }
 
 
