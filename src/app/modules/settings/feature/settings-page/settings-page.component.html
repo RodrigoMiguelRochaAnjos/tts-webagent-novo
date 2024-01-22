@@ -13,7 +13,7 @@
     <div class="double-fields">
         <webagent-input [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
             [pattern]="'[a-z]'" [label]="'Country Dial Code'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="'[a-z]'" [label]="'Phone number'" [placeholder]="'Insert your first name'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [label]="'Phone number'" [placeholder]="'Insert your phone number'" />
     </div>
 </div>
 
