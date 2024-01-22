@@ -1,0 +1,30 @@
+:host{
+
+    height: 42px;
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    .range-bar {
+        position: relative;
+        height: 2px;
+        width: 100%;
+        background-color: #1F75AE;
+        cursor: grab;
+
+    }
+    .range-knob-handle{
+        height: 15px;
+        width: 15px;
+        position: absolute;
+        cursor: grab;
+        left: 0%;
+
+        .range-knob{
+            height: 15px;
+            width: 15px;
+            border-radius: 50%; 
+            background-color: #1F75AE;
+        }
+    }
+}

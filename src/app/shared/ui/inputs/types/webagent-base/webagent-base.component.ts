@@ -22,6 +22,7 @@ export class WebagentBaseComponent implements ControlValueAccessor{
     placeholder: string = "";
     min?: string | number;
     max?: string | number;
+    step?: number;
     options: string[] = [];
     theme?: Theme;
 

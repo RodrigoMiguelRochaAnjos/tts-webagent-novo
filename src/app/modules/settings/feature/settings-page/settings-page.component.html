@@ -51,3 +51,8 @@
         <webagent-input [label]="'Select a currency'" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" />
     </div>
 </div>
+
+<div class="slider">
+    <webagent-input [type]="InputType.SLIDER" [min]="'0.5'" [max]="'2.5'" [step]=".1" [(ngModel)]="fontSize" style="box-shadow: none;"/>
+    <p class="text-preview" [style.font-size.em]="this.fontSize"> TextPreview </p>
+</div>

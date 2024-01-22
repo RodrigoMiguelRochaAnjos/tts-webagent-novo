@@ -7,7 +7,7 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
     styleUrls: ['./webagent-incremental-selector.component.scss']
 })
 export class WebagentIncrementalSelectorComponent extends WebagentBaseComponent implements OnInit {
-    step: number = 1;
+    counter: number = 1;
 
     maxLimit: number = 9;
     minLimit: number = 0;
@@ -29,7 +29,7 @@ export class WebagentIncrementalSelectorComponent extends WebagentBaseComponent 
     decrement() {
         if (this.value <= this.minLimit) return;
         
-        this.value -= this.step;
+        this.value -= this.counter;
         this.update()
     }
 

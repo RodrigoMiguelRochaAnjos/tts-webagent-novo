@@ -14,6 +14,8 @@ export class SettingsPageComponent {
 	InputType = InputType;
   patterns = patterns;
   countriesDialCodes = countriesDialCodes;
+
+  fontSize: number = 5.5;
  
   countriesDialCodeOptions: string[] = [];
 

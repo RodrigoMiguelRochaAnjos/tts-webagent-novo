@@ -14,6 +14,7 @@ import { WebagentSearchComponent } from '../types/webagent-search/webagent-searc
 import { WebagentPasswordComponent } from '../types/webagent-password/webagent-password.component';
 import { Theme } from '../theme.enum';
 import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
+import { WebagentSliderComponent } from '../types/webagent-slider/webagent-slider.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -38,6 +39,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() label?: string;
     @Input() min?: string;
     @Input() max?: string;
+    @Input() step?: number = .1;
     @Input() theme: Theme = Theme.DEFAULT;
 
     @HostBinding("class.ng-disabled")
@@ -130,6 +132,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentPasswordComponent;
             case InputType.TEXT_DATE_INPUT:
                 return WebagentTextDateInputComponent;
+            case InputType.SLIDER:
+                return WebagentSliderComponent;
             default:
                 throw new Error("Invalid input type");
         }
@@ -146,6 +150,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         componentRef.instance.placeholder = this.placeholder;
         componentRef.instance.min = this.min;
         componentRef.instance.max = this.max;
+        componentRef.instance.step = this.step;
         componentRef.instance.options = this.options;
         componentRef.instance.theme = this.theme;
 
