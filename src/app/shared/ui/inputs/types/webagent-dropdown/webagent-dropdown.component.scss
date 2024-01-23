@@ -25,6 +25,32 @@
             box-shadow: 0px 0px 2px #11214a4d;
             z-index: 99;
         }
+
+    }
+    .selected-option {
+        display: flex;
+        align-items: center;
+    }
+    
+    .arrow-icon {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 5px 5px 0;
+        border-color: #555 transparent transparent transparent;
+        margin-left: auto;
+    }
+    
+    .arrow-icon.up {
+        border-width: 0 5px 5px;
+        border-color: transparent transparent #555 transparent;
+    }
+
+    .dropdown-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding-top: 10px;
     }
 }
 

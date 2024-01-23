@@ -1,6 +1,5 @@
-
 <div class="selected-option" (click)="toggleDropdown()">
-    {{ selectedOption }}
+    {{ selectedOption }} <span class="arrow-icon" [class.up]="isDropdownOpen"></span>
 </div>
 <ul class="dropdown-list" [class.active]="isDropdownOpen">
     <li *ngFor="let option of options" (click)="selectOption(option)">
