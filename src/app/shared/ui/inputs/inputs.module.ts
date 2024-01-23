@@ -17,6 +17,7 @@ import { FieldLimitDirective } from "../../directives/field-limit.directive";
 import { WebagentSearchComponent } from './types/webagent-search/webagent-search.component';
 import { WebagentPasswordComponent } from './types/webagent-password/webagent-password.component';
 import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
+import { WebagentCheckboxInputComponent } from './types/webagent-checkbox-input/webagent-checkbox-input.component';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { WebagentTextDateInputComponent } from './types/webagent-text-date-input
         WebagentCvvComponent,
         WebagentSearchComponent,
         WebagentPasswordComponent,
-        WebagentTextDateInputComponent
+        WebagentTextDateInputComponent,
+        WebagentCheckboxInputComponent
     ],
     imports: [
         CommonModule,
