@@ -1,103 +1,170 @@
-:host{
+:host {
     display: flex;
     align-items: center;
     justify-content: space-around;
     padding-top: 10px;
     position: relative;
-    
-    app-flight-selection-indicator{
+
+    app-flight-selection-indicator {
+        // width 15px
         margin-left: 20px;
         margin-right: 10px;
     }
-    
-    .flight-option-content{
-        width: calc(100% - 30px);
-        > .airlines {
-            position: relative;
-            display: flex;
-            width: 95%;
-            height: 20px;
-            margin: 0 10px;
-            padding-right: 20px;
-            
-            .tags {
 
-                position: absolute;
-                right: 0;
-                width: 64%;
-                display: inline-flex;
-                align-items: center;
-                font-size: 11px;
-                height: 100%;
-                flex-wrap: wrap;
-                justify-content: center;
+    .flight-option-content {
+        width: calc(100% - 45px);
 
-                .tag{
-                    display: inline-block;
-                    margin: 2.5px;
-                    font-size: .75em;
-                    border-radius: 3px;
-                    background-color: var(--tma-color-secondary);
-                    color: var(--tma-color-background-dark);
-                    padding: 2px 5px;
-                    width: fit-content;
-                }
 
-                &.overFour{
-                    margin-top: -8px;
 
-                }
+        .tags {
+            right: 0;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .tag {
+                display: inline-block;
+                margin: 2.5px;
+                font-size: .75rem;
+                border-radius: 3px;
+                background-color: #414D6E;
+                color: #fff;
+                padding: 2px 5px;
+                width: fit-content;
             }
 
-            > .airline-logo {
-                display: block;
-                width: 20px;
-                height: 20px;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: contain;
-    
-                > span {
-                    display: block;
-                    font-size: 7px;
-                    font-weight: bold;
-                    color: lightgray;
-                    text-align: center;
-                }
-            }
-    
-            &.more {
-                > .airline-logo {
-                    width: 12px;
-                    height: 12px;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    z-index: 0;
-    
-                    &:first-child {
-                        top: auto;
-                        bottom: 0;
-                        left: 7%;
-                        z-index: 1;
-                    }
-                }
+            &.overFour {
+                margin-top: -8px;
+
             }
         }
-    
-        .info{
+
+        .info {
             display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
+            align-items: stretch;
+            justify-content: stretch;
             width: 100%;
             padding: 10px;
+
             .info-segment {
-                font-size: 12px;
-                color: var(--tma-color-text);
+                font-size: .75rem;
+                color: #12214A;
                 font-weight: 500;
-                
-                &:first-child{
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                .text {
+                    font-size: 1rem;
+                }
+
+                &:first-child {
                     margin-right: auto;
+                    flex: 0;
+                }
+
+                &:nth-child(4),
+                &:nth-child(5) {
+                    flex: .5;
+                    align-items: center;
+                }
+
+                &:nth-child(3) {
+                    flex: 2;
+                }
+
+                .flight-progress {
+                    width: 100%;
+                    height: 2px;
+                    background-color: #C8D8E9;
+                    position: relative;
+
+                    .title {
+                        font-size: .75rem;
+                        position: absolute;
+                        left: 50%;
+                        transform: translate(-50%, -150%);
+                    }
+
+                    .stops {
+                        display: flex;
+                        position: absolute;
+                        top: 0;
+                        transform: translateY(-50%);
+                        width: 100%;
+                        justify-content: space-between;
+
+                        .stop {
+                            display: block;
+                            width: 10px;
+                            height: 10px;
+                            background-color: #C8D8E9;
+                            border-radius: 50%;
+                            &:hover{
+                                background-color: #12214A;
+                            }
+                        }
+
+                    }
+                    .progress-bar {
+                        position: absolute;
+                        width: 0%;
+                        height: 2px;
+                        top: 0;
+                        left: 0;
+                        display: block;
+                        background-color: #12214A;
+                        transition: width ease-in-out .3s;
+                    }
+                }
+
+                >.airlines {
+                    position: relative;
+                    display: flex;
+                    width: 95%;
+                    height: 35px;
+                    margin: 0 10px;
+                    padding-right: 20px;
+
+
+                    >.airline-logo {
+                        display: block;
+                        width: 35px;
+                        height: 35px;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+
+                        >span {
+                            display: block;
+                            font-size: 7px;
+                            font-weight: bold;
+                            color: lightgray;
+                            text-align: center;
+                        }
+                    }
+
+                    &.more {
+                        >.airline-logo {
+                            width: 12px;
+                            height: 12px;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            z-index: 0;
+
+                            &:first-child {
+                                top: auto;
+                                bottom: 0;
+                                left: 7%;
+                                z-index: 1;
+                            }
+                        }
+                    }
                 }
             }
         }

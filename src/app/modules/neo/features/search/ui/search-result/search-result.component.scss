@@ -21,18 +21,19 @@
     width: 100%;
     border-radius: 11px;
     transition: transform ease-in-out .3s;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
+    justify-content: stretch;
     flex-wrap: wrap;
     position: relative;
     background-color: var(--tma-color-background-dark);
     margin-top: 20px;
     box-shadow: 0px 0px 17px #3333;
+    position: relative;
 
     &:has(.split-ticketing) {
         padding-right: 15px;
     }
-    
+
     .split-ticketing {
         position: absolute;
         right: 0;
@@ -58,6 +59,7 @@
         transition: height ease-in-out .3s;
         overflow: hidden;
         height: fit-content;
+        border-top: 1px dashed #a7a7a7;
 
         &.open {
             height: 400px;
@@ -67,36 +69,12 @@
     .search-result-left {
         width: 70%;
         position: relative;
+        border-right: 1px dashed #a7a7a7;
 
-        div h3 {
+        .separation {
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-
-            span {
-                background-color: var(--tma-color-background-dark);
-                width: fit-content;
-                color: #738FC6 !important;
-                font-size: 12px;
-                text-align: center;
-                padding: 5px;
-                font-weight: 400;
-                margin: 0px;
-                position: relative;
-                z-index: 1;
-            }
-
-            &::after {
-                content: '';
-                width: 100%;
-                height: 1px;
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                background-color: var(--tma-color-c2a-transparent);
-            }
+            height: 0px;
+            border-bottom: 1px dashed #a7a7a7;
         }
 
         .line {
@@ -127,52 +105,64 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        height: 100%;
         padding: 10px;
-
-        .price {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--tma-color-text);
-
-            .CUR {
-                font-size: 14px;
-            }
-
-            .tooltip-currency-exchange{
-                position: relative;
-                
-                .tooltip-info{
-                    background-color: #BFD3E0;
-                    color: #11214A;
-                    text-align: center;
-                    padding: 5px 15px;
-                    font-size: 0.6em;
-                    border-radius: 5px;
-                    //position tooltip
-                    position: absolute;
-                    z-index: 1;
-                    visibility: visible;
-                    left: 0%;
-                    transform: translate(calc(-100% + 20px), -20%);
-                    
-
-                    .tooltip-price{
-                        color: #2576AC;
-                        display: block;
+        flex-direction: column;
+        min-height: 100%;
+        .container{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            .price {
+                font-weight: 600;
+                color: #11214A;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+    
+                span {
+                    font-size: 1.7rem;
+    
+                    .CUR {
+                        font-size: .75em;
                     }
-                    
-                    .tooltip-triangle{
-                        display: block;
-                        background-color: #bfd3e0;
+                }
+    
+                .tooltip-currency-exchange {
+                    position: relative;
+    
+                    .tooltip-info {
+                        background-color: #BFD3E0;
+                        color: #11214A;
+                        text-align: center;
+                        padding: 5px 15px;
+                        font-size: 0.6em;
+                        border-radius: 5px;
+                        //position tooltip
                         position: absolute;
-                        width: 20px;
-                        height: 15px;
-                        clip-path: polygon(0 0,50% 50%,0 100%);
+                        z-index: 1;
                         visibility: visible;
-                        top: 50%;
-                        right: 0;
-                        transform: translate(100%,-50%);
+                        left: 0%;
+                        transform: translate(calc(-100% + 20px), -20%);
+    
+    
+                        .tooltip-price {
+                            color: #2576AC;
+                            display: block;
+                        }
+    
+                        .tooltip-triangle {
+                            display: block;
+                            background-color: #bfd3e0;
+                            position: absolute;
+                            width: 20px;
+                            height: 15px;
+                            clip-path: polygon(0 0, 50% 50%, 0 100%);
+                            visibility: visible;
+                            top: 50%;
+                            right: 0;
+                            transform: translate(100%, -50%);
+                        }
                     }
                 }
             }
@@ -187,18 +177,14 @@
         }
 
         .search-result-info-select {
-            background-color: var(--tma-color-secondary);
-            color: var(--tma-color-text-c2a);
-            width: 86px;
-            height: 21px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 13px;
             font-weight: 500;
-            border-radius: 5px;
             transition: opacity ease-in-out .3s;
             cursor: pointer;
+            width: 80%;
 
             &.disabled {
                 background-color: var(--tma-color-c2a-disabled);

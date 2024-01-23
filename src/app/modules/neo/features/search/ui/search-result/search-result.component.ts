@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, HostListener, NgZone, ElementRef, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/core/authentication/auth.service";
 import { UserService } from "src/app/core/authentication/user/user.service";
@@ -12,6 +12,7 @@ import { FlightOptionTabs } from "../../models/flight-option-tabs.enum";
 import { BalanceService } from "src/app/shared/services/balance.service";
 import { AirCheckoutDetailsRequest } from "../../models/air-checkout-details-request.model";
 import { ReservationService } from "src/app/modules/neo/data-access/reservation.service";
+import { AirSegment } from "src/app/modules/neo/models/air-segment.model";
 
 
 @Component({
@@ -23,7 +24,6 @@ export class SearchResultComponent implements OnInit {
     @Input() result!: AirSearchResponse;
 
     private currency!: string;
-    selectedOptions!: { [id: string]: FlightOption };
     showCurrencyInfo: boolean = false;
     showFlightDetails = false;
     showPriceDetails = false;
@@ -31,20 +31,18 @@ export class SearchResultComponent implements OnInit {
     tooltipOpen = false;
 
     constructor(
-        private loadingService: LoadingService,
-        private router: Router,
-        private http: HttpClient,
         private authService: AuthService,
-        private reservationService: ReservationService
+        private reservationService: ReservationService,
     ) { }
-
+    
     ngOnInit() {
         this.currency = this.authService.getUserValue().currency;
+        console.log(JSON.stringify(this.result));
     }
 
     get originDestinationLabel(): string {
         let label = '';
-        const lastOutbountIndex = this.result.outbounds[0].segments.length -1;
+        const lastOutbountIndex = this.result.outbounds[0].segments.length - 1;
 
         label = this.result.outbounds[0].segments[0].origin.code;
         label += ' - ';
@@ -59,21 +57,18 @@ export class SearchResultComponent implements OnInit {
      * @param tab specifies the tab to open
      */
     toggleTab(tab: string): void {
+        this.showDestInfo = false;
+        this.showFlightDetails = false;
+        this.showPriceDetails = false;
         switch (tab) {
             case FlightOptionTabs.DestInfo:
                 this.showDestInfo = true;
-                this.showFlightDetails = false;
-                this.showPriceDetails = false;
                 break;
             case FlightOptionTabs.PriceDetails:
-                this.showDestInfo = false;
-                this.showFlightDetails = false;
                 this.showPriceDetails = true;
                 break;
             case FlightOptionTabs.FlightDetails:
-                this.showDestInfo = false;
                 this.showFlightDetails = true;
-                this.showPriceDetails = false;
                 break;
         }
     }
@@ -93,40 +88,48 @@ export class SearchResultComponent implements OnInit {
         // return this.reservationService.canBook(this.result.id);
     }
 
+    get selectedOptions(): { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null } {
+        return this.reservationService.getSelectedFlightsValue();
+    }
+
     get destinations(): string {
-        const destinations: string[] = [];
-        if (this.result.inbounds) {
-            for (const inbound of this.result.inbounds) {
-                for (const segment of inbound.segments) {
-                    destinations.push(segment.destination.code);
-                }
-            }
-        }
-        if (this.result.outbounds) {
-            for (const outbound of this.result.outbounds) {
-                for (const segment of outbound.segments) {
-                    destinations.push(segment.destination.code);
-                }
-            }
-        }
+
+        const destinations: string[] = this.result.outbounds?.flatMap(outbound =>
+            outbound.segments.map(segment => segment.destination.code)
+        )?.concat(this.result.inbounds?.flatMap(inbound =>
+            inbound.segments.map(segment => segment.destination.code)
+        ));
+        console.log(destinations.toString());
         return destinations.toString();
     }
 
     toggleCurrencyInfo(): void {
-		this.showCurrencyInfo = !this.showCurrencyInfo;
-	}
+        this.showCurrencyInfo = !this.showCurrencyInfo;
+    }
 
-    selectOptions(option: { [id: string]: any }): void {
-        this.selectedOptions = option;
+    selectOptions(option: FlightOption, type: "INBOUNDS" | "OUTBOUNDS"): void {
+        this.reservationService.activeResult = this.result.id;
+        this.reservationService.selectFlight(option, type);
+        
+        if (!(this.result.inbounds && this.result.inbounds.length > 0)) return;
+
+        switch (type) {
+            case "INBOUNDS":
+                if (this.result.outbounds.length <= 1) this.reservationService.selectFlight(this.result.outbounds[0], "OUTBOUNDS");
+                break;
+            case "OUTBOUNDS":
+                if (this.result.inbounds.length <= 1) this.reservationService.selectFlight(this.result.inbounds[0], "INBOUNDS");
+                break;
+        }
+
     }
 
     toggleTooltip(): void {
         this.tooltipOpen = !this.tooltipOpen;
     }
-    
 
     async advance(): Promise<void> {
-		if (!this.canBook) return;
+        if (!this.canBook) return;
 
         let hasEnoughFunds: boolean = false;
         let totalFee: number = 0;
@@ -155,9 +158,9 @@ export class SearchResultComponent implements OnInit {
         // hasEnoughFunds = this.balanceService.getBalanceValue().amount >= totalFee;
 
         // if (!hasEnoughFunds) alert(`Not enough money in current account., You need to have enough money for the fee of ${totalFee} USD`);
-        
+
         // await this.makeCheckoutDetailsRequest(body);
-        
+
     }
 
     // makeCheckoutDetailsRequest(body: AirCheckoutDetailsRequest): void {
@@ -170,7 +173,7 @@ export class SearchResultComponent implements OnInit {
 
 
     //             const supplierInfos = new Map<string, SupplierInfo[]>();
-                
+
     //             if (details.supplierInfos != null){
     //                 for (const key in details.supplierInfos) {
     //                     supplierInfos.set(key, (details.supplierInfos[key] as SupplierInfo[]));
@@ -180,7 +183,7 @@ export class SearchResultComponent implements OnInit {
     //             details.supplierInfos = supplierInfos;
 
     //             const formOfPayments = new Map<string, SupportedPayments>();
-                
+
     //             if (details.formOfPayments != null){
     //                 for (const key in details.formOfPayments){
     //                     formOfPayments.set(key, (details.formOfPayments[key] as SupportedPayments))
@@ -201,8 +204,4 @@ export class SearchResultComponent implements OnInit {
     //         }
     //     });
     // }
-
-    get isOutboundDetailsValid() :boolean{
-        return this.showFlightDetails && this.selectedOptions != null && this.selectedOptions['OUTBOUND'] != null;
-    }
 }
