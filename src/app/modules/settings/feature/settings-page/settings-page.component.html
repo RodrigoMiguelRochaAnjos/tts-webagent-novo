@@ -1,43 +1,43 @@
 <div class="card">
     <h4>User Profile</h4>
 
-    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [placeholder]="'Name'" [label]="'Name'" />
+    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [label]="'Name'" />
 
     <div class="double-fields">
         <webagent-input [type]="InputType.TEXT" [required]="true" [placeholder]="'dd/mm/yyyy'"
-            [label]="'Data de nascimento'" />
+            [label]="'Date of Birth'" />
         <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.email.source"
-            [placeholder]="'Insert your email address'" [label]="'Email'" />
+            [label]="'Email'" />
     </div>
 
     <div class="double-fields">
-        <webagent-input [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
+        <webagent-input id="countryDial" [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
             [pattern]="'[a-z]'" [label]="'Country Dial Code'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [label]="'Phone number'" [placeholder]="'Insert your phone number'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [label]="'Phone number'" />
     </div>
 </div>
 
 <div class="card address">
     <h4>Address</h4>
-    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
-        [placeholder]="'Insert the name of your entity'" [label]="'Entity Name'" />
+    <webagent-input [type]="InputType.TEXT" [pattern]="patterns.text.source"
+        [label]="'Entity Name'" />
     
     <div class="address-column">
-        <webagent-input class="street" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
-            [placeholder]="'Insert the street name and number'" [label]="'Street'" />
-        <webagent-input class="flat" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
-            [placeholder]="'Flat number'" [label]="'Flat'" />
-        <webagent-input class="post-code" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.postCode.source"
-            [placeholder]="'Post Code'" [label]="'Post Code'" />
+        <webagent-input class="street" [type]="InputType.TEXT" [pattern]="patterns.text.source"
+            [label]="'Street'" />
+        <webagent-input class="flat" [type]="InputType.TEXT" [pattern]="patterns.text.source"
+            [label]="'Flat'" />
+        <webagent-input class="post-code" [type]="InputType.TEXT" [pattern]="patterns.postCode.source"
+            [label]="'Post Code'" />
 
     </div>
 
     <div class="triple-fields">
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
-            [placeholder]="'Insert the locality'" [label]="'Locality'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.city.source"
-            [placeholder]="'Insert the city'" [label]="'City'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.countryCode.source"
+        <webagent-input [type]="InputType.TEXT" [pattern]="patterns.text.source"
+            [label]="'Locality'" />
+        <webagent-input [type]="InputType.TEXT" [pattern]="patterns.city.source"
+            [label]="'City'" />
+        <webagent-input [type]="InputType.TEXT" [pattern]="patterns.countryCode.source"
             [placeholder]="'E.g. PT'" [label]="'Country Code'" />
     </div>
 

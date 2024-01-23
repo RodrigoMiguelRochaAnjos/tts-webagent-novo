@@ -14,7 +14,7 @@ export class SettingsPageComponent {
 	InputType = InputType;
   patterns = patterns;
   countriesDialCodes = countriesDialCodes;
- 
+
   countriesDialCodeOptions: string[] = [];
 
   ngOnInit() {
