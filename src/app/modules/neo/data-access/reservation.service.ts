@@ -75,8 +75,8 @@ export class ReservationService {
         return this.reservationProcess$.value.FUNDS_CHECKED;
     }
 
-    public getCheckoutDetails(body: AirCheckoutDetailsRequest): Promise<boolean> {
-        this.checkoutService.loadDetails(body);
+    public async getCheckoutDetails(body: AirCheckoutDetailsRequest): Promise<boolean> {
+        await this.checkoutService.loadDetails(body);
         
         this.checkoutDetails$.subscribe({
             next: (response: AirCheckoutDetailsResponse | null) => {

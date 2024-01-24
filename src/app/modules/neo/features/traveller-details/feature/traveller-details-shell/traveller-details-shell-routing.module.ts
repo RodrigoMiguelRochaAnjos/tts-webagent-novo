@@ -8,7 +8,7 @@ const routes: Routes = [
   {
       path: '',
       component: TravellerDetailsPageComponent,
-      loadChildren: () => TravellerDetailsPageModule
+      loadChildren: () => TravellerDetailsPageModule,
   }
 ];
 

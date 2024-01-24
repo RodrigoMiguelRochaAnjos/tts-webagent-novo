@@ -41,19 +41,26 @@ export class CheckoutService {
         return this.price$.value;
     }
 
-    loadDetails(body: AirCheckoutDetailsRequest): void {
-        this.authService.getUser().subscribe((user: User) => {
-            if(!(user instanceof AuthenticatedUser)) return;
-            
-            this.httpClient.post<AirCheckoutDetailsResponse>(`${this.ENDPOINT}/checkout-details`, body, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": `Bearer ${user.token}`
-                }
-            }).subscribe({
-                next: (response: AirCheckoutDetailsResponse) => this.details$.next(response),
-                error: () => this.details$.next(null)
-            });
+    async loadDetails(body: AirCheckoutDetailsRequest): Promise<void> {
+
+        return new Promise<void>((resolve) => {
+            this.authService.getUser().subscribe((user: User) => {
+                if(!(user instanceof AuthenticatedUser)) return;
+                
+                this.httpClient.post<AirCheckoutDetailsResponse>(`${this.ENDPOINT}/checkout-details`, body, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${user.token}`
+                    }
+                }).subscribe({
+                    next: (response: AirCheckoutDetailsResponse) => this.details$.next(response),
+                    error: () => {
+                        resolve();
+                        this.details$.next(null)
+                    },
+                    complete: () => resolve()
+                });
+            })
         })
     }
 

@@ -1,74 +1,26 @@
 <div class="left-section">
 
-    <div class="container">
+    <div class="container" *ngFor="let traveller of this.travellers">
         <h4>Traveller Details</h4>
     
         <div class="traveller-type">
-            Adult
+            {{ traveller.toString() }}
         </div>
     
-        <div class="double-fields">
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [placeholder]="'E.g. John'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [placeholder]="'E.g. Doe'" />
+        <div class="triple-fields">
+            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
+            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
+            <webagent-input [type]="InputType.NUMBER" [required]="false" [(ngModel)]="traveller.contact.phone.dialCode" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
         </div>
-        <div class="single-field">
-    
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.DATE" [required]="false" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
+        <div class="triple-fields">
+            <webagent-input [type]="InputType.DATE" [required]="false" [(ngModel)]="traveller.dateOfBirth" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
+            <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
+            <webagent-input [type]="InputType.NUMBER" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
         </div>
     
         <button class="button-small">Add frequent flyer number</button>
     </div>
-    <div class="container">
-        <h4>Traveller Details</h4>
     
-        <div class="traveller-type">
-            Adult
-        </div>
-    
-        <div class="double-fields">
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [placeholder]="'E.g. John'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [placeholder]="'E.g. Doe'" />
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.DATE" [required]="false" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-        </div>
-    
-        <button class="button-small">Add frequent flyer number</button>
-    </div>
-    <div class="container">
-        <h4>Traveller Details</h4>
-
-        <div class="traveller-type">
-            Adult
-        </div>
-    
-        <div class="double-fields">
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [placeholder]="'E.g. John'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [placeholder]="'E.g. Doe'" />
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.DATE" [required]="false" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
-            <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-        </div>
-        <div class="double-fields">
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
-            <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-        </div>
-    
-        <button class="button-small">Add frequent flyer number</button>
-    </div>
     <div class="container">
         <h4>Agency Contact</h4>
     

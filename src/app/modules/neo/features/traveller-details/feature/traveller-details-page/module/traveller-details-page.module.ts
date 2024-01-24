@@ -7,12 +7,12 @@ import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [TravellerDetailsPageComponent],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FormsModule
-  ],
-  exports: [TravellerDetailsPageComponent]
+    declarations: [TravellerDetailsPageComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FormsModule
+    ],
+    exports: [TravellerDetailsPageComponent]
 })
 export class TravellerDetailsPageModule { }

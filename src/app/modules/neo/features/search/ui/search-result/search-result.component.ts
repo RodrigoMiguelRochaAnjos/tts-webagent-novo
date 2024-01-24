@@ -161,7 +161,7 @@ export class SearchResultComponent implements OnInit {
                     return;
                 }
 
-                this.router.navigate(['trip/summary']);
+                this.router.navigate(['neo/travellers']);
             })
         });
     }
