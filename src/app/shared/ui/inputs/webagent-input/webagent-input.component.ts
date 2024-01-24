@@ -14,6 +14,7 @@ import { WebagentSearchComponent } from '../types/webagent-search/webagent-searc
 import { WebagentPasswordComponent } from '../types/webagent-password/webagent-password.component';
 import { Theme } from '../theme.enum';
 import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
+import { WebagentCheckboxInputComponent } from '../types/webagent-checkbox-input/webagent-checkbox-input.component';
 import { WebagentNumberComponent } from '../types/webagent-number/webagent-number.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
@@ -135,6 +136,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentPasswordComponent;
             case InputType.TEXT_DATE_INPUT:
                 return WebagentTextDateInputComponent;
+                case InputType.CHECKBOX:
+                return WebagentCheckboxInputComponent;
             default:
                 throw new Error("Invalid input type");
         }

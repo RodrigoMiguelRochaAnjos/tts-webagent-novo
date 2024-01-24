@@ -10,5 +10,6 @@ export enum InputType {
     CVV,
     SEARCH,
     TEXT_DATE_INPUT,
+    CHECKBOX,
     NUMBER
 }
