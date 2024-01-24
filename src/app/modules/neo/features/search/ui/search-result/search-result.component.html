@@ -54,27 +54,28 @@
             </div>
         </div>
         <div class="search-result-info-tab-opened"
-            *ngIf="this.showDestInfo || this.showFlightDetails || this.showPriceDetails">
+            *ngIf="isCurrentResult && (this.showDestInfo || this.showFlightDetails || this.showPriceDetails)">
 
             <div class="search-result-info-tabs">
-                <div [ngClass]="{'search-result-info-tab': true, 'selected': showFlightDetails}"
+                <div class="search-result-info-tab" [ngClass]="{'selected': showFlightDetails}"
                     (click)="toggleTab('FLIGHT_DETAILS')">
                     {{ 'FLIGHT_DETAILS' }}
                 </div>
-                <div [ngClass]="{'search-result-info-tab': true, 'selected': showPriceDetails}"
+                <div class="search-result-info-tab" [ngClass]="{'selected': showPriceDetails}"
                     (click)="toggleTab('PRICE_DETAILS')">
                     {{ 'PRICE_DETAILS' }}
                 </div>
-                <div [ngClass]="{'search-result-info-tab': true, 'selected': showDestInfo}"
+                <div class="search-result-info-tab" [ngClass]="{'selected': showDestInfo}"
                     (click)="toggleTab('DEST_INFO')">
                     {{ 'DEST_INFO' }}
                 </div>
+                <div class="slider" style="--index: {{ getActiveIndex() }}" ></div>
             </div>
 
-            <app-tab-flight-details *ngIf="this.showFlightDetails && this.selectedOptions.OUTBOUNDS" [option]="this.selectedOptions.OUTBOUNDS" [outbound]="true"></app-tab-flight-details>
-            <app-tab-flight-details *ngIf="this.showFlightDetails && this.selectedOptions.INBOUNDS" [option]="this.selectedOptions.INBOUNDS" [outbound]="false"></app-tab-flight-details>
-            <app-tab-price-details *ngIf="this.showPriceDetails" [result]="result" [selected]="this.selectedOptions"></app-tab-price-details>
-            <app-tab-dest-info *ngIf="this.showDestInfo" [destinations]="destinations"></app-tab-dest-info>
+            <app-tab-flight-details *ngIf="this.isCurrentResult && this.showFlightDetails && this.selectedOptions.OUTBOUNDS" [option]="this.selectedOptions.OUTBOUNDS" [outbound]="true"></app-tab-flight-details>
+            <app-tab-flight-details *ngIf="this.isCurrentResult && this.showFlightDetails && this.selectedOptions.INBOUNDS" [option]="this.selectedOptions.INBOUNDS" [outbound]="false"></app-tab-flight-details>
+            <app-tab-price-details *ngIf="this.isCurrentResult && this.showPriceDetails" [result]="result" [selected]="this.selectedOptions"></app-tab-price-details>
+            <app-tab-dest-info *ngIf="this.isCurrentResult && this.showDestInfo" [destinations]="destinations"></app-tab-dest-info>
         </div>
     </div>
 

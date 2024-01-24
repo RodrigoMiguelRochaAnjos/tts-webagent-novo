@@ -34,12 +34,10 @@
                     {{ numberOfStops }} {{ 'STOPS' }}
                 </div>
                 <div class="stops">
-                    <div class="stop" (mouseover)="onStopHover(0)" (mouseout)="onStopHover(-1)"></div>
+                    <div class="stop" (mouseover)="onStopHover(numberOfStops)" (mouseout)="onStopHover(-1)" style="--index: -1"></div>
                     <div class="stop" *ngFor="let number of range(1, numberOfStops); let index = index" style="--index: {{index}}" (mouseover)="onStopHover(index)" (mouseout)="onStopHover(-1)"></div>
-                    <div class="stop" (mouseover)="onStopHover(numberOfStops)" (mouseout)="onStopHover(-1)"></div>
+                    <div class="stop" (mouseover)="onStopHover(-1)" (mouseout)="onStopHover(-1)" style="--index: {{numberOfStops + 1}}"></div>
                 </div>
-                {{ progressWidth }}
-                {{ numberOfStops + 1 }}
                 <span class="progress-bar" [style.width]="progressWidth"></span>
 
             </div>

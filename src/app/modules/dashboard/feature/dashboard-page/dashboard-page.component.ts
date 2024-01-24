@@ -22,12 +22,12 @@ export class DashboardPageComponent implements OnInit{
         this.testResult = JSON.parse(`
         {
     "show": true,
-    "id": "0b199ba0-7b97-4f52-b2e8-73f0a286e9ed",
+    "id": "d04b5c79-2658-4eaa-85e9-accb1fca4743",
     "price": {
-        "amount": 246.68,
+        "amount": 319.11,
         "currency": "EUR",
         "preferredCurrency": "EUR",
-        "totalAmount": 246.68,
+        "totalAmount": 319.11,
         "includeTaxes": true,
         "exchange": false,
         "passengersPrices": [
@@ -35,10 +35,25 @@ export class DashboardPageComponent implements OnInit{
                 "amount": 0,
                 "currency": "EUR",
                 "preferredCurrency": "EUR",
-                "totalAmount": 246.68,
+                "totalAmount": 319.11,
                 "includeTaxes": true,
                 "exchange": false,
                 "taxes": [
+                    {
+                        "name": "J9",
+                        "amount": 4,
+                        "currency": "EUR"
+                    },
+                    {
+                        "name": "PT",
+                        "amount": 14.24,
+                        "currency": "EUR"
+                    },
+                    {
+                        "name": "YP",
+                        "amount": 36.44,
+                        "currency": "EUR"
+                    },
                     {
                         "name": "FR",
                         "amount": 17.63,
@@ -56,27 +71,12 @@ export class DashboardPageComponent implements OnInit{
                     },
                     {
                         "name": "QX",
-                        "amount": 13.61,
-                        "currency": "EUR"
-                    },
-                    {
-                        "name": "GB",
-                        "amount": 15.16,
-                        "currency": "EUR"
-                    },
-                    {
-                        "name": "UB",
-                        "amount": 25.65,
+                        "amount": 11.17,
                         "currency": "EUR"
                     },
                     {
                         "name": "YQ",
-                        "amount": 42,
-                        "currency": "EUR"
-                    },
-                    {
-                        "name": "YR",
-                        "amount": 2,
+                        "amount": 73,
                         "currency": "EUR"
                     }
                 ],
@@ -87,99 +87,219 @@ export class DashboardPageComponent implements OnInit{
     },
     "outbounds": [
         {
-            "id": "70e943c8-eaf8-4e96-b418-8db9dc58cf0b",
-            "searchId": "b4892c7f-ac41-446d-ae77-c273cedd8acd",
+            "id": "61b4911d-5e00-436b-89f1-8f291cfa95a2",
+            "searchId": "ce905f66-ee8e-4cdf-9304-c4484789b26d",
             "provider": "XMLSELECT",
-            "duration": 85,
+            "duration": 1440,
             "segments": [
                 {
                     "origin": {
-                        "code": "CDG",
+                        "code": "PDL",
                         "type": "AIRPORT"
                     },
                     "destination": {
-                        "code": "LHR",
+                        "code": "LIS",
                         "type": "AIRPORT"
                     },
-                    "departureDatetime": "2024-01-26T07:35:00",
-                    "arrivalDatetime": "2024-01-26T08:00:00",
-                    "flightNumber": 1680,
-                    "duration": 85,
+                    "departureDatetime": "2024-01-25T20:15:00",
+                    "arrivalDatetime": "2024-01-25T23:30:00",
+                    "flightNumber": 6626,
+                    "duration": 135,
                     "equipment": {
-                        "code": "223",
-                        "name": "Airbus A220-300"
+                        "code": "320",
+                        "name": "Airbus A320"
                     },
                     "operatingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
+                        "code": "S4",
+                        "name": "SATA Intl",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/S4.png"
                     },
                     "marketingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
                     },
-                    "departureTerminal": "2E",
-                    "arrivalTerminal": "4",
+                    "departureTerminal": "",
+                    "arrivalTerminal": "1",
                     "fareDetailsList": [
                         {
                             "ptc": "ADULT",
-                            "fareBasis": "HYL0AALA",
-                            "cabinClass": "Economy",
-                            "bookingClass": "H",
+                            "fareBasis": "UF0CLC00",
+                            "cabinClass": "Shuttle",
+                            "bookingClass": "U",
+                            "description": "",
+                            "privateFare": false
+                        }
+                    ]
+                },
+                {
+                    "origin": {
+                        "code": "LIS",
+                        "type": "AIRPORT"
+                    },
+                    "destination": {
+                        "code": "OPO",
+                        "type": "AIRPORT"
+                    },
+                    "departureDatetime": "2024-01-26T06:45:00",
+                    "arrivalDatetime": "2024-01-26T07:45:00",
+                    "flightNumber": 1920,
+                    "duration": 60,
+                    "equipment": {
+                        "code": "32N",
+                        "name": "Airbus A320-212"
+                    },
+                    "operatingCarrier": {
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
+                    },
+                    "marketingCarrier": {
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
+                    },
+                    "departureTerminal": "1",
+                    "arrivalTerminal": "",
+                    "fareDetailsList": [
+                        {
+                            "ptc": "ADULT",
+                            "fareBasis": "UF0CLC00",
+                            "cabinClass": "Shuttle",
+                            "bookingClass": "U",
+                            "description": "",
+                            "privateFare": false
+                        }
+                    ]
+                },
+                {
+                    "origin": {
+                        "code": "OPO",
+                        "type": "AIRPORT"
+                    },
+                    "destination": {
+                        "code": "ORY",
+                        "type": "AIRPORT"
+                    },
+                    "departureDatetime": "2024-01-26T19:05:00",
+                    "arrivalDatetime": "2024-01-26T22:15:00",
+                    "flightNumber": 456,
+                    "duration": 130,
+                    "equipment": {
+                        "code": "320",
+                        "name": "Airbus A320"
+                    },
+                    "operatingCarrier": {
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
+                    },
+                    "marketingCarrier": {
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
+                    },
+                    "departureTerminal": "",
+                    "arrivalTerminal": "1",
+                    "fareDetailsList": [
+                        {
+                            "ptc": "ADULT",
+                            "fareBasis": "UF0CLC00",
+                            "cabinClass": "Shuttle",
+                            "bookingClass": "U",
                             "description": "",
                             "privateFare": false
                         }
                     ]
                 }
             ],
-            "tags": ["LCC"],
-            "nstops": 0,
+            "tags": [],
+            "nstops": 2,
             "show": true
         }
     ],
     "inbounds": [
         {
-            "id": "528db03c-ecf7-4418-869c-bf7ccf8b453a",
-            "searchId": "b4892c7f-ac41-446d-ae77-c273cedd8acd",
+            "id": "dbacd2e4-f716-4248-9196-b04388324f11",
+            "searchId": "ce905f66-ee8e-4cdf-9304-c4484789b26d",
             "provider": "XMLSELECT",
-            "duration": 80,
+            "duration": 350,
             "segments": [
                 {
                     "origin": {
-                        "code": "LHR",
+                        "code": "ORY",
                         "type": "AIRPORT"
                     },
                     "destination": {
-                        "code": "CDG",
+                        "code": "OPO",
                         "type": "AIRPORT"
                     },
-                    "departureDatetime": "2024-02-20T06:20:00",
-                    "arrivalDatetime": "2024-02-20T08:40:00",
-                    "flightNumber": 1381,
-                    "duration": 80,
+                    "departureDatetime": "2024-01-30T10:20:00",
+                    "arrivalDatetime": "2024-01-30T11:30:00",
+                    "flightNumber": 453,
+                    "duration": 130,
                     "equipment": {
-                        "code": "223",
-                        "name": "Airbus A220-300"
+                        "code": "E90",
+                        "name": "EMBRAER 190"
                     },
                     "operatingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
+                        "code": "NI",
+                        "name": "Portugalia Air",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/NI.png"
                     },
                     "marketingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
                     },
-                    "departureTerminal": "4",
-                    "arrivalTerminal": "2E",
+                    "departureTerminal": "1",
+                    "arrivalTerminal": "",
                     "fareDetailsList": [
                         {
                             "ptc": "ADULT",
-                            "fareBasis": "TYL0AALA",
-                            "cabinClass": "Tourist",
-                            "bookingClass": "T",
+                            "fareBasis": "LF0CLC00",
+                            "cabinClass": "Economy",
+                            "bookingClass": "L",
+                            "description": "",
+                            "privateFare": false
+                        }
+                    ]
+                },
+                {
+                    "origin": {
+                        "code": "OPO",
+                        "type": "AIRPORT"
+                    },
+                    "destination": {
+                        "code": "PDL",
+                        "type": "AIRPORT"
+                    },
+                    "departureDatetime": "2024-01-30T12:40:00",
+                    "arrivalDatetime": "2024-01-30T14:10:00",
+                    "flightNumber": 6627,
+                    "duration": 150,
+                    "equipment": {
+                        "code": "320",
+                        "name": "Airbus A320"
+                    },
+                    "operatingCarrier": {
+                        "code": "S4",
+                        "name": "SATA Intl",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/S4.png"
+                    },
+                    "marketingCarrier": {
+                        "code": "TP",
+                        "name": "TAP Air Portugal",
+                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/TP.png"
+                    },
+                    "departureTerminal": "",
+                    "arrivalTerminal": "",
+                    "fareDetailsList": [
+                        {
+                            "ptc": "ADULT",
+                            "fareBasis": "LF0CLC00",
+                            "cabinClass": "Economy",
+                            "bookingClass": "L",
                             "description": "",
                             "privateFare": false
                         }
@@ -187,109 +307,7 @@ export class DashboardPageComponent implements OnInit{
                 }
             ],
             "tags": [],
-            "nstops": 0,
-            "show": true
-        },
-        {
-            "id": "548e8b90-25c6-4a2f-9783-595ec818c229",
-            "searchId": "b4892c7f-ac41-446d-ae77-c273cedd8acd",
-            "provider": "XMLSELECT",
-            "duration": 80,
-            "segments": [
-                {
-                    "origin": {
-                        "code": "LHR",
-                        "type": "AIRPORT"
-                    },
-                    "destination": {
-                        "code": "CDG",
-                        "type": "AIRPORT"
-                    },
-                    "departureDatetime": "2024-02-20T11:30:00",
-                    "arrivalDatetime": "2024-02-20T13:50:00",
-                    "flightNumber": 1581,
-                    "duration": 80,
-                    "equipment": {
-                        "code": "223",
-                        "name": "Airbus A220-300"
-                    },
-                    "operatingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
-                    },
-                    "marketingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
-                    },
-                    "departureTerminal": "4",
-                    "arrivalTerminal": "2E",
-                    "fareDetailsList": [
-                        {
-                            "ptc": "ADULT",
-                            "fareBasis": "TYL0AALA",
-                            "cabinClass": "Tourist",
-                            "bookingClass": "T",
-                            "description": "",
-                            "privateFare": false
-                        }
-                    ]
-                }
-            ],
-            "tags": [],
-            "nstops": 0,
-            "show": true
-        },
-        {
-            "id": "9fdf8e9c-0199-4f93-9673-b11fc801a648",
-            "searchId": "b4892c7f-ac41-446d-ae77-c273cedd8acd",
-            "provider": "XMLSELECT",
-            "duration": 80,
-            "segments": [
-                {
-                    "origin": {
-                        "code": "LHR",
-                        "type": "AIRPORT"
-                    },
-                    "destination": {
-                        "code": "CDG",
-                        "type": "AIRPORT"
-                    },
-                    "departureDatetime": "2024-02-20T15:00:00",
-                    "arrivalDatetime": "2024-02-20T17:20:00",
-                    "flightNumber": 1781,
-                    "duration": 80,
-                    "equipment": {
-                        "code": "223",
-                        "name": "Airbus A220-300"
-                    },
-                    "operatingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
-                    },
-                    "marketingCarrier": {
-                        "code": "AF",
-                        "name": "Air France",
-                        "logo_url": "https://carrierlogos.s3.us-east-2.amazonaws.com/AF.png"
-                    },
-                    "departureTerminal": "4",
-                    "arrivalTerminal": "2E",
-                    "fareDetailsList": [
-                        {
-                            "ptc": "ADULT",
-                            "fareBasis": "TYL0AALA",
-                            "cabinClass": "Tourist",
-                            "bookingClass": "T",
-                            "description": "",
-                            "privateFare": false
-                        }
-                    ]
-                }
-            ],
-            "tags": [],
-            "nstops": 0,
+            "nstops": 1,
             "show": true
         }
     ],

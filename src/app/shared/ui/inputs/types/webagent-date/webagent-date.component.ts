@@ -70,7 +70,7 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
         if(!day) return false;
         if (!this.dateForm.valid) return false;
 
-        let selectDate: moment.Moment = moment(this.dateForm.get("selectedDate")?.value, "'DD/MM/YYYY'")
+        let selectDate: moment.Moment = moment(this.dateForm.get("selectedDate")?.value, 'DD/MM/YYYY')
 
         return day.isSame(selectDate);
     }

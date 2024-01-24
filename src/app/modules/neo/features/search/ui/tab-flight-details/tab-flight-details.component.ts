@@ -65,4 +65,12 @@ export class TabFlightDetailsComponent {
             date1.getDate() == date2.getDate()
         )
     }
+
+    get numberOfStops(): number {
+        return this.option.segments.length - 1;
+    }
+
+    range(start: number, end: number): number[] {
+        return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+    }
 }

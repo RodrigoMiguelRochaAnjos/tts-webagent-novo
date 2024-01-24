@@ -23,6 +23,7 @@ import { AirSegment } from "src/app/modules/neo/models/air-segment.model";
 export class SearchResultComponent implements OnInit {
     @Input() result!: AirSearchResponse;
 
+    private lastTabIndex: number = 0;
     private currency!: string;
     showCurrencyInfo: boolean = false;
     showFlightDetails = false;
@@ -33,6 +34,7 @@ export class SearchResultComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private reservationService: ReservationService,
+        private router: Router
     ) { }
     
     ngOnInit() {
@@ -84,8 +86,11 @@ export class SearchResultComponent implements OnInit {
     }
 
     get canBook(): boolean {
-        return true;
-        // return this.reservationService.canBook(this.result.id);
+        return this.reservationService.canBook(this.result.id, this.result.inbounds.length > 0);
+    }
+
+    get isCurrentResult() : boolean {
+        return this.reservationService.activeResult === this.result.id;
     }
 
     get selectedOptions(): { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null } {
@@ -108,7 +113,10 @@ export class SearchResultComponent implements OnInit {
     }
 
     selectOptions(option: FlightOption, type: "INBOUNDS" | "OUTBOUNDS"): void {
-        this.reservationService.activeResult = this.result.id;
+        if (this.reservationService.activeResult != this.result.id) {
+            this.reservationService.resetSelection();
+            this.reservationService.activeResult = this.result.id;
+        }
         this.reservationService.selectFlight(option, type);
         
         if (!(this.result.inbounds && this.result.inbounds.length > 0)) return;
@@ -131,77 +139,38 @@ export class SearchResultComponent implements OnInit {
     async advance(): Promise<void> {
         if (!this.canBook) return;
 
-        let hasEnoughFunds: boolean = false;
-        let totalFee: number = 0;
+        this.reservationService.checkFunds().then( (checked: boolean) => {
+            if (!checked) {
+                alert(`Not enough money in current account., You need to have enough money for the fee of 4.5 USD per LCC flight`);
+                return;
+            }
+            const outbound: FlightOption | null = this.reservationService.getSelectedFlightsValue().OUTBOUNDS;
+            const inbound: FlightOption | null = this.reservationService.getSelectedFlightsValue().INBOUNDS;
 
-        this.reservationService.checkFunds();
+            if (!outbound) return;
 
-        // if (!this.reservationService.selectionFlights['OUTBOUND']) return;
+            const selectionFlights: FlightOption[] = [outbound];
 
-        // const outbound: FlightOption = this.reservationService.selectionFlights['OUTBOUND'];
+            if (inbound) selectionFlights.push(inbound);
 
-        // let selectionFlights: FlightOption[] = [outbound];
+            const body: AirCheckoutDetailsRequest = new AirCheckoutDetailsRequest(this.result.price, selectionFlights, this.currency);
 
-        // if (this.reservationService.selectionFlights['INBOUND']) selectionFlights.push(this.reservationService.selectionFlights['INBOUND']);
+            this.reservationService.getCheckoutDetails(body).then((success: boolean) => {
+                if(!success) {
+                    alert(`The flight you are trying to select is no longer available`);
+                    return;
+                }
 
-        // const body: AirCheckoutDetailsRequest = new AirCheckoutDetailsRequest(this.result.price, selectionFlights, this.currency);
-
-        // selectionFlights.forEach((option: FlightOption) => {
-        //     if (option.provider === Providers.TRAVELFUSION) totalFee += 4.5;
-        // });
-
-        // if (totalFee === 0) {
-        //     await this.makeCheckoutDetailsRequest(body);
-        //     return;
-        // }
-
-        // hasEnoughFunds = this.balanceService.getBalanceValue().amount >= totalFee;
-
-        // if (!hasEnoughFunds) alert(`Not enough money in current account., You need to have enough money for the fee of ${totalFee} USD`);
-
-        // await this.makeCheckoutDetailsRequest(body);
-
+                this.router.navigate(['trip/summary']);
+            })
+        });
     }
 
-    // makeCheckoutDetailsRequest(body: AirCheckoutDetailsRequest): void {
-    //     this.checkoutService.getCheckoutDetails(body).subscribe({
-    //         next: async (result: Result) => {
+    getActiveIndex(): number {
+        if (this.showFlightDetails) this.lastTabIndex = 0;
+        if (this.showPriceDetails) this.lastTabIndex = 1;
+        if (this.showDestInfo) this.lastTabIndex = 2
 
-    //             if(!result.success) return;
-
-    //             const details: any = result.data as AirCheckoutDetailsResponse;
-
-
-    //             const supplierInfos = new Map<string, SupplierInfo[]>();
-
-    //             if (details.supplierInfos != null){
-    //                 for (const key in details.supplierInfos) {
-    //                     supplierInfos.set(key, (details.supplierInfos[key] as SupplierInfo[]));
-    //                 }
-    //             }
-
-    //             details.supplierInfos = supplierInfos;
-
-    //             const formOfPayments = new Map<string, SupportedPayments>();
-
-    //             if (details.formOfPayments != null){
-    //                 for (const key in details.formOfPayments){
-    //                     formOfPayments.set(key, (details.formOfPayments[key] as SupportedPayments))
-    //                 }
-    //             }
-
-    //             details.formOfPayments = formOfPayments;
-
-    //             this.reservationService.updateCheckoutDetails(details);
-
-
-    //             await this.loadingService.dismiss();
-
-    //             this.router.navigate(['trip/summary'])
-    //         },
-    //         error: async (error) => {
-    //             await this.loadingService.dismiss();
-    //         }
-    //     });
-    // }
+        return this.lastTabIndex;
+    }
 }

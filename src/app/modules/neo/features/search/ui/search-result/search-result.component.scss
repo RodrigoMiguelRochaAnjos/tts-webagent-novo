@@ -108,29 +108,31 @@
         padding: 10px;
         flex-direction: column;
         min-height: 100%;
-        .container{
+
+        .container {
             width: 100%;
             display: flex;
             align-items: center;
             flex-direction: column;
+
             .price {
                 font-weight: 600;
                 color: #11214A;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
-    
+
                 span {
                     font-size: 1.7rem;
-    
+
                     .CUR {
                         font-size: .75em;
                     }
                 }
-    
+
                 .tooltip-currency-exchange {
                     position: relative;
-    
+
                     .tooltip-info {
                         background-color: #BFD3E0;
                         color: #11214A;
@@ -144,13 +146,13 @@
                         visibility: visible;
                         left: 0%;
                         transform: translate(calc(-100% + 20px), -20%);
-    
-    
+
+
                         .tooltip-price {
                             color: #2576AC;
                             display: block;
                         }
-    
+
                         .tooltip-triangle {
                             display: block;
                             background-color: #bfd3e0;
@@ -199,10 +201,10 @@
         margin: 0px auto;
         justify-content: flex-start;
         align-items: center;
-        border-bottom: 1px solid var(--tma-color-c2a-transparent);
+        border-bottom: 2px solid #738FC6;
+        position: relative;
 
         .search-result-info-tab {
-            position: relative;
             cursor: pointer;
             width: calc(100% / 3);
             height: 30px;
@@ -212,29 +214,29 @@
             justify-content: center;
             font-size: 12px;
             font-weight: 400;
-
-            &::after {
-                content: '';
-                width: 0%;
-                height: 1px;
-                background-color: var(--tma-color-c2a);
-                position: absolute;
-                bottom: 0px;
-                left: 0px;
-                transform: translateY(50%);
-
-                transition: width ease-in-out .3s;
-
-            }
+            position: relative;
 
             &.selected {
-                color: var(--tma-color-c2a);
+                color: #11214A;
+            }
 
-                &::after {
-                    content: '';
-                    width: 100%;
+            &:hover {
+                ~ .slider {
+                    transform: translate(calc(var(--index) * 100%), 100%);
                 }
             }
+        }
+
+        .slider {
+            width: calc(100% / 3);
+            height: 2px;
+            background-color: #11214A;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            transform: translate(calc(var(--index) * 100%), 100%);
+
+            transition: transform ease-in-out .3s;
         }
     }
 }

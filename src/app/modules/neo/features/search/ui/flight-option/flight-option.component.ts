@@ -87,8 +87,12 @@ export class FlightOptionComponent implements OnInit {
             this.progressWidth = '0%';
             return;
         }
-        
-        const widthPercentage = ((index + 1) / (this.numberOfStops + 1)) * 100;
+        if (index == this.numberOfStops) {
+            this.progressWidth = '100%';
+            return;
+        }
+        const invertedIndex: number = (this.numberOfStops + 1) - (index + 1);
+        const widthPercentage = (invertedIndex / (this.numberOfStops + 1)) * 100;
         this.progressWidth = `${widthPercentage}%`;
     }
 }
