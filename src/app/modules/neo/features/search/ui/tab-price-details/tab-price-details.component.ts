@@ -12,7 +12,7 @@ import { AirSearchResponse } from "src/app/modules/neo/models/responses/air-sear
 })
 export class TabPriceDetailsComponent {
 	@Input() result!: AirSearchResponse;
-    @Input() selected!: { [id: string]: FlightOption };
+    @Input() selected!: { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null };
 
 	constructor() {}
 
@@ -41,14 +41,14 @@ export class TabPriceDetailsComponent {
 		return fareDetails[0];
 	}
 
-    get inbound(): FlightOption | undefined {
-        if(!this.selected) return undefined;
+    get inbound(): FlightOption | null {
+        if(!this.selected) return null;
 
-        return this.selected['INBOUND'];
+        return this.selected['INBOUNDS'];
     }
 
-    get outbound(): FlightOption | undefined {
-        if(!this.selected) return undefined;
-        return this.selected['OUTBOUND'];
+    get outbound(): FlightOption | null {
+        if(!this.selected) return null;
+        return this.selected['OUTBOUNDS'];
     }
 }

@@ -9,5 +9,6 @@ export enum InputType {
     SWITCH,
     CVV,
     SEARCH,
-    TEXT_DATE_INPUT
+    TEXT_DATE_INPUT,
+    NUMBER
 }

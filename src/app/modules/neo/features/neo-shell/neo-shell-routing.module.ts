@@ -11,6 +11,10 @@ const routes: Routes = [
         path: 'search',
         loadChildren: () => import("../search/feature/search-shell/search-shell.module").then((m) => m.SearchShellModule)
     },
+    {
+        path: 'travellers',
+        loadChildren: () => import("../traveller-details/feature/traveller-details-shell/traveller-details-shell.module").then((m) => m.TravellerDetailsShellModule)
+    },
 ]
 
 @NgModule({

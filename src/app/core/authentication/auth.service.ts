@@ -12,6 +12,7 @@ import { AuthValidationService, Validators } from "./auth-validation/auth-valida
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { UserMapper } from "./user.mapper";
+import { SyncData } from "src/app/modules/home/models/sync-data.model";
 
 @Injectable({
     providedIn: 'root'
@@ -55,7 +56,10 @@ export class AuthService implements OnDestroy{
         this.userService.login(loginRequest).subscribe({
             next: (response: LoginResponse) => {
 
-                Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
+                if(response.syncData) {
+                    Object.setPrototypeOf(response.syncData, SyncData.prototype)
+                    Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
+                }
 
                 switch (this.loginValidator.validateLogin(response)){
                     case Validators.VALID:
@@ -73,6 +77,9 @@ export class AuthService implements OnDestroy{
                         break;
                     case Validators.HAS_ALERT:
                         alert("HAS ALERTS");
+                        break;
+                    case Validators.INVALID_REQUEST:
+                        alert("INVALID LOGIN");
                         break;
                 }
                 

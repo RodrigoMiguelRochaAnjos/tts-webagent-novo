@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { WebagentInputComponent } from './shared/ui/inputs/webagent-input/webagent-input.component';
 import { SharedModule } from './shared/shared.module';
 import { FlightSearchFormComponent } from './modules/neo/features/search/ui/flight-search-form/flight-search-form.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { FlightSearchFormComponent } from './modules/neo/features/search/ui/flig
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
+        FormsModule,
         SharedModule
     ],
     providers: [

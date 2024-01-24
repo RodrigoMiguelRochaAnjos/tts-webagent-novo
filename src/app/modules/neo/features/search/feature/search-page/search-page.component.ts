@@ -1,7 +1,7 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, HostListener, Input, OnInit } from '@angular/core';
 import { SearchService } from '../../data-access/search.service';
 import { AirSearchRequest } from '../../utils/requests/air-search-request/air-search-request.model';
-import { Observable } from 'rxjs';
+import { Observable, elementAt } from 'rxjs';
 import { AirSearchResponse, AirSearchResults } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AirSearchIdResponse } from '../../utils/responses/air-search-id-response.model';
@@ -34,7 +34,10 @@ export class SearchPageComponent implements OnInit {
         if (this.id == null) return;
 
         this.searchService.search(this.id).then((success: boolean) => {
-            if (success === false && this.searchService.getResultsValue().length <= 0) this.router.navigate(['dashboard']);
+            if (success === false && this.searchService.getResultsValue().length <= 0) {
+                this.searchService.previousSearchId = undefined;
+                this.router.navigate(['neo/search/']);
+            }
         });
 
     }
@@ -62,5 +65,21 @@ export class SearchPageComponent implements OnInit {
         if (result.inbounds.length > 0 && result.inbounds.filter((option: FlightOption) => option.show).length <= 0) return false;
 
         return true;
+    }
+
+    @HostListener('window:scroll', ['$event'])
+    onScroll(event: any) {
+        if (
+            window.innerHeight + window.scrollY >=
+            document.body.offsetHeight - 100
+        ) {
+            this.searchService.nextPage();
+        }
+    }
+
+    onScreen(event: {isOnScreen: boolean, element: HTMLElement}) : void {
+        if (event.isOnScreen) {
+            event.element.classList.toggle("on-screen");
+        }
     }
 }

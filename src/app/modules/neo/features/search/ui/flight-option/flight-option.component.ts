@@ -1,4 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ReservationService } from 'src/app/modules/neo/data-access/reservation.service';
 import { Carrier } from 'src/app/modules/neo/models/carrier.model';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
@@ -9,19 +10,24 @@ import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-sear
     styleUrls: ['./flight-option.component.scss'],
 })
 export class FlightOptionComponent implements OnInit {
-
-    @Input() result!: AirSearchResponse;
+    progressWidth = '0%';
+    selected!: boolean;
+    @Input() resultId!: string;
     @Input() option!: FlightOption;
-    @Input() outbound!: boolean;
-
-    @Output() flightSelectEvent: EventEmitter<{ [id: string]: FlightOption }> = new EventEmitter<{ [id: string]: FlightOption }>();
+    @Output() flightSelectEvent: EventEmitter<FlightOption> = new EventEmitter<FlightOption>();
 
 
     constructor(
-        // private reservationService: ReservationService
+        private reservationService: ReservationService,
     ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.reservationService.getSelectedFlights().subscribe({
+            next: (flights: { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }) => {
+                this.selected = this.isOptionSelected();
+            }
+        })
+    }
 
     get airlinesLogos(): Carrier[] {
         const logos: Carrier[] = [];
@@ -63,26 +69,30 @@ export class FlightOptionComponent implements OnInit {
         return this.option.segments[this.option.segments.length - 1].destination.code;
     }
 
-    get isOptionSelected(): boolean {
-        return false;
-        // return this.reservationService.isOptionSelected(
-        //     this.result.id,
-        //     this.option.id,
-        //     this.outbound
-        // );
+    isOptionSelected(): boolean {
+        return this.reservationService.isOptionSelected(this.option.id) && (this.resultId === this.reservationService.activeResult);
     }
 
     @HostListener('click')
     onSelectionClick(): void {
+        this.flightSelectEvent.emit(this.option);
+    }
 
-        // this.reservationService.select(this.result, this.option, this.outbound ? 'OUTBOUNDS' : 'INBOUNDS');
+    range(start: number, end: number): number[] {
+        return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+    }
 
-        // let inbound: any = this.reservationService.selectionFlights['INBOUND'] ? this.reservationService.selectionFlights['INBOUND'] : null; 
-        // let outbound: any = this.reservationService.selectionFlights['OUTBOUND'] ? this.reservationService.selectionFlights['OUTBOUND'] : null; 
-
-        // this.flightSelectEvent.emit({
-        //     'INBOUND': inbound,
-        //     'OUTBOUND': outbound
-        // });
+    onStopHover(index: number): void {
+        if (index < 0) {
+            this.progressWidth = '0%';
+            return;
+        }
+        if (index == this.numberOfStops) {
+            this.progressWidth = '100%';
+            return;
+        }
+        const invertedIndex: number = (this.numberOfStops + 1) - (index + 1);
+        const widthPercentage = (invertedIndex / (this.numberOfStops + 1)) * 100;
+        this.progressWidth = `${widthPercentage}%`;
     }
 }

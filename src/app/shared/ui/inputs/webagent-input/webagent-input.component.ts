@@ -14,6 +14,7 @@ import { WebagentSearchComponent } from '../types/webagent-search/webagent-searc
 import { WebagentPasswordComponent } from '../types/webagent-password/webagent-password.component';
 import { Theme } from '../theme.enum';
 import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
+import { WebagentNumberComponent } from '../types/webagent-number/webagent-number.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -37,7 +38,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @Input() value?: any = "";
     @Input() label?: string;
     @Input() min?: string;
-    @Input() max?: string;
+    @Input() max?: string | number;
     @Input() theme: Theme = Theme.DEFAULT;
 
     @HostBinding("class.ng-disabled")
@@ -107,6 +108,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             case InputType.TEXT:
                 return WebagentTextComponent;
             case InputType.DATE:
+                this.hideDefault = true;
+
                 return WebagentDateComponent;
             case InputType.DATE_RANGE:
                 this.hideDefault = true;
@@ -122,6 +125,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 this.hideDefault = true;
 
                 return WebagentSwitchComponent;
+            case InputType.NUMBER:
+                return WebagentNumberComponent;
             case InputType.CVV:
                 return WebagentCvvComponent;
             case InputType.SEARCH:
@@ -148,6 +153,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         componentRef.instance.max = this.max;
         componentRef.instance.options = this.options;
         componentRef.instance.theme = this.theme;
+        componentRef.instance.label = this.label;
 
         componentRef.instance.writeValue(this.value);
 
@@ -160,6 +166,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             
             const regex: RegExp = new RegExp(this.pattern);
 
+            console.log(this.value);
+            console.log("regexp: ", regex.test(this.value));
             this.invalid = !regex.test(this.value);
 
             if(this.value == '') this.invalid = this.required;

@@ -83,9 +83,36 @@
             .image{
                 width: 30px;
                 height: 30px;
-                background-color: #1F75AE;
+                background-color: #11214A;
                 border-radius: 50%;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                cursor: pointer;
+
+                .vertical{
+                    position: absolute;
+                    height: 15px;
+                    width: 2px;
+                    background-color: white;
+                }
+
+                .horizontal{
+                    height: 50%;
+                    width: 2px;
+                    background-color: white;
+                    transform: rotate(90deg)
+
+                }
             }
+        }
+    }
+
+    #customContent1{
+        p {
+            margin-top: 50px;
         }
     }
 }

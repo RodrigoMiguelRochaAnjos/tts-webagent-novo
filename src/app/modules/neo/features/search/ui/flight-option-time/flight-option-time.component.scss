@@ -1,17 +1,18 @@
 .time {
     text-align: center;
     display: flex;
+    position: relative;
     div{
         display: flex;
-        font-size: 12px;
+        font-size: .85rem;
         font-weight: 600;
-        color: var(--tma-color-text);
+        color: #12214A;
         div:nth-child(2){
             padding: 0 5px;
         }
         
     }
     .next-day{
-        font-size: 7px;
+        font-size: 9px;
     }
 }
