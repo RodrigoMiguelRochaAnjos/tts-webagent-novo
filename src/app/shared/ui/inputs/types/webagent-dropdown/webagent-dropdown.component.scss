@@ -48,9 +48,12 @@
     }
 
     .dropdown-list {
-        max-height: 200px;
+        margin-top:6px;
+        max-height: 230px;
         overflow-y: auto;
-        padding-top: 10px;
+        padding-left: 2px;
+        padding-right: 1px;
+        padding-bottom: 1px;
     }
 }
 
