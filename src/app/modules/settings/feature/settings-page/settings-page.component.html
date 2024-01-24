@@ -1,10 +1,10 @@
 <div class="card">
     <h4>User Profile</h4>
 
-    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [placeholder]="'Name'" [label]="'Name'" />
+    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [placeholder]="'Insert your full name'" [label]="'Name'" />
 
     <div class="double-fields">
-        <webagent-input [type]="InputType.TEXT" [required]="true" [placeholder]="'dd/mm/yyyy'"
+        <webagent-input [type]="InputType.DATE" [required]="true" [placeholder]="'dd/mm/yyyy'"
             [label]="'Data de nascimento'" />
         <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.email.source"
             [placeholder]="'Insert your email address'" [label]="'Email'" />

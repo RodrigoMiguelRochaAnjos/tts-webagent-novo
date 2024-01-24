@@ -34,3 +34,14 @@
         }
     }
 }
+
+@media only screen and (max-width: 1280px) {
+    :host{
+
+        .middle {
+            p{
+                font-size: 0.75rem;
+            }
+        }
+    }
+}

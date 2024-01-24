@@ -1,1 +1,35 @@
-<input type="date" [(ngModel)]="this.value" (input)="update()" [pattern]="this.pattern" [required]="this.required" placeholder="{{ this.placeholder }}">
+<form [formGroup]="this.dateForm" >
+    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" />
+</form>
+
+<div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">
+    <div class="date-range-container">
+        <div class="month-control flex-container flex-center flex-middle">
+            <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
+                <
+            </div>
+            <div>{{ date.format('MMMM') }} {{ date.format('YYYY') }}</div>
+            <div class="left-control flex-container flex-middle flex-left" (click)="nextMonth()">
+                >
+            </div>
+        </div>
+        <div class="flex-container flex-center">
+            <div class="flex-container flex-center flex-middle calendar-days-container">
+                <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+            </div>
+        </div>
+        <div class="calendar-days-container flex-container">
+            <div class="calendar-days flex-container flex-center flex-middle"
+                [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day)}"
+                *ngFor="let day of daysArray" (click)="selectDate(day)">
+                <div *ngIf="day">{{ day.date() }}</div>
+            </div>
+        </div>
+    </div>
+</div>

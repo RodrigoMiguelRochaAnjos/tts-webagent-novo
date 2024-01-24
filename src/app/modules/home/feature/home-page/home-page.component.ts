@@ -52,8 +52,6 @@ export class HomePageComponent implements OnInit{
     login() : void {
         let selectedGds: string | undefined = Object.keys(this.switch).find(key => this.switch[key] === true);;
 
-        console.log(selectedGds);
-
         this.loginRequest.gds = selectedGds ? selectedGds : 'Galileo';
         
         if(!this.loginRequest.isValid()) return;

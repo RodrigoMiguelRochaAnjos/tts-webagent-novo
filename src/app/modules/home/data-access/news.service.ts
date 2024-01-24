@@ -46,9 +46,6 @@ export class NewsService {
             const news = new Array<New>();
             let requests = 0;
 
-            console.log(this.newsProviders$.value)
-
-            
             this.restService.get("https://www.businesstravelnews.com/Rss/TopStories", { responseType: 'text'}).subscribe({
                 next: (result: any) => {
                     const parser = new DOMParser();
@@ -74,7 +71,6 @@ export class NewsService {
                     }
 
                     this.news$.next(news);
-                    console.log(this.news$.value)
                 }
             });
 

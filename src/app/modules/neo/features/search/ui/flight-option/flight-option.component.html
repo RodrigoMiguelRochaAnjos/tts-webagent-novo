@@ -1,53 +1,56 @@
-<app-flight-selection-indicator [selected]="isOptionSelected" (click)="onSelectionClick()">
+<app-flight-selection-indicator [selected]="selected" (click)="onSelectionClick()">
 </app-flight-selection-indicator>
 <div class="flight-option-content">
-    <div [ngClass]="{
-        airlines: true,
-        more: airlinesLogos.length > 1
-    }">
-        <div class="airline-logo" [title]="option.segments[0].marketingCarrier.name"
-            [ngStyle]="{'background-image': 'url(' + this.airlinesLogos[0].logo_url + ')'}"></div>
-        <ng-container *ngIf="airlinesLogos.length > 1">
-            <div class="airline-logo" *ngIf="airlinesLogos.length == 2" [ngStyle]="{
-                        'background-image': 'url(' + airlinesLogos[1].logo_url + ')'
-                    }"></div>
-            <div class="airline-logo" *ngIf="airlinesLogos.length > 2">
-                <span>+{{ airlinesLogos.length - 1 }}</span>
-            </div>
-        </ng-container>
-        <div [ngClass]="{
-            tags: true,
-            overFour: this.option.tags.length > 4
-        }">
-            <span class="tag" *ngFor="let tag of this.option.tags">{{ tag }}</span>
-        </div>
-    </div>
-    
     <div class="info">
         <div class="info-segment">
-            <app-flight-option-time
-                [timeDeparture]="this.option.segments[0].departureDatetime"
-                [timeArrival]=" this.option.segments[this.option.segments.length - 1].arrivalDatetime"
-            ></app-flight-option-time>
+            <div [ngClass]="{
+                    airlines: true,
+                    more: airlinesLogos.length > 1
+                }">
+                <div class="airline-logo" [title]="option.segments[0].marketingCarrier.name"
+                    [ngStyle]="{'background-image': 'url(' + this.airlinesLogos[0].logo_url + ')'}"></div>
+                <ng-container *ngIf="airlinesLogos.length > 1">
+                    <div class="airline-logo" *ngIf="airlinesLogos.length == 2" [ngStyle]="{
+                                    'background-image': 'url(' + airlinesLogos[1].logo_url + ')'
+                                }"></div>
+                    <div class="airline-logo" *ngIf="airlinesLogos.length > 2">
+                        <span>+{{ airlinesLogos.length - 1 }}</span>
+                    </div>
+                </ng-container>
+
+            </div>
+        </div>
+        <div class="info-segment">
+            <app-flight-option-time [timeDeparture]="this.option.segments[0].departureDatetime"
+                [timeArrival]=" this.option.segments[this.option.segments.length - 1].arrivalDatetime"></app-flight-option-time>
             <app-flight-option-place [origin]="originCode" [destination]="destinationCode"></app-flight-option-place>
         </div>
-        <!-- <div class="info-segment">
-            <div class="plane-path">
-                <div [ngClass]="{ airplane: true, inverted: !outbound }">
-                    <ion-icon name="airplane" color="primary"></ion-icon>
-                </div>
-            </div>
-        </div> -->
         <div class="info-segment">
-    
+            <div class="flight-progress">
+                <div class="title" *ngIf="numberOfStops == 0">
+                    {{ 'DIRECT_FLIGHT' }}
+                </div>
+                <div class="title" *ngIf="numberOfStops > 0">
+                    {{ numberOfStops }} {{ 'STOPS' }}
+                </div>
+                <div class="stops">
+                    <div class="stop" (mouseover)="onStopHover(numberOfStops)" (mouseout)="onStopHover(-1)" style="--index: -1"></div>
+                    <div class="stop" *ngFor="let number of range(1, numberOfStops); let index = index" style="--index: {{index}}" (mouseover)="onStopHover(index)" (mouseout)="onStopHover(-1)"></div>
+                    <div class="stop" (mouseover)="onStopHover(-1)" (mouseout)="onStopHover(-1)" style="--index: {{numberOfStops + 1}}"></div>
+                </div>
+                <span class="progress-bar" [style.width]="progressWidth"></span>
+
+            </div>
         </div>
         <div class="info-segment">
             <div class="text">{{ totalDuration }}</div>
-            <div class="text" *ngIf="numberOfStops == 0">
-                {{ 'DIRECT_FLIGHT'  }}
-            </div>
-            <div class="text" *ngIf="numberOfStops > 0">
-                {{ numberOfStops }} {{ 'STOPS'  }}
+        </div>
+        <div class="info-segment">
+            <div [ngClass]="{
+                tags: true,
+                overFour: this.option.tags.length > 4
+            }">
+                <span class="tag" *ngFor="let tag of this.option.tags">{{ tag }}</span>
             </div>
         </div>
     </div>

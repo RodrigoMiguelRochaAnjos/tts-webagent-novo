@@ -66,7 +66,7 @@ export class Contact {
                     this.email = value;
                     break;
                 case 'address':
-                    this.address = Object.assign<Address, any>(new Address('', '', '', '', '', '', '', '') , JSON.parse(value));
+                    this.address = Object.assign<Address, any>(new Address() , JSON.parse(value));
                     break;
                 case 'phone':
                     this.phone = Object.assign<Phone, any>(new Phone() , JSON.parse(value));

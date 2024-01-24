@@ -18,6 +18,7 @@ import { WebagentSearchComponent } from './types/webagent-search/webagent-search
 import { WebagentPasswordComponent } from './types/webagent-password/webagent-password.component';
 import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
 import { WebagentCheckboxInputComponent } from './types/webagent-checkbox-input/webagent-checkbox-input.component';
+import { WebagentNumberComponent } from './types/webagent-number/webagent-number.component';
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { WebagentCheckboxInputComponent } from './types/webagent-checkbox-input/
         WebagentSearchComponent,
         WebagentPasswordComponent,
         WebagentTextDateInputComponent,
-        WebagentCheckboxInputComponent
+        WebagentCheckboxInputComponent,
+        WebagentNumberComponent
     ],
     imports: [
         CommonModule,

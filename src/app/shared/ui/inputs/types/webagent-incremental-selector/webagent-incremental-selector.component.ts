@@ -32,8 +32,4 @@ export class WebagentIncrementalSelectorComponent extends WebagentBaseComponent 
         this.value -= this.step;
         this.update()
     }
-
-    isNumeric(value: any): boolean {
-        return !isNaN(parseFloat(value)) && isFinite(value);
-    }
 }

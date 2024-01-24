@@ -9,6 +9,9 @@ import { InfantWithSeatTraveller } from "../models/traveller/types/infant-with-s
 import { MilitaryTraveller } from "../models/traveller/types/military-traveller.model";
 import { SeniorTraveller } from "../models/traveller/types/senior-traveller.model";
 import { TravellerTypes } from "../models/traveller/traveller-types.enum";
+import { Contact } from "src/app/core/models/user/contact/contact.model";
+import { Phone } from "src/app/core/models/user/contact/segments/phone.model";
+import { Address } from "src/app/core/models/user/contact/segments/address.model";
 
 @Injectable({
     providedIn: 'root'
@@ -60,6 +63,10 @@ export class TravellerService {
 
     public getTravellers(): Travellers {
         return this._travellers
+    }
+
+    public setTraveller(travellers: Travellers): void {
+        this._travellers = travellers;
     }
 
     private getType(travellerType: TravellerTypes): any {

@@ -211,7 +211,6 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         entries.forEach(entry => {
             if ((entry.boundingClientRect.x + entry.boundingClientRect.width) > entry.rootBounds!.right) this.alignLeft = true;
 
-            console.log(`${(entry.boundingClientRect.y + entry.boundingClientRect.height)} >= ${entry.rootBounds!.bottom}`)
             if ((entry.boundingClientRect.y + entry.boundingClientRect.height) > entry.rootBounds!.bottom) this.alignTop = true;
         });
     }
