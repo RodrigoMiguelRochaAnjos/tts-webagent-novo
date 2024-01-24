@@ -41,6 +41,11 @@ const routes: Routes = [
         path: 'traveller-details',
         loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
         canActivateChild: [AuthGuardService]
+    },
+    {
+        path: 'checkout',
+        loadChildren: () => import('./modules/neo/features/checkout/feature/checkout-shell/checkout-shell.module').then((m) => m.CheckoutShellModule),
+        title: 'Checkout'
     }
 ];
 

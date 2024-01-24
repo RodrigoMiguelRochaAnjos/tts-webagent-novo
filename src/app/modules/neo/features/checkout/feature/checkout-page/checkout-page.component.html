@@ -1,0 +1,50 @@
+<div class="page-container">
+    <div class="top-section">
+
+    </div>
+
+
+    <div class="mid-section">
+        <div class="half-section left">
+            <div class="first-row">
+                <h4>Payment Card</h4>
+                <webagent-input [type]="InputType.DROPDOWN" [required]="true" [label]="'Card type'"/>
+            </div>
+
+            <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card holder'" [placeholder]="'E.g. John'"/>
+             
+            <div class="second-row">
+                <webagent-input [type]="InputType.NUMBER" [required]="true" [label]="'Card holder'" [placeholder]="'E.g. 0000 0000 0000 0000'"/>
+                <webagent-input [type]="InputType.CVV" [required]="true" [label]="'CVV'" [placeholder]="'E.g. 00000'"/>
+                <webagent-input [type]="InputType.TEXT_DATE_INPUT" [required]="true" [label]="'Expiry date'" [placeholder]="'E.g. mm/yyyy'"/>
+            </div>
+
+            <div class="error-section">
+                
+                <span style="list-style-type:disc"> Invalid username should have atleast 5 characters </span>
+                
+                <span style="list-style-type:disc"> Invalid password should have 5 characters </span>
+
+            </div>
+
+        </div>
+        <div class="half-section right">
+            <h4>Billing address</h4>
+
+            <div class="first-section">
+
+            </div>
+
+            <div class="second-section">
+
+            </div>
+
+            <div class="third-section">
+
+            </div>
+
+        </div>    
+    </div>
+
+
+</div>
