@@ -11,6 +11,9 @@ import { AnonymousUser } from "src/app/core/models/user/types/anonymous-user.mod
 import { IncompleteUser } from "src/app/core/models/user/types/incomplete-user.model";
 import { PageableWrapper } from "src/app/core/models/pageable-wrapper.model";
 import { Transaction, Transactions } from "../models/transaction.model";
+import { DepositRequest } from "../models/deposit-request.model";
+import { DepositResponse } from "../models/deposit-response.model";
+import { Deposit } from "../models/deposit.model";
 
 @Injectable({
     providedIn: 'root'
@@ -64,7 +67,7 @@ export class BalanceService {
         });
     }
 
-    loadTransactions(numberOfDays: number) {
+    loadTransactions(numberOfDays?: number, startDate?: string, endDate?: string) {
         this.authService.getUser().subscribe((user: User) => {
             if (!(user instanceof AuthenticatedUser)) return;
 
@@ -76,17 +79,51 @@ export class BalanceService {
 
             if (numberOfDays != null) remoteUrl += `&limit=${numberOfDays}`;
 
-            this.httpClient.get<PageableWrapper<Transactions>>(remoteUrl, { headers: headers }).subscribe({
-                next: (data: PageableWrapper<Transactions>) => {
+            if (startDate != null) remoteUrl += `&startdate=${startDate}`;
 
-                    this.transactions$.next(this.transactions$.value.concat(data.content));
-                    this.page++;
-                },
-                error: (error) => {
-                    console.error('An error occurred:', error);
-                }
+            if (endDate != null) remoteUrl += `&enddate=${endDate}`;
+
+            this.httpClient.get<PageableWrapper<Transactions>>(remoteUrl, { headers: headers }).subscribe({
+                next: (data: PageableWrapper<Transactions>) =>  this.transactions$.next(this.transactions$.value.concat(data.content)),
+                error: (error) => console.error('An error occurred:', error)
             });
         });
+    }
+
+    public addFunds(deposit: Deposit): Promise<boolean> {
+        return new Promise<boolean>((resolve) => {
+            this.authService.getUser().subscribe((user: User) => {
+                if (!(user instanceof AuthenticatedUser)) return;
+    
+                const headers: HttpHeaders = new HttpHeaders({
+                    Authorization: `Bearer ${user.token}`
+                });
+    
+                const dataToSend: DepositRequest = new DepositRequest();
+                dataToSend.clientUrl = window.location.href;
+                dataToSend.deposit = deposit;
+    
+                this.httpClient.post<DepositResponse>(`${this.ENDPOINT}/deposit`, dataToSend, { headers: headers }).subscribe({
+                    next: (response: DepositResponse) => {
+                        if (response.paymentUrl == null) {
+                            resolve(false);
+                            return;
+                        }
+
+                        window.open(response.paymentUrl, '_self');
+                    },
+                    error: (error) => {
+                        console.error('Error making POST request', error);
+                        resolve(false);
+                    }
+                });
+            });
+        })
+    
+    }
+
+    resetTransactions(): void{
+        this.transactions$.next([]);
     }
 }
 

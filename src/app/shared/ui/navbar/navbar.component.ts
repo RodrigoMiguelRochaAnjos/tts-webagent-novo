@@ -7,6 +7,10 @@ import { Route, Router } from '@angular/router';
 import { IncompleteUser } from '../../../core/models/user/types/incomplete-user.model';
 import { Balance } from '../../models/balance.model';
 import { BalanceService } from '../../services/balance.service';
+import { ModalControllerService } from '../../../core/services/modal-controller.service';
+import { InputType } from '../inputs/input-type.enum';
+import { patterns } from '../../utils/validation-patterns';
+import { Deposit } from '../../models/deposit.model';
 
 @Component({
   selector: 'navbar',
@@ -14,20 +18,26 @@ import { BalanceService } from '../../services/balance.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit, OnDestroy{
+    InputType = InputType
+    patterns = patterns
+
     user$!: Observable<User>;
     public routes: NavItem[] = [];
+    public deposit: Deposit = new Deposit();
 
     @Input() side!: boolean;
 
     @HostBinding('style.display')
     public display: string = "block";
     public balance$!: Observable<Balance>;
-
+    public modal$!: Observable<boolean>; 
+    
     private userSubscription!: Subscription;
 
     constructor(
         private authService: AuthService,
         private balanceService: BalanceService,
+        private modalService: ModalControllerService,
         private router: Router
     ) {
         
@@ -36,7 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy{
     ngOnInit(): void {
         this.user$ = this.authService.getUser();
         this.balance$ = this.balanceService.getBalance();
-
+        this.modal$ = this.modalService.getModal();
         
         this.userSubscription = this.user$.subscribe({
             next: (user: User) => {
@@ -75,6 +85,18 @@ export class NavbarComponent implements OnInit, OnDestroy{
     
     logout() : void {
         this.authService.logout();
+    }
+    
+    toggleModal(content: any, modalId: string) {
+        this.modalService.showModal(content, modalId);
+    }
+
+    addFunds(): void {
+        this.deposit.currency = "USD";
+        if(!this.deposit.isValid()) return;
+
+        this.balanceService.addFunds(this.deposit);
+
     }
 }
 

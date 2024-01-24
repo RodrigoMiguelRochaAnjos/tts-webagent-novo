@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WebagentInputComponent } from '../../webagent-input/webagent-input.component';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 
@@ -7,16 +7,20 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
   templateUrl: './webagent-dropdown.component.html',
   styleUrls: ['./webagent-dropdown.component.scss']
 })
-export class WebagentDropdownComponent extends WebagentBaseComponent{
-    selectedOption: string = 'Select an option';
+export class WebagentDropdownComponent extends WebagentBaseComponent implements OnInit{
     isDropdownOpen: boolean = false;
+    
+    ngOnInit(): void {
+    }
 
     toggleDropdown(): void {
         this.isDropdownOpen = !this.isDropdownOpen;
     }
 
     selectOption(option: string): void {
-        this.selectedOption = option;
+        this.value = option;
         this.isDropdownOpen = false;
+
+        this.update();
     }
 }

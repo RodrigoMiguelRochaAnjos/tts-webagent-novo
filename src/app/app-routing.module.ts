@@ -36,6 +36,11 @@ const routes: Routes = [
         loadChildren: () => import('./modules/wallet/feature/wallet-shell/wallet-shell.module').then((m) => m.WalletShellModule),
         canActivateChild: [AuthGuardService],
         title: 'Wallet'
+    },
+    {
+        path: 'traveller-details',
+        loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
+        canActivateChild: [AuthGuardService]
     }
 ];
 

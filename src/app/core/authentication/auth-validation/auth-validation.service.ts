@@ -4,6 +4,7 @@ import { Middleware } from "./handler.model";
 import { AlertValidator } from "./validations/alert.validator";
 import { LicenseValidator } from "./validations/license.validator";
 import { SettingsValidator } from "./validations/settings.validator";
+import { RequestValidator } from "./validations/request.validator";
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthValidationService{
 
     public validateLogin(loginResponse: LoginResponse): Validators{
         const middlewares: Middleware = Middleware.link(
+            new RequestValidator(),
             new AlertValidator(),
             new LicenseValidator(),
             new SettingsValidator()
@@ -26,5 +28,6 @@ export enum Validators {
     HAS_ALERT,
     INVALID_LICENSE,
     INVALID_SETTINGS,
+    INVALID_REQUEST,
     VALID
 }

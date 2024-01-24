@@ -17,7 +17,7 @@ export class SearchService {
     private readonly VERSION: string = 'v1';
     private readonly ENDPOINT: string = environment.endpoints.NEO;
 
-    previousSearchId!: string;
+    previousSearchId?: string;
     public isLoading: boolean = false;
 
     public itemsPerPage: number = 30;
@@ -54,63 +54,91 @@ export class SearchService {
         return this.httpClient.post<AirSearchIdResponse>(`${this.ENDPOINT}/${this.VERSION}/search`, airSearch, { headers: http });
     }
 
-    public search(searchId: string) : void {
-        const user = this.authService.getUserValue();
+    public search(searchId: string) : Promise<boolean> {
 
-        if (!(user instanceof AuthenticatedUser)) return;
+        return new Promise((resolve) => {
 
-        this.previousSearchId = searchId;
+            const user = this.authService.getUserValue();
+    
+            if (!(user instanceof AuthenticatedUser)) return;
+    
+            this.previousSearchId = searchId;
+    
+            this.results$.next([]);
+    
+            this.isLoading = true;
+            new Observable<AirSearchResponse>((observer: Subscriber<AirSearchResponse>) => {
+                const eventSource: EventSourcePolyfill = new EventSourcePolyfill(
+                    `${this.ENDPOINT}/${this.VERSION}/search/${searchId}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization:
+                                `Bearer ${user.token}`
+                        },
+                    }
+                );
+                let index = 0;
+                eventSource.onmessage = (message: OnMessageEvent) => {
+                    const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
+                    result.show = true;
 
-        this.results$.next([]);
+                    if (index >= (this.page * this.itemsPerPage)) {
+                        result.show = false;
+                        return;
+                    }
+                    result.outbounds = result.outbounds.map((option: FlightOption) => {
+                        option.show= true
+                        return option;
+                    });
+                    result.inbounds = result.inbounds.map((option: FlightOption) => {
+                        option.show = true
+                        return option;
+                    });
+                    observer.next(result);
 
-        this.isLoading = true;
-        new Observable<AirSearchResponse>((observer: Subscriber<AirSearchResponse>) => {
-            const eventSource: EventSourcePolyfill = new EventSourcePolyfill(
-                `${this.ENDPOINT}/${this.VERSION}/search/${searchId}`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization:
-                            `Bearer ${user.token}`
-                    },
+                    index++;
+
+                    resolve(true);
                 }
-            );
+    
+                eventSource.onerror = () => {
+                    this.isLoading = false;
+    
+                    eventSource.close();
 
-            eventSource.onmessage = (message: OnMessageEvent) => {
-                const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
-                
-                result.show = true;
-                result.outbounds = result.outbounds.map((option: FlightOption) => {
-                    option.show= true
-                    return option;
-                });
-                result.inbounds = result.inbounds.map((option: FlightOption) => {
-                    option.show = true
-                    return option;
-                });
-                observer.next(result);
-            }
+                    resolve(false);
+                }
+    
+                return () => {
+                    eventSource.close();
+                }
+            }).subscribe({
+                next: (result: AirSearchResponse) => {
+                    const results: AirSearchResults = this.results$.value;
+    
+                    results.push(result);
+    
+                    this.results$.next(results);
+                }
+            })
+        });
+    }
 
-            eventSource.onerror = () => {
-                this.isLoading = false;
-                eventSource.close();
-            }
+    nextPage(): void {
+        this.page++;
+        this.results$.next(
+            this.results$.value.map((value: AirSearchResponse, index: number) => {
+                value.show = true;
 
-            return () => {
-                eventSource.close();
-            }
-        }).subscribe({
-            next: (result: AirSearchResponse) => {
-                const results: AirSearchResults = this.results$.value;
-
-                results.push(result);
-
-                this.results$.next(results);
-            }
-        })
-        
-
-    } 
+                if (index >= (this.page * this.itemsPerPage)) {
+                    value.show = false;
+                    return value;
+                }
+                return value;
+            })
+        )
+    }
 
     
 }

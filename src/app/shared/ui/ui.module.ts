@@ -5,11 +5,13 @@ import { NewsTemplateComponent } from "./news-template/news-template.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { InputsModule } from "./inputs/inputs.module";
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
     declarations: [
         LoadingComponent,
         NewsTemplateComponent,
+        ModalComponent,
     ],
     imports: [
         CommonModule,
@@ -19,7 +21,8 @@ import { InputsModule } from "./inputs/inputs.module";
     exports: [
         LoadingComponent,
         NewsTemplateComponent,
-        InputsModule
+        InputsModule,
+        ModalComponent
     ],
 })
 export class UIModule { }

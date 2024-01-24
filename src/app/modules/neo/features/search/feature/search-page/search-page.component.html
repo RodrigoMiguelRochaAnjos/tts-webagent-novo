@@ -2,10 +2,14 @@
 <div class="form" [ngClass]="{ 'with-results': this.hasResults }">
     <flight-search-form></flight-search-form>
 </div>
-<div class="result-section">
+<div class="result-section" *ngIf="(this.results$ | async)!.length > 0">
+    <p>Showing {{ showing }} results out of {{ max }}</p>
 
+    <div class="results">
+        <ng-container *ngFor="let result of (this.results$ | async); let i = index">
+            <div (onScreen)="onScreen($event)" class="result" style="--index: {{i}}" *ngIf="result.show && hasOptions(result)">
+                <app-search-result [result]="result"></app-search-result>
+            </div>
+        </ng-container>
+    </div>
 </div>
-<p>Showing {{ showing }} results out of {{ max }}</p>
-<p *ngFor="let result of (this.results$ | async)">
-    <app-search-result *ngIf="result.show && hasOptions(result)" [result]="result"></app-search-result>
-</p>

@@ -1,0 +1,10 @@
+<div class="modal-container">
+    <div class="close" [ngClass]="{'open': isModalOpen}" (click)="close()">
+        <span class="arrow left"></span>
+        <span class="arrow right"></span>
+    </div>
+    <div class="modal-content">
+        <ng-container *ngIf="content" [ngTemplateOutlet]="this.content"></ng-container>
+    </div>
+
+</div>

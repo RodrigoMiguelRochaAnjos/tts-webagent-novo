@@ -9,5 +9,8 @@ export const patterns = {
     passport: /^[A-Z][0-9]{8}$/,
     FFN: /^[A-Za-z0-9-]{4,}$/,
 	postCode: /^.{1,20}$/,
-	countryCode: /^[A-Za-z]{2}$/
+	countryCode: /^[A-Za-z]{2}$/,
+	countryDialCode: /^\+?[0-9]+$/,
+    amount: /^[\d]{1,9}$/,
+	date: /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/,
 };  
