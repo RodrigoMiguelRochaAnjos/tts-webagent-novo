@@ -7,6 +7,7 @@ import { countriesDialCodes } from 'src/app/shared/utils/countries-dial-codes.da
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
 import { Observable } from 'rxjs';
+import { Settings } from 'src/app/modules/home/models/settings.model';
 
 @Component({
     selector: 'app-settings-page',
@@ -18,18 +19,30 @@ export class SettingsPageComponent implements OnInit{
     patterns = patterns;
     countriesDialCodes = countriesDialCodes;
 
-    countriesDialCodeOptions: string[] = [];
+    countriesDialCodeOptions: string[] = []
+    
+    private oldSettings: Settings = new Settings();
+    tmpSettings: Settings = new Settings();
 
-    private user$!: Observable<User>;
+    user$!: Observable<User>;
 
     constructor(
         private authService: AuthService
     ) {
         this.countriesDialCodeOptions = Object.keys(this.countriesDialCodes);
-        this.user$ = authService.getUser();
+        this.user$ = this.authService.getUser();
     }
 
     ngOnInit(): void {
-        
+        this.user$.subscribe((user: User) => {
+            console.log("User settings: ",user.settings);
+            this.oldSettings = user.settings ? user.settings : new Settings();
+            this.tmpSettings = user.settings ? user.settings : new Settings();
+        })
+    }
+
+    get canSave() : boolean {
+        console.log("can save? ",JSON.stringify(this.oldSettings) !== JSON.stringify(this.tmpSettings))
+        return JSON.stringify(this.oldSettings) !== JSON.stringify(this.tmpSettings);
     }
 }

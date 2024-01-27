@@ -22,7 +22,8 @@ export class AuthenticatedUser extends User {
                 languageCode: this.languageCode,
                 currency: this.currency,
                 gds: this.gds.toString(),
-                token: this.token
+                token: this.token,
+                settings: JSON.stringify(this.settings)
             }
         });
 

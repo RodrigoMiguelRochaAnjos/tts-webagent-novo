@@ -21,11 +21,11 @@ export class ReservationService {
     private checkoutDetails$!: Observable<AirCheckoutDetailsResponse | null>;
 
     private reservationProcess$: BehaviorSubject<ReservationProcessesState> = new BehaviorSubject<ReservationProcessesState>({
-        FUNDS_CHECKED: Promise.resolve(false),
-        AIR_CHECKOUT_DETAILS: Promise.resolve(false),
-        TRAVELLER_DETAILS_VALID: Promise.resolve(false),
-        AIR_CHECKOUT_PRICE: Promise.resolve(false),
-        BOOKING: Promise.resolve(false),
+        FUNDS_CHECKED: new Promise<boolean>((resolve) => resolve(false)),
+        AIR_CHECKOUT_DETAILS: new Promise<boolean>((resolve) => resolve(false)),
+        TRAVELLER_DETAILS_VALID: new Promise<boolean>((resolve) => resolve(false)),
+        AIR_CHECKOUT_PRICE: new Promise<boolean>((resolve) => resolve(false)),
+        BOOKING: new Promise<boolean>((resolve) => resolve(false)),
     });
     
 
@@ -35,12 +35,6 @@ export class ReservationService {
     ) {
         this.balance$ = this.balanceService.getBalance();
         this.checkoutDetails$ = this.checkoutService.getDetails();
-
-        const reservationProgress: string | null = localStorage.getItem("reservationProgress");
-
-        if(reservationProgress == null) return;
-        
-        this.reservationProcess$.next(JSON.parse(reservationProgress) as ReservationProcessesState);
     }
 
     public getSelectedFlights(): Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }> {
@@ -105,6 +99,10 @@ export class ReservationService {
         flights[type] = option;
 
         this.selectedFlights$.next(flights);
+    }
+
+    public getProgress(): Observable<ReservationProcessesState> {
+        return this.reservationProcess$;
     }
 
     private saveProcess() {

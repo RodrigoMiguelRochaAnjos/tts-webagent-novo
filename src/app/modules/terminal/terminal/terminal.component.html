@@ -1,0 +1,12 @@
+<div
+	class="terminal-content"
+	[style.font-size.em]="fontSize"
+	[innerHTML]="content"
+	(click)="emitClickEvent($event)"
+	(keypress)="emitSubmitEvent($event)"
+	(keyup)="onKeyUpEvent($event)"
+	(gesturechange)="onGestureChange($event)"
+	(touchstart)="onTouchStart($event)"
+	(touchmove)="onTouchMove($event)"
+	id="terminal-window"
+></div>

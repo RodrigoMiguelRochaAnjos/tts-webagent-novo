@@ -6,12 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/ui/navbar/navbar.component';
 import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
-import { LoadingComponent } from './shared/ui/loading/loading.component';
 import { CommonModule } from '@angular/common';
-import { WebagentInputComponent } from './shared/ui/inputs/webagent-input/webagent-input.component';
 import { SharedModule } from './shared/shared.module';
-import { FlightSearchFormComponent } from './modules/neo/features/search/ui/flight-search-form/flight-search-form.component';
 import { FormsModule } from '@angular/forms';
+import { AirSegmentComponent } from './modules/neo/ui/air-segment/air-segment.component';
+import { SummarySegmentComponent } from './modules/neo/ui/summary-segment/summary-segment.component';
 
 @NgModule({
     declarations: [

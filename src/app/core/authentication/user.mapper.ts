@@ -9,6 +9,7 @@ import { Phone } from "../models/user/contact/segments/phone.model";
 import { AuthenticatedUser } from "../models/user/types/authenticated-user.model";
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { AnonymousUser } from "../models/user/types/anonymous-user.model";
+import { Settings } from "src/app/modules/home/models/settings.model";
 
 export class UserMapper {
     static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
@@ -36,6 +37,8 @@ export class UserMapper {
         user.contact = contact;
         user.currency = 'EUR';
         user.languageCode = 'en';
+        user.settings = response.syncData.settings;
+
         switch (loginRequest.gds) {
             case 'Galileo':
                 user.gds = new Galileo();
@@ -73,6 +76,8 @@ export class UserMapper {
         user.contact = storedObject.data.contact
         user.id = storedObject.data.id
         user.token = storedObject.data.token
+        console.log("Stored object: ",storedObject.data.settings);
+        user.settings = Object.assign(new Settings(), JSON.parse(storedObject.data.settings));
 
         switch (storedObject.data.gds) {
             case 'Galileo':

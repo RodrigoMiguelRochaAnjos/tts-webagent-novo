@@ -15,10 +15,18 @@ export class Settings {
     sendByEmail!: any[];
     currency!: string;
     languageCode!: string;
+    street!: string
+    flat!: string
+    locality!: string
+    city!: string
+    province!: string
+    postCode!: string
+    countryCode!: string
+    agencyEntityName!: string
 
     default: boolean = false;
 
-    isValid(): boolean {
+    public isValid(): boolean {
 
         return (
             this.qks != null && 

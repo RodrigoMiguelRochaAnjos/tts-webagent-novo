@@ -2,9 +2,6 @@ import { GDS } from "../gds.model";
 
 export class Galileo extends GDS {
 
-    protected override SON_PATTERN = /^[z|Z][a-zA-Z0-9]{2}$/;
-    protected override PCC_PATTERN = /^[a-zA-Z0-9]{4}$/;
-
     constructor() {
         super();
     }

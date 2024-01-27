@@ -40,7 +40,8 @@ const routes: Routes = [
     {
         path: 'traveller-details',
         loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
-        canActivateChild: [AuthGuardService]
+        canActivateChild: [AuthGuardService],
+        title: 'travellers'
     }
 ];
 

@@ -1,0 +1,16 @@
+
+<div class="phase" [ngClass]="{'complete': this.fundsChecked, 'current': false}" data-content="Funds checked">
+    Funds checked
+</div>
+<div class="phase" [ngClass]="{'complete': this.airCheckoutDetails, 'current': !this.airCheckoutDetails && fundsChecked}" data-content="Flight Summary">
+    Flight Summary
+</div>
+<div class="phase" [ngClass]="{'complete': this.travellerDetailsValid, 'current': !this.travellerDetailsValid && airCheckoutDetails}" data-content="Traveller Details">
+    Traveller Details 
+</div>
+<div class="phase" [ngClass]="{'complete': this.airCheckoutPrice, 'current': !this.airCheckoutPrice && travellerDetailsValid}" data-content="Checkout">
+    Checkout
+</div>
+<div class="phase" [ngClass]="{'complete': this.booking, 'current': !this.booking && airCheckoutPrice}" data-content="Reservation Summary">
+    Reservation Summary
+</div>

@@ -12,7 +12,9 @@ import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-sear
 export class FlightOptionComponent implements OnInit {
     progressWidth = '0%';
     selected!: boolean;
-    @Input() resultId!: string;
+
+    @Input() displayOnly: boolean = false;
+    @Input() resultId?: string;
     @Input() option!: FlightOption;
     @Output() flightSelectEvent: EventEmitter<FlightOption> = new EventEmitter<FlightOption>();
 

@@ -1,0 +1,56 @@
+<ion-toolbar *ngIf="showingQKeys">
+	<div class="qkeys">
+		<div class="qkey" *ngFor="let qkey of quickKeys" (click)="onQKeyClick(qkey)">{{ qkey }}</div>
+	</div>
+</ion-toolbar>
+<ion-toolbar>
+    <div class="pkey-area" *ngIf="this.hasActivePkey">
+        <div class="command">
+            <span *ngFor="let item of pkeyObjects; index as itemIndex" [ngClass]="{'variable': item.isVariable}">
+                <ng-container *ngIf="item.isVariable" >
+
+                    <input
+                        #variableElement
+                        type="text"
+                        clearInput="true"
+                        [placeholder]="originalPKeyObjects[itemIndex].text"
+                        [(ngModel)]="item.text"
+                        (keydown)="checkTab($event)"
+                        (keypress)="executePKey($event)"
+                        required
+                        autofocus
+                    />
+                </ng-container>
+
+                <ng-container *ngIf="item.isVariable === false">
+                    {{ item.text ? item.text : originalPKeyObjects[itemIndex].text }}
+                </ng-container>
+            </span>
+        </div>
+    </div>
+	<ion-input
+        *ngIf="this.hasActivePkey === false"
+
+		#terminalCommandInput
+		id="terminal-command-input"
+		type="text"
+		name="terminal-command"
+		[inputmode]="inputMode"
+		placeholder="{{ 'COMMAND' | translate }}"
+		autocomplete="off"
+		autocorrect="off"
+		clearInput="true"
+		spellcheck="false"
+		(keypress)="emitSubmitEvent($event)"
+		(keydown.arrowup)="onArrowClick($event)"
+		(keydown.arrowdown)="onArrowClick($event)"
+	></ion-input>
+	<ion-buttons slot="end">
+        <button *ngIf="this.hasActivePkey" (click)="this.reset()">
+            X
+        </button>
+		<ion-button (click)="toggleQKeys()" *ngIf="this.hasActivePkey === false">
+			<ion-icon slot="icon-only" name="keypad"></ion-icon>
+		</ion-button>
+	</ion-buttons>
+</ion-toolbar>
