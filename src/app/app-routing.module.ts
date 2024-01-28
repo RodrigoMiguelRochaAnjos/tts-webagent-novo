@@ -27,6 +27,12 @@ const routes: Routes = [
         title: 'NEO'
     },
     {
+        path: 'terminal',
+        loadChildren: () => import('./modules/terminal/feature/terminal-shell/terminal-shell.module').then((m) => m.TerminalShellModule),
+        canActivateChild: [AuthGuardService],
+        title: 'Terminal'
+    },
+    {
         path: 'settings',
         loadChildren: () => import('./modules/settings/feature/settings-shell/settings-shell.module').then((m) => m.SettingsShellModule),
         title: 'Settings'
@@ -37,12 +43,6 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'Wallet'
     },
-    {
-        path: 'traveller-details',
-        loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
-        canActivateChild: [AuthGuardService],
-        title: 'travellers'
-    }
 ];
 
 @NgModule({

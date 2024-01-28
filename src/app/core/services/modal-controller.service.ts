@@ -1,6 +1,7 @@
 import { ApplicationRef, ComponentRef, EnvironmentInjector, Injectable, createComponent } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { ModalComponent } from '../../shared/ui/modal/modal.component';
+import { DestroyService } from './destroy.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,12 @@ export class ModalControllerService {
   constructor(
       private appRef: ApplicationRef,
       private environmentInjector: EnvironmentInjector,
+      private destroyService: DestroyService
   ) { }
 
 
   public getModal(): Observable<boolean> {
-    return this.modal$;
+    return this.modal$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
   }
 
   public getModalValue(): boolean {

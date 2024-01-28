@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AirCheckoutDetailsResponse } from "../features/search/models/air-checkout-details-response.model";
 import { AirCheckoutPriceRequest } from "../features/search/models/air-checkout-price-request.model";
@@ -9,6 +9,7 @@ import { AirCheckoutPriceResponse } from "../features/search/models/air-checkout
 import { AuthService } from "src/app/core/authentication/auth.service";
 import { User } from "src/app/core/models/user/user.model";
 import { AuthenticatedUser } from "src/app/core/models/user/types/authenticated-user.model";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -22,11 +23,12 @@ export class CheckoutService {
 
     constructor(
         private httpClient: HttpClient,
-        private authService: AuthService
+        private authService: AuthService,
+        private destroyService: DestroyService
     ) { }
 
     public getDetails(): Observable<AirCheckoutDetailsResponse | null> {
-        return this.details$;
+        return this.details$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getDetailsValue(): AirCheckoutDetailsResponse | null {
@@ -34,7 +36,7 @@ export class CheckoutService {
     }
 
     public getPrice(): Observable<AirCheckoutPriceResponse | null> {
-        return this.price$;
+        return this.price$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getPriceValue(): AirCheckoutPriceResponse | null {

@@ -22,7 +22,10 @@ export class Settings {
     province!: string
     postCode!: string
     countryCode!: string
-    agencyEntityName!: string
+    agencyEntityName!: string;
+    portraitFontSize: number = 1;
+    sendByEmailItems: any[] = [];
+    keepKeyboardVisible: boolean = false;
 
     default: boolean = false;
 

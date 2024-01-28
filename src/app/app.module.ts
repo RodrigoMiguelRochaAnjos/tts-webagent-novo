@@ -11,6 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { AirSegmentComponent } from './modules/neo/ui/air-segment/air-segment.component';
 import { SummarySegmentComponent } from './modules/neo/ui/summary-segment/summary-segment.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { SummarySegmentComponent } from './modules/neo/ui/summary-segment/summar
         AppRoutingModule,
         HttpClientModule,
         FormsModule,
-        SharedModule
+        SharedModule,
+        TranslateModule.forRoot()
     ],
     providers: [
         {

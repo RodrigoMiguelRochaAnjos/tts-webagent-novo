@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, switchMap } from "rxjs";
+import { BehaviorSubject, Observable, switchMap, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Balance } from "../models/balance.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -14,6 +14,7 @@ import { Transaction, Transactions } from "../models/transaction.model";
 import { DepositRequest } from "../models/deposit-request.model";
 import { DepositResponse } from "../models/deposit-response.model";
 import { Deposit } from "../models/deposit.model";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -29,11 +30,12 @@ export class BalanceService {
 
     constructor(
         private httpClient: HttpClient,
-        private authService: AuthService
+        private authService: AuthService,
+        private destroyService: DestroyService
     ) {}
 
     public getBalance(): Observable<Balance> {
-        return this.balance$;
+        return this.balance$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getBalanceValue(): Balance {
@@ -41,7 +43,7 @@ export class BalanceService {
     }
 
     public getTransactions(): Observable<Transactions> {
-        return this.transactions$;
+        return this.transactions$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getTransactionsValue(): Transactions {

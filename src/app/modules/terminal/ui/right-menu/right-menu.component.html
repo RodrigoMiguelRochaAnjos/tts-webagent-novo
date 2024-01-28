@@ -1,0 +1,62 @@
+<!-- <ion-header>
+	<div class="tabs">
+		<div class="ion-activatable ripple-parent tab" [class.active]="0 === activeTab" (click)="onTabChange(0)">
+			PKeys
+			<ion-ripple-effect type="bounded"></ion-ripple-effect>
+		</div>
+		<div class="ion-activatable ripple-parent tab" [class.active]="1 === activeTab" (click)="onTabChange(1)">
+			{{ 'HISTORY' | translate }}
+			<ion-ripple-effect type="bounded"></ion-ripple-effect>
+		</div>
+		<div class="ion-activatable ripple-parent tab" [class.active]="2 === activeTab" (click)="onTabChange(2)">
+			{{ 'QUEUES' | translate }}
+			<ion-ripple-effect type="bounded"></ion-ripple-effect>
+		</div>
+		<div class="ion-activatable ripple-parent tab" [class.active]="3 === activeTab" (click)="onTabChange(3)">
+			{{ 'TOOLS' | translate }}
+			<ion-ripple-effect type="bounded"></ion-ripple-effect>
+		</div>
+	</div>
+</ion-header> -->
+
+<div *ngIf="activeTab === 0" class="menu-tab-content">
+    <ul>
+        <li *ngFor="let pkey of pkeys; index as pkeyIndex" button detail (click)="openPKey(pkeyIndex)">
+            <label>{{ pkey.name }}</label>
+        </li>
+    </ul>
+</div>
+<div *ngIf="activeTab === 1" class="menu-tab-content">
+    <ng-container *ngIf="!hasCommandsInHistory">
+        <div class="no-results">
+            <!-- {{'EMPTY_HISTORY_COMMANDS' | translate}}. -->
+        </div>
+    </ng-container>
+    <ul>
+        <li *ngFor="let command of commandsHistory; index as cmdIndex;" button detail
+            (click)="onCommandClick(command)">
+            <label>{{ command }}</label>
+        </li>
+    </ul>
+</div>
+<div *ngIf="activeTab === 2" class="menu-tab-content">
+    <ul lines="full">
+        <li *ngFor="let queue of queues" (click)="executeQueueCommand(queue.id)" button detail>
+            <label>{{ queue.name }} ({{ queue.totalBfs }})</label>
+        </li>
+    </ul>
+    <div *ngIf="!queuesAreLoading && !hasQueues" class="no-results">
+        <!-- {{'EMPTY_ACTIVE_QUEUES' | translate}}. -->
+    </div>
+    <div *ngIf="queuesAreLoading" class="loading">
+        <!-- {{'LOADING' | translate}}... -->
+    </div>
+</div>
+<div *ngIf="activeTab === 3" class="menu-tab-content">
+    <ul lines="full">
+        <li button detail (click)="getPnrs()">
+            <!-- <label>{{'MY_PNRS' | translate}}</label> -->
+            <!-- <ion-icon slot="start" name="calendar"></ion-icon> -->
+        </li>
+    </ul>
+</div>

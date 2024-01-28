@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { BalanceService } from "src/app/shared/services/balance.service";
 import { ReservationProcess, ReservationProcessesState } from "../features/search/models/reservation-process.enum";
 import { Balance } from "src/app/shared/models/balance.model";
@@ -8,6 +8,7 @@ import { Providers } from "../models/providers.enum";
 import { AirCheckoutDetailsRequest } from "../features/search/models/air-checkout-details-request.model";
 import { AirCheckoutDetailsResponse } from "../features/search/models/air-checkout-details-response.model";
 import { CheckoutService } from "./checkout.service";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -31,14 +32,15 @@ export class ReservationService {
 
     constructor(
         private balanceService: BalanceService,
-        private checkoutService: CheckoutService
+        private checkoutService: CheckoutService,
+        private destroyService: DestroyService
     ) {
         this.balance$ = this.balanceService.getBalance();
         this.checkoutDetails$ = this.checkoutService.getDetails();
     }
 
     public getSelectedFlights(): Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }> {
-        return this.selectedFlights$;
+        return this.selectedFlights$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getSelectedFlightsValue(): { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null } {
@@ -102,7 +104,7 @@ export class ReservationService {
     }
 
     public getProgress(): Observable<ReservationProcessesState> {
-        return this.reservationProcess$;
+        return this.reservationProcess$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     private saveProcess() {

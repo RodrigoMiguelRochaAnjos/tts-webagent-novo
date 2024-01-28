@@ -11,7 +11,7 @@ import { ModalComponent } from './modal/modal.component';
     declarations: [
         LoadingComponent,
         NewsTemplateComponent,
-        ModalComponent,
+        ModalComponent
     ],
     imports: [
         CommonModule,
