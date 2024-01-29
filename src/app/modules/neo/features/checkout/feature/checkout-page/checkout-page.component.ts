@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
+import { patterns } from 'src/app/shared/utils/validation-patterns';
 
 @Component({
   selector: 'app-checkout-page',
@@ -8,7 +9,8 @@ import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 })
 export class CheckoutPageComponent {
 
-  InputType = InputType
-
+  InputType = InputType;
+  
+  patterns = patterns;
 
 }

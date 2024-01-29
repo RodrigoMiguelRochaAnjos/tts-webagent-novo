@@ -15,6 +15,11 @@ const routes: Routes = [
         path: 'travellers',
         loadChildren: () => import("../traveller-details/feature/traveller-details-shell/traveller-details-shell.module").then((m) => m.TravellerDetailsShellModule)
     },
+    {
+        path: 'checkout',
+        loadChildren: () => import("../checkout/feature/checkout-shell/checkout-shell.module").then((m) => m.CheckoutShellModule)
+    }
+
 ]
 
 @NgModule({
