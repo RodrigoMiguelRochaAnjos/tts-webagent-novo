@@ -21,7 +21,7 @@
 
 <div *ngIf="activeTab === 0" class="menu-tab-content">
     <ul>
-        <li *ngFor="let pkey of pkeys; index as pkeyIndex" button detail (click)="openPKey(pkeyIndex)">
+        <li *ngFor="let pkey of (this.pkeys$ | async); index as pkeyIndex" button detail (click)="openPKey(pkeyIndex)">
             <label>{{ pkey.name }}</label>
         </li>
     </ul>
@@ -29,11 +29,11 @@
 <div *ngIf="activeTab === 1" class="menu-tab-content">
     <ng-container *ngIf="!hasCommandsInHistory">
         <div class="no-results">
-            <!-- {{'EMPTY_HISTORY_COMMANDS' | translate}}. -->
+            {{'EMPTY_HISTORY_COMMANDS' | translate}}.
         </div>
     </ng-container>
     <ul>
-        <li *ngFor="let command of commandsHistory; index as cmdIndex;" button detail
+        <li *ngFor="let command in commandHistory.forwardsIterator(); index as cmdIndex;" button detail
             (click)="onCommandClick(command)">
             <label>{{ command }}</label>
         </li>
@@ -46,16 +46,17 @@
         </li>
     </ul>
     <div *ngIf="!queuesAreLoading && !hasQueues" class="no-results">
-        <!-- {{'EMPTY_ACTIVE_QUEUES' | translate}}. -->
+        {{'EMPTY_ACTIVE_QUEUES' | translate}}.
     </div>
     <div *ngIf="queuesAreLoading" class="loading">
-        <!-- {{'LOADING' | translate}}... -->
+        {{'LOADING' | translate}}...
     </div>
 </div>
 <div *ngIf="activeTab === 3" class="menu-tab-content">
     <ul lines="full">
         <li button detail (click)="getPnrs()">
-            <!-- <label>{{'MY_PNRS' | translate}}</label> -->
+            <label>{{'MY_PNRS' | translate}}</label>
+            <i class="fa-solid fa-calendar"></i>
             <!-- <ion-icon slot="start" name="calendar"></ion-icon> -->
         </li>
     </ul>

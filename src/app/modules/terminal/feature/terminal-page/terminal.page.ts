@@ -8,6 +8,7 @@ import { User } from 'src/app/core/models/user/user.model';
 import { Stack } from 'src/app/core/utils/stack.structure';
 import { MenuService } from '../../data-access/menu.service';
 import { Menu } from '../../models/menu.model';
+import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 
 @Component({
     selector: 'app-main',
@@ -21,7 +22,7 @@ export class TerminalPage implements OnInit {
 	hasFilters!: boolean;
 	showBtnMu!: boolean;
 	showBtnMd!: boolean;
-	emailItems!: any[];
+	emailItems: any[] = [];
 	hasItemsToEmail!: boolean;
 	keepKeyboardVisible!: boolean;
 	menusSwipeEnabled = true;
@@ -36,7 +37,7 @@ export class TerminalPage implements OnInit {
     selectedPkey: number = -1;
 
     terminals$!: Observable<{ terminal: HTMLElement, selected: boolean }[]>;
-    history$!: Observable<Stack<string>>;
+    history$!: Observable<CircularLinkedList<string>>;
 
     terminalContent$!: Observable<string>;
 
@@ -72,23 +73,23 @@ export class TerminalPage implements OnInit {
         });
 
         this.authService.getUser().subscribe((user: User) => {
-            this.hasItemsToEmail = user.settings.sendByEmail.length > 0;
-            this.emailItems = user.settings.sendByEmailItems;
+            this.hasItemsToEmail = user.settings.sendByEmailItems ? user.settings.sendByEmailItems.length > 0 : false;
+            this.emailItems = user.settings ? user.settings.sendByEmailItems : [];
             this.keepKeyboardVisible = user.settings.keepKeyboardVisible;
         });
 
 
-        forkJoin({ terminalContent: this.terminalContent$, history: this.history$}).subscribe({
-            next: (value: { terminalContent: string, history: Stack<string> }) => {
-                if (value.terminalContent !== '' || value.history.getSize() <= 0) return;
+        // forkJoin({ terminalContent: this.terminalContent$, history: this.history$}).subscribe({
+        //     next: (value: { terminalContent: string, history: Stack<string> }) => {
+        //         if (value.terminalContent !== '' || value.history.getSize() <= 0) return;
 
-                const commandToExecute: string | undefined = value.history.pop();
+        //         const commandToExecute: string | undefined = value.history.pop();
 
-                if(commandToExecute == null) return;
+        //         if(commandToExecute == null) return;
 
-                this.terminalService.executeTerminalCommand(commandToExecute);
-            }
-        })
+        //         this.terminalService.executeTerminalCommand(commandToExecute);
+        //     }
+        // })
     }
 
     /**
@@ -258,4 +259,7 @@ export class TerminalPage implements OnInit {
         this.allowCommands();
     }
 
+    toggleMenu(side: 'right'): void {
+        this.menuService.toggleMenu(side);
+    }
 }

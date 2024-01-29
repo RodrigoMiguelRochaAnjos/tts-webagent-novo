@@ -40,7 +40,6 @@ export class MenuService {
 
     toggleMenu(side: 'right'): void {
         this.targetedMenu = side === 'right' ? this.rightMenu : null;
-
         if (this.targetedMenu == null) return;
 
         if (this.targetedMenu.opened) {

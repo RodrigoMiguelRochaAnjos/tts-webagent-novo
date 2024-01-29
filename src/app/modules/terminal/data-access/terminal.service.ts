@@ -10,11 +10,13 @@ import { DestroyService } from 'src/app/core/services/destroy.service';
 import { environment } from 'src/environments/environment';
 import { TerminalComponent } from '../ui/terminal/terminal.component';
 import { SafeHtml } from '@angular/platform-browser';
-import { SettingsService } from 'src/app/core/services/settings.service';
 import { TerminalSpecialRender } from '../utils/terminal-special-renderer.model';
 import { Stack } from 'src/app/core/utils/stack.structure';
 import { TerminalContent } from '../models/terminal-content.model';
 import { MenuService } from './menu.service';
+import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 
 export const MONTHS: string[] = [
     'JAN',
@@ -43,7 +45,11 @@ export class TerminalService {
         selected: true
     }]);
 
-    private history$: BehaviorSubject<Stack<string>> = new BehaviorSubject<Stack<string>>(new Stack<string>(50));
+    private history$: BehaviorSubject<CircularLinkedList<string>> = new BehaviorSubject<CircularLinkedList<string>>(new CircularLinkedList<string>(50));
+
+    private forwardIterator!: Iterator<string>;
+    private backwardsIterator!: Iterator<string>;
+
     private filters$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
     private updateCommand!: object;
@@ -75,11 +81,23 @@ export class TerminalService {
         private authService: AuthService,
         private router: Router,
         private destroyService: DestroyService,
-        private settingsService: SettingsService,
         private environmentInjector: EnvironmentInjector,
         private menuService: MenuService,
+        private alertService: AlertService,
         translate: TranslateService,
     ) {
+        const list: CircularLinkedList<string> = this.history$.value;
+        list.append('');
+
+        this.history$.next(list);
+
+        this.loadCommandHistory();
+
+        this.history$.subscribe((value: CircularLinkedList<string>) => {
+            this.forwardIterator = value.forwardsIterator();
+            this.backwardsIterator = value.backwardIterator();
+        })
+
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
@@ -101,7 +119,7 @@ export class TerminalService {
         return this.showButtons$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
-    public getHistory(): Observable<Stack<string>> {
+    public getHistory(): Observable<CircularLinkedList<string>> {
         return this.history$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
@@ -171,31 +189,44 @@ export class TerminalService {
     }
 
     private addCommandToHistory(command: string): void {
-        const commands: Stack<string> = this.history$.value;
-        if (command === commands.pop()) {
-            return;
-        }
+        const commands: CircularLinkedList<string> = this.history$.value;
 
-        commands.push(command);
+        if (command === this.backwardsIterator.next().value) return;
+
+        commands.append(command);
 
         this.history$.next(commands);
 
-        localStorage.setItem('commands', JSON.stringify(commands));
+        localStorage.setItem('commands', JSON.stringify(commands.toList()));
     }
 
     private processCommandErrors(serverData: any): void {
         if (serverData.message.text && serverData.message.text.includes('Session does not exist')) {
-            // this.utilitiesService.showAlert(this.errorLabel, this.expiredSessionMessage);
+            this.alertService.show(AlertType.ERROR, this.messages['EXPIRED_SESSION_MESSAGE']);
+            
             this.authService.logout();
             return;
         }
 
         if (serverData.msgAlert) {
+            console.log();
+            this.alertService.show(AlertType.WARNING, serverData.msgObj[serverData.msgObj.type].message).subscribe((value: AlertAction) => {
+                switch(value){
+                    case AlertAction.EXECUTE:
+                        window.location.href = serverData.msgObj[serverData.msgObj.type].buttonLinkTarget;
+                        break;
+                    case AlertAction.WAITING:
+                        return;
+                    case AlertAction.CANCEL:
+                        return;
+                }
+            });
             // this.utilitiesService.showPopupFromServer(serverData.msgObj);
             return;
         }
 
-        // this.utilitiesService.showAlert(this.errorLabel, serverData.message.text);
+        this.alertService.show(AlertType.WARNING, serverData.message.text);
+
     }
 
     private executeUpdateCommand(terminalContent: string): void {
@@ -220,7 +251,7 @@ export class TerminalService {
                     });
                 },
                 error: (error: Error) => {
-                    // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                    this.alertService.show(AlertType.ERROR, error.message);
                 }
             })
         })
@@ -231,18 +262,18 @@ export class TerminalService {
             if (!emailInfo || !emailElement) return;
 
             if (emailElement.className.includes('terminal-email-selected')) {
-                const indexToRemove = user.settings.sendByEmail.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-                user.settings.sendByEmail = user.settings.sendByEmail.splice(indexToRemove, 1);
+                const indexToRemove = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+                user.settings.sendByEmailItems = user.settings.sendByEmailItems.splice(indexToRemove, 1);
 
-                this.settingsService.update(user.settings, false);
+                this.authService.updateUserSettings(user.settings);
                 emailElement.classList.toggle('terminal-email-selected');
                 return;
             }
 
-            const index = user.settings.sendByEmail.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-            if (index < 0) user.settings.sendByEmail.push(emailInfo);
+            const index = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+            if (index < 0) user.settings.sendByEmailItems.push(emailInfo);
 
-            this.settingsService.update(user.settings, false);
+            this.authService.updateUserSettings(user.settings);
             emailElement.classList.toggle('terminal-email-selected');
 
         });
@@ -310,7 +341,7 @@ export class TerminalService {
                 },
                 error: (err: Error) => {
                     // this.utilitiesService.dismissLoading();
-                    // this.utilitiesService.showAlert(this.errorLabel, err);
+                    this.alertService.show(AlertType.ERROR, err.message);
                 }
             })
 
@@ -447,7 +478,7 @@ export class TerminalService {
                         resolve(result.message);
                     },
                     error: (err: Error) => {
-                        // this.utilitiesService.showAlert(this.errorLabel, result.message)
+                        this.alertService.show(AlertType.ERROR, "Invalid command");
                     }
                 });
             });
@@ -529,10 +560,24 @@ export class TerminalService {
                 this.restService.post(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
                     next: (result: any) => resolve(result.message),
                     error: (err: any) => {
-                        // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                        this.alertService.show(AlertType.ERROR, err.message);
                     }
                 })
             })
         });
+    }
+
+    public loadCommandHistory(): void {
+        const savedCommandsString = localStorage.getItem("commands");
+
+        if (savedCommandsString == null) return;
+
+        const commands: CircularLinkedList<string> = new CircularLinkedList<string>(50);
+
+        for (let command of JSON.parse(savedCommandsString) as string[]) {
+            commands.append(command);
+        }
+
+        this.history$.next(commands);
     }
 }

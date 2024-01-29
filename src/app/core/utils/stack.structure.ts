@@ -45,4 +45,14 @@ export class Stack<T> {
             console.log(this.arr[i]);
         }
     }
+
+    [Symbol.iterator](): Iterator<T> {
+        let index = this.top;
+        return {
+            next: () => ({
+                value: this.arr[index--],
+                done: index < 0
+            })
+        }
+    }
 }

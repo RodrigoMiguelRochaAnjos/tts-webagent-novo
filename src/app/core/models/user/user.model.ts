@@ -33,4 +33,5 @@ export abstract class User {
     }
 
     public abstract save(): void;
+    public abstract copy(user: User): User;
 }

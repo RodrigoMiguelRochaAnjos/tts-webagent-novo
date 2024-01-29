@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 import { LoginResponse } from "src/app/modules/home/models/login.response";
 import { LogoutRequest } from "../../models/requests/logout-request.model";
 import { DestroyService } from "../../services/destroy.service";
+import { Settings } from "src/app/modules/home/models/settings.model";
 
 @Injectable({
     providedIn: 'root'
@@ -24,5 +25,9 @@ export class UserService {
 
     logout(body: LogoutRequest) : Observable<any> {
         return this.httpClient.post<any>(`${this.ENDPOINT}/SignOff`, body).pipe(takeUntil(this.destroyService.getDestroyOrder()));
+    }
+
+    updateSettings(settingsRequest: { sessionId: string, settings: Settings}): Observable<{ message: string }> {
+        return this.httpClient.post<{ message: string }>(`${this.ENDPOINT}/UpdateSettings`, settingsRequest).pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 }

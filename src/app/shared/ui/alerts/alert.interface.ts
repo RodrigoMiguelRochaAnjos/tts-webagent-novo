@@ -1,10 +1,7 @@
+import { UUID } from "src/app/core/utils/uuid.type";
 
 export abstract class Alert {
-    public title: string;
-    public alertId!: string;
-    public content: any;
+    public alertId?: UUID;
+    public content?: any;
 
-    constructor(title: string) {
-        this.title = title;
-    }
 }

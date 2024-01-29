@@ -6,6 +6,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { InputsModule } from "./inputs/inputs.module";
 import { ModalComponent } from './modal/modal.component';
+import { AlertModule } from "./alerts/alert.module";
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { ModalComponent } from './modal/modal.component';
     imports: [
         CommonModule,
         RouterModule,
+        AlertModule,
         InputsModule
     ],
     exports: [

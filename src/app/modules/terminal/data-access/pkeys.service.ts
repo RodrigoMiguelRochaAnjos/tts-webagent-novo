@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
 import { AuthenticatedUser } from 'src/app/core/models/user/types/authenticated-user.model';
 import { environment } from 'src/environments/environment';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +27,7 @@ export class PkeysService {
     constructor(
         private restService: HttpClient,
         private authService: AuthService,
+        private alertService: AlertService,
         private destroyService: DestroyService,
         translate: TranslateService
     ) {
@@ -49,7 +52,7 @@ export class PkeysService {
     public add(newPKey: PKey): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             if (!newPKey.isValid()) {
-                // this.utilitiesService.showAlert(this.errorLabel, this.invalid + " " + this.pkeyLabel);
+                this.alertService.show(AlertType.ERROR, this.messages['INVALID'] + " " + this.messages['PKEY_LABEL']);
                 resolve(false);
                 return;
             }
@@ -68,7 +71,7 @@ export class PkeysService {
                         resolve(true);
                     },
                     error: (err: Error) => {
-                        // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                        this.alertService.show(AlertType.ERROR, this.messages['INVALID'] + " " + this.messages['PKEY_LABEL']);
                         resolve(false);
                     }
                 });
@@ -80,7 +83,7 @@ export class PkeysService {
     update(index: number, updatedPKey: PKey): Promise<boolean> {
         return new Promise<boolean>(resolve => {
             if (!updatedPKey.isValid()) {
-                // this.utilitiesService.showAlert(this.errorLabel, this.invalid + " " + this.pkeyLabel);
+                this.alertService.show(AlertType.ERROR, this.messages['INVALID'] + " " + this.messages['PKEY_LABEL']);
                 resolve(false);
                 return;
             }
@@ -99,7 +102,7 @@ export class PkeysService {
                         resolve(true);
                     },
                     error: () => {
-                        // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                        this.alertService.show(AlertType.ERROR, this.messages['INVALID'] + " " + this.messages['PKEY_LABEL']);
                         resolve(false);
                     }
                 })
@@ -123,7 +126,7 @@ export class PkeysService {
                     }
                 },
                 error: () => {
-                    // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                    this.alertService.show(AlertType.ERROR, this.messages['INVALID'] + " " + this.messages['PKEY_LABEL']);
                 }
             });
         });
@@ -137,12 +140,29 @@ export class PkeysService {
             const postData = { sessionId: user.id };
             this.restService.post(`${this.ENDPOINT}/ApplyDefaultPKeys`, postData).subscribe({
                 next: (result: any) => {
-                    // this.loadService.loadPKeysFromServer(result.data);
+                    this.loadPKeysFromServer(result);
                 },
                 error: (err: Error) => {
-                    // this.utilitiesService.showAlert(this.errorLabel, result.message);
+                    this.alertService.show(AlertType.ERROR, "Error resetting pkeys");
                 }
             })
         });
+    }
+
+    public loadPkeysFromStorage(): void {
+        const pkeys: string | null = localStorage.getItem('pkeys');
+        console.log(pkeys);
+        if(pkeys == null) return;
+
+        this.pkeys$.next(JSON.parse(pkeys) as PKey[]);
+    }
+
+    public loadPKeysFromServer(serverPKeys: any): void {
+        const pkeys: PKey[] = [];
+        serverPKeys.forEach((serverPKey: PKey) => {
+            pkeys.push(PKey.fromServer(serverPKey));
+        });
+        this.pkeys$.next(pkeys);
+        localStorage.setItem('pkeys', JSON.stringify(pkeys));
     }
 }

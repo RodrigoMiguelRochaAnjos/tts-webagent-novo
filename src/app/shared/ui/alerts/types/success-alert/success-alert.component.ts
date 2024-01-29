@@ -5,11 +5,11 @@ import { BehaviorSubject } from 'rxjs';
 import { UUID } from 'src/app/core/utils/uuid.type';
 
 @Component({
-  selector: 'app-error-alert',
-  templateUrl: './error-alert.component.html',
-  styleUrls: ['./error-alert.component.scss']
+  selector: 'success-alert',
+  templateUrl: './success-alert.component.html',
+  styleUrls: ['./success-alert.component.scss']
 })
-export class ErrorAlertComponent extends Alert{
+export class SuccessAlertComponent extends Alert{
     AlertAction = AlertAction;
 
     constructor(
@@ -21,13 +21,13 @@ export class ErrorAlertComponent extends Alert{
     @HostBinding("class.hide")
     get hide(): boolean {
         const alert: { id: UUID, component: ComponentRef<Alert>, show: boolean, response: BehaviorSubject<AlertAction> } | undefined = this.alertService.getResponseById(this.alertId!)
-        
-        if(alert == null) return false;
+
+        if (alert == null) return false;
 
         return !alert.show;
     }
 
-    close(action: AlertAction): void{
+    close(action: AlertAction): void {
         console.log("reached");
         this.alertService.close(this.alertId!, action);
     }

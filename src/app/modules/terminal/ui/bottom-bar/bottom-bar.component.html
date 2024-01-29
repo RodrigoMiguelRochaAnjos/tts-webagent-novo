@@ -45,11 +45,11 @@
         />
         <div class="buttons">
             <button *ngIf="this.hasActivePkey" (click)="this.reset()">
-                X
+                <i class="fa-solid fa-x"></i>
             </button>
             <button (click)="toggleQKeys()" *ngIf="this.hasActivePkey === false">
                 <!-- <ion-icon slot="icon-only" name="keypad"></ion-icon> -->
-                Eu sou um icon
+                <i class="fa-regular fa-keyboard"></i>
             </button>
         </div>
     </div>

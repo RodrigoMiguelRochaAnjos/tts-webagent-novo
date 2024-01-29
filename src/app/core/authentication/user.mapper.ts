@@ -24,11 +24,12 @@ export class UserMapper {
         contact.phone = phone;
 
         let user: AuthenticatedUser;
-
         user = new AuthenticatedUser()
 
-        if (response.syncData.settings.default) {
-            user = new IncompleteUser()
+        if (!response.syncData.settings) {
+            user = new IncompleteUser();
+            user.settings = Settings.default();
+            return user;
         }
 
         user.id = response.sessionId;

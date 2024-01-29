@@ -36,4 +36,16 @@ export class PKey {
             shared: this.isShared
         };
     }
+
+    static fromServer(serverPKey: any): PKey {
+        const pkey = new PKey();
+        pkey.name = serverPKey.name;
+        pkey.command = serverPKey.command[0];
+        pkey.commandVariables = serverPKey.command[1];
+        pkey.autoExecute = serverPKey.autoexecute;
+        pkey.lastUpdatedOn = serverPKey.lastupdated;
+        pkey.isShared = serverPKey.shared;
+        pkey.isSystemDefault = serverPKey.isSystemDefault;
+        return pkey;
+    }
 }

@@ -4,6 +4,7 @@ import { Galileo } from "../../gds/types/galileo.model";
 import { Apollo } from "../../gds/types/apollo.model";
 import { Contact } from "../contact/contact.model";
 import { AnonymousUser } from "./anonymous-user.model";
+import { IncompleteUser } from "./incomplete-user.model";
 
 export class AuthenticatedUser extends User {
     public id!: string;
@@ -41,6 +42,21 @@ export class AuthenticatedUser extends User {
 
     public setToken(token: string): this {
         this.token = token;
+        return this;
+    }
+
+    public copy(user: User): AuthenticatedUser {
+        if(!(user instanceof AuthenticatedUser || user instanceof IncompleteUser)) return this;
+
+        this.id = user.id;
+        this.token = user.token;
+        this.name = user.name;
+        this.languageCode = user.languageCode;
+        this.currency = user.currency;
+        this.contact = user.contact;
+        this.settings = user.settings;
+        this.gds = user.gds
+
         return this;
     }
 }

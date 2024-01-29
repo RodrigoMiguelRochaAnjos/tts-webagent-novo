@@ -50,5 +50,5 @@
         <webagent-input [label]="'Select a currency'" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" [(ngModel)]="this.tmpSettings.currency" />
     </div>
 
-    <button class="button-medium" *ngIf="canSave">SAVE</button>
+    <button class="button-medium" (click)="update()">SAVE</button>
 </div>

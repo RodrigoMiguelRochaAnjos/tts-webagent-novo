@@ -7,6 +7,7 @@ import { Stack } from 'src/app/core/utils/stack.structure';
 import { PkeysService } from '../../data-access/pkeys.service';
 import { PKey } from '../../models/pkey.model';
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
+import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 
 
 class PKeyObject {
@@ -32,8 +33,6 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
     @Output() commandSubmit = new EventEmitter<string>();
     @ViewChild('terminalCommandInput') terminalCommandInput!: ElementRef;
     @ViewChildren('variableElement') variableElements!: QueryList<ElementRef>
-
-    private commandsHistory!: Stack<string>;
     private numberClicks: number = -1;
 
     hasActivePkey: boolean = true;
@@ -45,7 +44,10 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
     showingQKeys = false;
     quickKeys: string[] = [];
 
-    private history$!: Observable<Stack<string>>;
+    private historySize: number = 0;
+    private history$!: Observable<CircularLinkedList<string>>;
+    private forwardsIterator!: Iterator<string>;
+    private backwardIterator!: Iterator<string>;
 
     constructor(
         // private menuService: MenuService,
@@ -60,7 +62,14 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
         this.history$ = this.terminalService.getHistory();
 
         this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.qks[0]);
-        this.history$.subscribe((history: Stack<string>) => this.commandsHistory = history);
+        
+        this.history$.subscribe((history: CircularLinkedList<string>) => {
+            if(history == null) return;
+            this.historySize = history.getSize();
+
+            this.forwardsIterator = history.forwardsIterator();
+            this.backwardIterator = history.backwardIterator();
+        });
     }
 
     ngAfterViewInit(): void {
@@ -149,19 +158,19 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
      * will be the command that corresponds to the element in the history array, using the index of number of clicks.
      */
     onArrowClick(event: any): void {
+
+        let prevCommand: string = '';
+
         if (event.key === "ArrowUp") {
-            if (this.numberClicks < this.commandsHistory.getSize() - 1)
-                this.numberClicks += 1;
-            else
-                this.numberClicks = -1;
+            prevCommand = this.backwardIterator.next().value;
+        } else if (event.key === "ArrowDown") {
+            prevCommand = this.forwardsIterator.next().value;
         }
-        else if (event.key === "ArrowDown" && this.numberClicks > -1)
-            this.numberClicks -= 1;
 
         const value = "";
         const selectionStart = this.terminalCommandInput.nativeElement.selectionStart != null ? this.terminalCommandInput.nativeElement.selectionStart : value.length;
         const selectionEnd = this.terminalCommandInput.nativeElement.selectionEnd != null ? this.terminalCommandInput.nativeElement.selectionEnd : value.length;
-        this.terminalCommandInput.nativeElement.value = value.slice(0, selectionStart) + this.getCommand() + value.slice(selectionEnd);
+        this.terminalCommandInput.nativeElement.value = `${value.slice(0, selectionStart)}${prevCommand}${value.slice(selectionEnd)}`;
         const newSelection = selectionStart + 1;
         this.terminalCommandInput.nativeElement.setSelectionRange(newSelection, newSelection);
     }
@@ -171,11 +180,11 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
      * If the number of clicks is more than 0, then it will return an element of the array
      * using the number of clicks as an index.
      */
-    private getCommand(): string | undefined {
-        if (this.numberClicks < 0) return "";
+    // private getCommand(): string | undefined {
+    //     if (this.numberClicks < 0) return "";
 
-        return this.commandsHistory.get(this.numberClicks);
-    }
+    //     return this.commandsHistory.get(this.numberClicks);
+    // }
 
 
     private getPKeyObjects(): PKeyObject[] {

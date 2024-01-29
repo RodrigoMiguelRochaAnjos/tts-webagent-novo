@@ -1,10 +1,10 @@
 <div id="right-menu" (click)="clickOutFilters()">
-	<!-- <app-right-menu
+	<app-right-menu
 		(executeCommand)="onExecuteCommandEvent($event)"
 		(logout)="logout()"
 		(commandResult)="onCommandResult($event)"
         (onOpenPkey)="setPkey($event)"
-	></app-right-menu> -->
+	></app-right-menu>
 </div>
 
 	<div id="terminal-page">
@@ -27,18 +27,13 @@
 		<div class="fixed-btn left-down-btns">
 			<button *ngIf="hasItemsToEmail" size="small" shape="round" (click)="onEmailItemsClick()">
                 <i class="fa-solid fa-envelope"></i>
-
-				<!-- <ion-icon slot="start" size="small" name="mail"></ion-icon> -->
 				({{ emailItems.length }})
 			</button>
 			<button *ngIf="showBtnMu" size="small" shape="round" (click)="executeMdMuCommands('MU')">
                 <i class="fa-solid fa-bars"></i>
-				<!-- <ion-icon size="small" slot="icon-only" name="caret-up"></ion-icon> -->
 			</button>
 			<button *ngIf="showBtnMd" size="small" shape="round" (click)="executeMdMuCommands('MD')">
                 <i class="fa-solid fa-caret-down"></i>
-
-				<!-- <ion-icon size="small" slot="icon-only" name="caret-down"></ion-icon> -->
 			</button>
 		</div>
 	</div>
@@ -53,4 +48,5 @@
 
 <terminal-bottom-bar [pkeyIndex]="selectedPkey" (commandSubmit)="onCommandInputSubmit($event)" />
 
+<button (click)="toggleMenu('right')">I am random button</button>
 

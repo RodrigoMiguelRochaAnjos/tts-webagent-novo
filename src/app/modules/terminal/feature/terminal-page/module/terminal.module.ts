@@ -15,8 +15,8 @@ import { TranslateModule } from '@ngx-translate/core';
     declarations: [
         TerminalPage,
         TerminalComponent,
-        BottomBarComponent
-        // RightMenuComponent,
+        BottomBarComponent,
+        RightMenuComponent,
         // CalendarPickerComponent
     ],
     providers: [

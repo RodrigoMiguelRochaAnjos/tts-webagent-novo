@@ -1,1 +1,13 @@
-<p>warning-alert works!</p>
+<div class="modal-center">
+    <div class="close" (click)="this.close(AlertAction.CANCEL)">
+        <i class="fa-solid fa-x"></i>
+    </div>
+    <h2>WARNING</h2>
+    <p>
+        {{ content }}
+    </p>
+    <div class="buttons">
+        <button (click)="this.close(AlertAction.EXECUTE)" class="button-medium call-to-action">I understand</button>
+        <button (click)="this.close(AlertAction.CANCEL)" class="button-medium">Close</button>
+    </div>
+</div>

@@ -13,6 +13,9 @@ import { AuthenticatedUser } from 'src/app/core/models/user/types/authenticated-
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { MenuService } from '../../data-access/menu.service';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 @Component({
     selector: 'app-right-menu',
     templateUrl: './right-menu.component.html',
@@ -28,12 +31,12 @@ export class RightMenuComponent implements OnInit {
 
     tabs = ['PKeys', 'History', 'Queues', 'Tools'];
     activeTab = 0;
-    pkeys!: PKey[];
+    pkeys$!: Observable<PKey[]>;
     queues: Queue[] = [];
     queuesAreLoading = false;
-    private commandHistory!: Stack<string>;
+    commandHistory!: CircularLinkedList<string>;
 
-    private history$!: Observable<Stack<string>>;
+    private history$!: Observable<CircularLinkedList<string>>;
 
     constructor(
         private menuService: MenuService,
@@ -41,6 +44,7 @@ export class RightMenuComponent implements OnInit {
         private pkeyService: PkeysService,
         private terminalService: TerminalService,
         private restService: HttpClient,
+        private alertService: AlertService,
         private authService: AuthService
     ) {
     }
@@ -48,11 +52,9 @@ export class RightMenuComponent implements OnInit {
     ngOnInit(): void {
         this.history$ = this.terminalService.getHistory();
 
-        this.pkeyService.getPkeys().subscribe((newPkeys) => {
-            this.pkeys = newPkeys;
-        });
+        this.pkeys$ = this.pkeyService.getPkeys();
         
-        this.history$.subscribe((val: Stack<string>) => this.commandHistory = val)
+        this.history$.subscribe((val: CircularLinkedList<string>) => this.commandHistory = val)
     }
 
     onTabChange(tabIndex: number): void {
@@ -97,7 +99,7 @@ export class RightMenuComponent implements OnInit {
                     });
                 },
                 error: (err: Error) => {
-                    // this.utilitiesService.showAlert('Error', result.message);
+                    this.alertService.show(AlertType.ERROR, err.message);
                 },
                 complete: () => this.queuesAreLoading = false
             })
@@ -121,7 +123,7 @@ export class RightMenuComponent implements OnInit {
                     this.menuService.toggleMenu('right');
                 },
                 error: (err: Error) => {
-                    // this.utilitiesService.showAlert('Error', result.message);
+                    this.alertService.show(AlertType.ERROR, err.message);
                 }
             });
         })
