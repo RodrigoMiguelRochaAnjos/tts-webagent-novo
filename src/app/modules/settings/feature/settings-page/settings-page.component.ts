@@ -7,6 +7,7 @@ import { countriesDialCodes } from 'src/app/shared/utils/countries-dial-codes.da
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
 import { Observable } from 'rxjs';
+import { countriesCodes } from 'src/app/shared/utils/countries-codes.data';
 
 @Component({
     selector: 'app-settings-page',
@@ -17,14 +18,18 @@ export class SettingsPageComponent implements OnInit{
     InputType = InputType;
     patterns = patterns;
     countriesDialCodes = countriesDialCodes;
+    countriesCodes = countriesCodes;
 
     countriesDialCodeOptions: string[] = [];
+    countriesCodesOptions: string[] = [];
+
 
     private user$!: Observable<User>;
 
     constructor(
         private authService: AuthService
     ) {
+        this.countriesCodesOptions = Object.keys(this.countriesCodes);
         this.countriesDialCodeOptions = Object.keys(this.countriesDialCodes);
         this.user$ = authService.getUser();
     }

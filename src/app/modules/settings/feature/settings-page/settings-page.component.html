@@ -11,7 +11,7 @@
     </div>
 
     <div class="double-fields">
-        <webagent-input id="countryDial" [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
+        <webagent-input id="countryDial" [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="false"
             [pattern]="'[a-z]'" [label]="'Country Dial Code *'" />
         <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [label]="'Phone number *'" />
     </div>
@@ -37,7 +37,7 @@
             [label]="'Locality'" />
         <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.city.source"
             [label]="'City'" />
-        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source"
+        <webagent-input [type]="InputType.DROPDOWN" [options]="countriesCodesOptions" [required]="false" [pattern]="patterns.countryCode.source"
             [placeholder]="'E.g. PT'" [label]="'Country Code'" />
     </div>
 
