@@ -17,6 +17,7 @@ import { MenuService } from './menu.service';
 import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
+import { TerminalHistoryService } from './terminal-history.service';
 
 export const MONTHS: string[] = [
     'JAN',
@@ -44,11 +45,6 @@ export class TerminalService {
         terminal: document.getElementById('terminal')!,
         selected: true
     }]);
-
-    private history$: BehaviorSubject<CircularLinkedList<string>> = new BehaviorSubject<CircularLinkedList<string>>(new CircularLinkedList<string>(50));
-
-    private forwardIterator!: Iterator<string>;
-    private backwardsIterator!: Iterator<string>;
 
     private filters$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
@@ -84,19 +80,10 @@ export class TerminalService {
         private environmentInjector: EnvironmentInjector,
         private menuService: MenuService,
         private alertService: AlertService,
+        private terminalHistory: TerminalHistoryService,
         translate: TranslateService,
     ) {
-        const list: CircularLinkedList<string> = this.history$.value;
-        list.append('');
-
-        this.history$.next(list);
-
-        this.loadCommandHistory();
-
-        this.history$.subscribe((value: CircularLinkedList<string>) => {
-            this.forwardIterator = value.forwardsIterator();
-            this.backwardsIterator = value.backwardIterator();
-        })
+        
 
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
@@ -119,9 +106,7 @@ export class TerminalService {
         return this.showButtons$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
-    public getHistory(): Observable<CircularLinkedList<string>> {
-        return this.history$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
+    
 
     public getSelectedCommand(): Observable<string> {
         return this.selectedCommand$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
@@ -188,17 +173,7 @@ export class TerminalService {
         this.executeUpdateCommand(terminalContentRedered);
     }
 
-    private addCommandToHistory(command: string): void {
-        const commands: CircularLinkedList<string> = this.history$.value;
-
-        if (command === this.backwardsIterator.next().value) return;
-
-        commands.append(command);
-
-        this.history$.next(commands);
-
-        localStorage.setItem('commands', JSON.stringify(commands.toList()));
-    }
+    
 
     private processCommandErrors(serverData: any): void {
         if (serverData.message.text && serverData.message.text.includes('Session does not exist')) {
@@ -327,7 +302,7 @@ export class TerminalService {
                 next: (result: any) => {
                     this.lastExecutedCommand.command = command;
 
-                    if (isCommandAString) this.addCommandToHistory(command as string);
+                    if (isCommandAString) this.terminalHistory.addCommandToHistory(command as string);
 
                     this.processTerminalCommand(result, emailElement);
                     // this.utilitiesService.dismissLoading();
@@ -565,19 +540,5 @@ export class TerminalService {
                 })
             })
         });
-    }
-
-    public loadCommandHistory(): void {
-        const savedCommandsString = localStorage.getItem("commands");
-
-        if (savedCommandsString == null) return;
-
-        const commands: CircularLinkedList<string> = new CircularLinkedList<string>(50);
-
-        for (let command of JSON.parse(savedCommandsString) as string[]) {
-            commands.append(command);
-        }
-
-        this.history$.next(commands);
     }
 }

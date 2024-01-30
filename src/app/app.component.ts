@@ -1,11 +1,7 @@
-import { AfterContentInit, AfterViewInit, Component, ComponentRef, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from './core/authentication/auth.service';
-import { LoadingService } from './core/interceptors/loading.service';
-import { Observable } from 'rxjs';
-import { IncompleteUser } from './core/models/user/types/incomplete-user.model';
-import { AuthenticatedUser } from './core/models/user/types/authenticated-user.model';
-import { TerminalService } from './modules/terminal/data-access/terminal.service';
 import { PkeysService } from './modules/terminal/data-access/pkeys.service';
+import { TerminalHistoryService } from './modules/terminal/data-access/terminal-history.service';
 
 @Component({
     selector: 'app-root',
@@ -18,11 +14,11 @@ export class AppComponent{
     constructor(
         private authService: AuthService,
         private pkeyService: PkeysService,
-        private terminalService: TerminalService
+        private terminalHistoryService: TerminalHistoryService
     ) {
         this.authService.loadUserFromStorage();
         this.pkeyService.loadPkeysFromStorage();
-        this.terminalService.loadCommandHistory();
+        this.terminalHistoryService.loadCommandHistory();
     }
 
 }

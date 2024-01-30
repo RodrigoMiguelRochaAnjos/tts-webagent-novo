@@ -9,6 +9,7 @@ import { Stack } from 'src/app/core/utils/stack.structure';
 import { MenuService } from '../../data-access/menu.service';
 import { Menu } from '../../models/menu.model';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
+import { TerminalHistoryService } from '../../data-access/terminal-history.service';
 
 @Component({
     selector: 'app-main',
@@ -43,13 +44,14 @@ export class TerminalPage implements OnInit {
 
     constructor(
         private domSanitizer: DomSanitizer,
+        private terminalHistoryService: TerminalHistoryService,
         private terminalService: TerminalService,
         private menuService: MenuService,
         private authService: AuthService
     ) {
         this.terminals$ = this.terminalService.getTerminals();
         this.terminalContent$ = this.terminalService.getTerminalContent();
-        this.history$ = this.terminalService.getHistory();
+        this.history$ = this.terminalHistoryService.getHistory();
     }
 
     ngOnInit(): void {

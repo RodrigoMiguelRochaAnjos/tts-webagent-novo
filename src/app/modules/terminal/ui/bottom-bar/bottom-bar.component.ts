@@ -8,6 +8,7 @@ import { PkeysService } from '../../data-access/pkeys.service';
 import { PKey } from '../../models/pkey.model';
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
+import { TerminalHistoryService } from '../../data-access/terminal-history.service';
 
 
 class PKeyObject {
@@ -53,13 +54,14 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
         // private menuService: MenuService,
         // private pkeysService: PkeysService,
         // private statisticsService: StatisticsService,
+        private terminalHistoryService: TerminalHistoryService,
         private terminalService: TerminalService,
         private authService: AuthService,
         private pkeysService: PkeysService
     ) { }
 
     ngOnInit(): void {
-        this.history$ = this.terminalService.getHistory();
+        this.history$ = this.terminalHistoryService.getHistory();
 
         this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.qks[0]);
         
@@ -166,7 +168,6 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
         } else if (event.key === "ArrowDown") {
             prevCommand = this.forwardsIterator.next().value;
         }
-
         const value = "";
         const selectionStart = this.terminalCommandInput.nativeElement.selectionStart != null ? this.terminalCommandInput.nativeElement.selectionStart : value.length;
         const selectionEnd = this.terminalCommandInput.nativeElement.selectionEnd != null ? this.terminalCommandInput.nativeElement.selectionEnd : value.length;

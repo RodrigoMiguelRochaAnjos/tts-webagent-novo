@@ -16,6 +16,7 @@ import { MenuService } from '../../data-access/menu.service';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
+import { TerminalHistoryService } from '../../data-access/terminal-history.service';
 @Component({
     selector: 'app-right-menu',
     templateUrl: './right-menu.component.html',
@@ -31,17 +32,18 @@ export class RightMenuComponent implements OnInit {
 
     tabs = ['PKeys', 'History', 'Queues', 'Tools'];
     activeTab = 0;
-    pkeys$!: Observable<PKey[]>;
     queues: Queue[] = [];
     queuesAreLoading = false;
-    commandHistory!: CircularLinkedList<string>;
-
-    private history$!: Observable<CircularLinkedList<string>>;
+    private historySize: number = 0;
+    
+    history$!: Observable<CircularLinkedList<string>>;
+    pkeys$!: Observable<PKey[]>;
 
     constructor(
         private menuService: MenuService,
         private router: Router,
         private pkeyService: PkeysService,
+        private terminalHistoryService: TerminalHistoryService,
         private terminalService: TerminalService,
         private restService: HttpClient,
         private alertService: AlertService,
@@ -50,11 +52,11 @@ export class RightMenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.history$ = this.terminalService.getHistory();
+        this.history$ = this.terminalHistoryService.getHistory();
 
         this.pkeys$ = this.pkeyService.getPkeys();
         
-        this.history$.subscribe((val: CircularLinkedList<string>) => this.commandHistory = val)
+        this.history$.subscribe((val: CircularLinkedList<string>) => this.historySize = val.getSize());
     }
 
     onTabChange(tabIndex: number): void {
@@ -78,7 +80,7 @@ export class RightMenuComponent implements OnInit {
     }
 
     get hasCommandsInHistory(): boolean {
-        return this.commandHistory.getSize() > 0;
+        return this.historySize > 0;
     }
 
     get hasQueues(): boolean {

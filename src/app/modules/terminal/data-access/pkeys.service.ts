@@ -31,6 +31,8 @@ export class PkeysService {
         private destroyService: DestroyService,
         translate: TranslateService
     ) {
+        this.loadPkeysFromStorage();
+
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });

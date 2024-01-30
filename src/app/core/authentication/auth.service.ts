@@ -86,7 +86,7 @@ export class AuthService implements OnDestroy {
                         Object.setPrototypeOf(response.syncData, SyncData.prototype)
                         Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
                     }
-
+                    console.log("SYNC DATA: ", response.syncData);
                     if (response.syncData && response.syncData.pkeys) console.log(response.syncData.pkeys);
 
                     switch (this.loginValidator.validateLogin(response)) {

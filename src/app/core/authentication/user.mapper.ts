@@ -10,6 +10,7 @@ import { AuthenticatedUser } from "../models/user/types/authenticated-user.model
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { Settings } from "src/app/modules/home/models/settings.model";
+import { PKey } from "src/app/modules/terminal/models/pkey.model";
 
 export class UserMapper {
     static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
@@ -23,9 +24,11 @@ export class UserMapper {
         contact.email = response.syncData.settings.profileUserEmail;
         contact.phone = phone;
 
-        let user: AuthenticatedUser;
-        user = new AuthenticatedUser()
+        UserMapper.loadPKeysFromServer(response.syncData.pkeys);
 
+        let user: AuthenticatedUser = new AuthenticatedUser();
+
+        
         if (!response.syncData.settings) {
             user = new IncompleteUser();
             user.settings = Settings.default();
@@ -56,6 +59,14 @@ export class UserMapper {
         user.gds.son = loginRequest.son;
 
         return user;
+    }
+
+    private static loadPKeysFromServer(serverPKeys: any): void {
+        const pkeys: PKey[] = [];
+        serverPKeys.forEach((serverPKey: any) => {
+            pkeys.push(PKey.fromServer(serverPKey));
+        });
+        localStorage.setItem('pkeys', JSON.stringify(pkeys));
     }
 
     static mapStorageToUser(obj: string | null): User {
