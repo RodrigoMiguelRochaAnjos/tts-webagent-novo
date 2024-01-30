@@ -1,4 +1,4 @@
-<app-flight-selection-indicator [selected]="selected" (click)="onSelectionClick()">
+<app-flight-selection-indicator [selected]="selected" (click)="onSelectionClick()" *ngIf="!this.displayOnly">
 </app-flight-selection-indicator>
 <div class="flight-option-content">
     <div class="info">

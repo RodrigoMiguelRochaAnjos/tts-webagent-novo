@@ -1,0 +1,50 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    background-color: #F2F7FA;
+    padding: 2px;
+    border-radius: 22px;
+    margin-top: 19px;
+    .phase {
+        width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+
+        &.complete {
+            background-color: #C8D8E9;
+            border-radius: 0px;
+            color: #414D6E;
+
+            &:first-child {
+                border-top-left-radius: 32px;
+                border-bottom-left-radius: 26px;
+            }
+        }
+
+        &.current {
+            background-color: #C8D8E9;
+            color: #fff;
+            border-top-right-radius: 32px;
+            border-bottom-right-radius: 32px;
+            position: relative;
+            z-index: 0;
+
+            &::before {
+                content: attr(data-content);
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                z-index: 99;
+                border-radius: 32px;
+                background-color: #414D6E;
+            }
+        }
+    }
+}

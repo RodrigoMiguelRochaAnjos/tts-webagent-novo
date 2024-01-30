@@ -9,24 +9,42 @@ export class Settings {
     hideWhatsNewNotify!: boolean;
     profileUserName!: string;
     profileUserEmail!: string;
-    profileUserDialCode!: number;
+    profileUserDialCode!: string;
     profileUserPhone!: string;
     emailTemplates!: any[];
-    sendByEmail!: any[];
+    sendByEmailItems: any[] = [];
     currency!: string;
     languageCode!: string;
+    street!: string
+    flat!: string
+    locality!: string
+    city!: string
+    province!: string
+    postCode!: string
+    countryCode!: string
+    agencyEntityName!: string;
+    portraitFontSize: number = 1;
+    keepKeyboardVisible: boolean = false;
 
     default: boolean = false;
 
-    isValid(): boolean {
-
+    public isValid(): boolean {
+        console.log(`
+            ${this.qks != null} && 
+            ${this.profileUserName != null} &&
+            ${this.profileUserEmail != null} &&
+            ${this.profileUserDialCode != null} &&
+            ${this.profileUserPhone != null} &&
+            ${this.sendByEmailItems != null} &&
+            ${this.languageCode != null}
+        `)
         return (
             this.qks != null && 
             this.profileUserName != null &&
             this.profileUserEmail != null &&
             this.profileUserDialCode != null &&
             this.profileUserPhone != null &&
-            this.sendByEmail != null &&
+            this.sendByEmailItems != null &&
             this.languageCode != null
         )
     }
@@ -36,7 +54,7 @@ export class Settings {
 
         settings.profileUserName = '';
         settings.profileUserEmail = '';
-        settings.profileUserDialCode = 351;
+        settings.profileUserDialCode = '351';
         settings.profileUserPhone = '';
         settings.languageCode = 'en';
         settings.currency = 'EUR';

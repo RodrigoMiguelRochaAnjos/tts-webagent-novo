@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, EventEmitter, HostBinding, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostBinding, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
@@ -45,6 +45,7 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     @HostBinding("class.ng-disabled")
     @Input() disabled: boolean = false;
 
+    @HostBinding("class.ng-required")
     @Input() required: boolean = false;
     
     @HostBinding("class.ng-invalid")
@@ -66,7 +67,8 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
 
     @Output() change: EventEmitter<any> = new EventEmitter<any>();
     constructor(
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private elementRef: ElementRef
     ) {}
 
     ngOnInit(): void {
@@ -173,7 +175,9 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             console.log("regexp: ", regex.test(this.value));
             this.invalid = !regex.test(this.value);
 
-            if(this.value == '') this.invalid = this.required;
+            if(this.value == '') this.invalid = false;
+            if (this.required && this.value == '') this.elementRef.nativeElement.classList.add("ng-required");
+            if (this.required && this.value != '') this.elementRef.nativeElement.classList.remove("ng-required");
 
             this.change.emit(value);
         });

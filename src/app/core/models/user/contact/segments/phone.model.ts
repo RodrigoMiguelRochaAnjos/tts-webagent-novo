@@ -2,7 +2,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { patterns } from "../../../../../shared/utils/validation-patterns";
 
 export class Phone{
-    dialCode!: number;
+    dialCode!: string;
 	number!: string;
 
     public isValid(): boolean {

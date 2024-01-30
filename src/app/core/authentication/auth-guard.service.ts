@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, takeUntil } from "rxjs";
 import { AuthService } from "./auth.service";
 import { User } from "../models/user/user.model";
 import { AuthenticatedUser } from "../models/user/types/authenticated-user.model";
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
+import { DestroyService } from "../services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,11 @@ import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 export class AuthGuardService {
     private currentPage: string = "";
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private destroyService: DestroyService
+    ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         return this.canActivateChild(route, state);
@@ -29,7 +34,9 @@ export class AuthGuardService {
         }
 
 
-        this.authService.getUser().subscribe({
+        this.authService.getUser()
+        .pipe(takeUntil(this.destroyService.getDestroyOrder()))
+        .subscribe({
             next: (user: User) => {
                 
                 if ((state.url != '/' && state.url != '/home') && !(user instanceof AuthenticatedUser) && !(user instanceof IncompleteUser)  ) {

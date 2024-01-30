@@ -23,6 +23,14 @@
         }
     }
 
+    &.ng-required {
+        box-shadow: 0px 0px 2px #11214a;
+
+        label {
+            color: #11214A;
+        }
+    }
+
     label {
         position: absolute;
         transform: translateY(-50%);

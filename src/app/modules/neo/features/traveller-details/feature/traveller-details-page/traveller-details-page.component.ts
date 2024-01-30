@@ -10,6 +10,7 @@ import { Traveller, Travellers } from 'src/app/modules/neo/models/traveller/trav
 import { Contact } from 'src/app/core/models/user/contact/contact.model';
 import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -26,7 +27,8 @@ export class TravellerDetailsPageComponent {
 
     constructor(
         private reservationService: ReservationService,
-        private travellerService: TravellerService
+        private travellerService: TravellerService,
+        private router: Router
     ) {
         this.option = this.reservationService.getSelectedFlights();
 
@@ -53,5 +55,15 @@ export class TravellerDetailsPageComponent {
     formatDate(date: string) {
         const formattedDate: string = moment(date, "YYYY-MM-DDTHH:mm:ss").format('DD-L');
 
+    }
+
+    advance(): void {
+        if(!this.travellerService.areTravellersValid()) {
+            console.log(this.travellerService.getTravellers());
+            alert("traveller fields are invalid");
+            return;
+        }
+
+        this.router.navigate(['neo/checkout'])
     }
 }

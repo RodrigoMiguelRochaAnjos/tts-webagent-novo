@@ -3,8 +3,9 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NewsProvidersResponse } from '../models/news-providers-response.model';
 import { NewsProvider } from '../models/news-provider.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { New } from '../models/new.model';
+import { DestroyService } from 'src/app/core/services/destroy.service';
 
 @Injectable({
     providedIn: 'root',
@@ -15,10 +16,13 @@ export class NewsService {
     private newsProviders$: BehaviorSubject<NewsProvider[]> = new BehaviorSubject<NewsProvider[]>([]);
     private news$: BehaviorSubject<New[]> = new BehaviorSubject<New[]>([]);
 
-    constructor(private restService: HttpClient) { }
+    constructor(
+        private restService: HttpClient,
+        private destroyService: DestroyService
+    ) { }
 
     public getNews() : Observable<New[]> {
-        return this.news$;
+        return this.news$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     loadProviders(): Promise<boolean> {

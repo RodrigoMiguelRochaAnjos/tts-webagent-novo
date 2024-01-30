@@ -21,7 +21,7 @@ export class AnonymousUser extends User{
         
         this.contact.email= "anonymous@email.com";
         this.contact.phone = new Phone();
-        this.contact.phone.dialCode = 351;
+        this.contact.phone.dialCode = '351';
         this.contact.phone.number = '911111111'
     }
 
@@ -43,5 +43,10 @@ export class AnonymousUser extends User{
 
         localStorage.removeItem("user");
         localStorage.setItem("user", user);
+    }
+
+    public copy(user: User): AnonymousUser {
+
+        return this;
     }
 }

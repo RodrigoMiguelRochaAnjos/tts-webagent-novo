@@ -1,0 +1,39 @@
+<p>Thursday, March 7, 2024</p>
+<div class="informations">
+    <div class="information flight-number">
+        <p>Flight</p>
+        <b>{{ this.segment.flightNumber }}</b>
+    </div>
+    <div class="information boarding-time">
+        <p>Boarding time</p>
+        <b>{{ segment.departureDatetime | date:'HH:mm' }}</b>
+    </div>
+    <div class="information terminal">
+        <p>Terminal</p>
+        <b>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</b>
+    </div>
+    <div class="information duration">
+        <p>Duration</p>
+        <b>{{ segmentDuration() }}</b>
+    </div>
+</div>
+<p>From: <b>AIRPORT/PDL</b> To: <b>AIRPORT/LIS</b></p>
+<p>Departure: <b>12:05</b> Arrival: <b>15:20</b></p>
+<p>Equipment: <b>Airbus A320</b></p>
+<div class="price">60 EUR</div>
+
+<div class="fare-details">
+    <p>Fare details</p>
+    <div class="fares">
+        <div>
+            <div class="fare" *ngFor="let fare of segment.fareDetailsList">
+                <p *ngIf="fare.ptc != null" class="passenger-type"><b>{{ fare.ptc }}</b></p>
+                <p *ngIf="fare.bookingClass != null">Booking class: <b>{{ fare.bookingClass }}</b></p>
+                <p *ngIf="fare.cabinClass != null">Cabin class: <b>{{ fare.cabinClass }}</b></p>
+                <p *ngIf="fare.description != null">Description: <b>{{ fare.description }}</b></p>
+                <p *ngIf="fare.fareBasis != null">Fare basis: <b>{{ fare.fareBasis }}</b></p>
+                <p *ngIf="fare.privateFare != null">Private fare: <b>{{ fare.privateFare ? 'YES': 'NO' }}</b></p>
+            </div>
+        </div>
+    </div>
+</div>

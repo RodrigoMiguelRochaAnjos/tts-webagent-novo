@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { AirSearchRequest } from "../utils/requests/air-search-request/air-search-request.model";
-import { BehaviorSubject, Observable, Subscribable, Subscriber, TeardownLogic } from "rxjs";
+import { BehaviorSubject, Observable, Subscribable, Subscriber, TeardownLogic, takeUntil } from "rxjs";
 import { AirSearchIdResponse } from "../utils/responses/air-search-id-response.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "src/app/core/authentication/auth.service";
@@ -9,6 +9,7 @@ import { AuthenticatedUser } from "src/app/core/models/user/types/authenticated-
 import { AirSearchResponse, AirSearchResults } from "../../../models/responses/air-search-result/air-search-result-response.model";
 import { EventSourcePolyfill, OnMessageEvent } from "ng-event-source";
 import { FlightOption } from "../../../models/flight-option.model";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -27,13 +28,14 @@ export class SearchService {
 
     constructor(
         private httpClient: HttpClient,
-        private authService: AuthService
+        private authService: AuthService,
+        private destroyService: DestroyService
     ) {
         
     }
 
     public getResults() : Observable<AirSearchResults> {
-        return this.results$;
+        return this.results$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getResultsValue(): AirSearchResults {
@@ -51,7 +53,7 @@ export class SearchService {
             "Authorization": `Bearer ${user.token}`
         });
 
-        return this.httpClient.post<AirSearchIdResponse>(`${this.ENDPOINT}/${this.VERSION}/search`, airSearch, { headers: http });
+        return this.httpClient.post<AirSearchIdResponse>(`${this.ENDPOINT}/${this.VERSION}/search`, airSearch, { headers: http }).pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public search(searchId: string) : Promise<boolean> {
