@@ -1,0 +1,114 @@
+<div class="page-container">
+    <div class="top-section">
+        <div class="left-side">
+            <div class="logo">
+
+            </div>
+        </div>
+
+        <div class="mid-side">
+            <div class="flight-info">
+                <p class="semi-bold">Sun 27 December</p>
+                <div class="ticket-info">
+                    <div class="first-row">
+                        <div class="first-column">
+                            <p>Flight</p>
+                            <h5>9798</h5>
+                        </div>
+                        <div class="first-column">
+                            <p>Boarding time</p>
+                            <h5>23:00</h5>
+                        </div>
+                        <div class="first-column">
+                            <p>Terminal</p>
+                            <h5>----------</h5>
+                        </div>
+                        <div class="first-column">
+                            <p>Duration</p>
+                            <h5>7h25m</h5>
+                        </div>
+
+                    </div>
+
+                    <div class="class">
+                        <p>Class:</p> <span> NI </span>
+                    </div>
+
+                    <div class="destination">
+                        <p>From:</p> <span>AIRPORT/JFK</span> <p>To: </p> <span>AIRPORT/BCN</span>
+                    </div>
+
+                    <div class="departure-time">
+                        <p>Departure:</p> <span>23:00</span> <p>Arrival: </p> <span>12:25</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-side">
+            
+            <div class="price">
+                <h2>200</h2><h5>EUR</h5>
+                <div class="info-circle"><span>i</span></div>
+            </div>
+            <div class="div">
+                <label>Taxes included</label>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <div class="mid-section">
+        <div class="half-section left">
+            <div class="first-row">
+                <h4>Payment Card</h4>
+                <webagent-input [type]="InputType.DROPDOWN" [required]="true" [label]="'Card type'"/>
+            </div>
+
+            <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card holder'" [placeholder]="'E.g. John'"/>
+             
+            <div class="second-row">
+                <webagent-input [type]="InputType.NUMBER" [required]="true" [label]="'Card number'" [placeholder]="'E.g. 0000 0000 0000 0000'"/>
+                <div class="half-inputs">
+                    <webagent-input [type]="InputType.CVV" [required]="true" [label]="'CVV'" [placeholder]="'E.g. 00000'"/>
+                    <webagent-input id="exp-date" [type]="InputType.TEXT_DATE_INPUT" [required]="true" [label]="'Expiry date'" [placeholder]="'E.g. mm/yyyy'"/>
+                </div>
+            </div>
+
+            <div class="error-section">
+                <ul>
+                    <li>Invalid username should have atleast 5 characters</li>
+                    <li>Invalid password should have 5 characters</li>
+                </ul> 
+            </div>
+
+        </div>
+        <div class="half-section right">
+            <h4>Billing address</h4>
+
+            <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Entity name'" [placeholder]="'E.g. TTS Lab'"/>
+            
+            <div class="first-section">
+                <webagent-input id="street" [type]="InputType.TEXT" [required]="true" [label]="'Street'" [placeholder]="'E.g. Rua da tecnologia 25'"/>
+                <webagent-input id="flat" [type]="InputType.TEXT" [required]="true" [label]="'Flat'" [placeholder]="'E.g. R/S'"/>
+                <webagent-input id="post-code" [type]="InputType.TEXT" [required]="true" [label]="'Post code'" [pattern]="patterns.postCode.source" [placeholder]="'E.g. 9500-296'"/>
+            </div>
+
+            <div class="second-section">
+                <webagent-input id="locality" [type]="InputType.TEXT" [required]="true" [label]="'Locality'" [placeholder]="'E.g. Porto'"/>
+                <webagent-input id="city" [type]="InputType.TEXT" [required]="true" [label]="'City'" [placeholder]="'E.g. Dublin'"/>
+                <webagent-input id="country-code" [type]="InputType.TEXT" [required]="true" [label]="'Country code'" [pattern]="patterns.countryCode.source" [placeholder]="'E.g. PT'"/>
+            </div>
+
+            <div class="error-section">
+                <ul>
+                    <li>Invalid username should have atleast 5 characters</li>
+                    <li>Invalid password should have 5 characters</li>
+                </ul> 
+            </div>
+        </div>    
+    </div>
+
+
+</div>

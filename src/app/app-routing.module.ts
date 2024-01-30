@@ -43,6 +43,22 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'Wallet'
     },
+    {
+        path: 'traveller-details',
+        loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
+        canActivateChild: [AuthGuardService]
+    },
+    {
+        path: 'checkout',
+        loadChildren: () => import('./modules/neo/features/checkout/feature/checkout-shell/checkout-shell.module').then((m) => m.CheckoutShellModule),
+        title: 'Checkout'
+    },
+    {
+        path: 'my-bookings',
+        loadChildren: () => import('./modules/neo/features/my-bookings/feature/my-bookings-shell/my-bookings-shell.module').then((m) => m.MyBookingsShellModule),
+        title: 'MyBookings'
+    }
+    
 ];
 
 @NgModule({

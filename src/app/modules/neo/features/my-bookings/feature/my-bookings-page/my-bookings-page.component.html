@@ -1,0 +1,17 @@
+<div class="bookings-container">
+    <div class="top-bar">
+        <h4>Bookings</h4>
+        <div class="date-filter">
+            <span>Creation Date:</span>
+            <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRangeCreation" (change)="updateBookings()" />
+            <span>Start Date:</span>
+            <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRangeStart" (change)="updateBookings()" />
+        </div>
+    </div>
+
+    <div class="booking-container">
+        <ng-container>
+            <app-booking [booking]="booking" *ngFor="let booking of (this.bookings$ | async)"/>
+        </ng-container>
+    </div>
+</div>

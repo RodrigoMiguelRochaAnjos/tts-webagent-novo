@@ -1,0 +1,57 @@
+:host{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 11px;
+    padding: 0px 25.5px 0px 21px;
+    box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.10);
+    height: 3.9375rem;
+    margin-bottom: 8.25px;
+
+    .left-side {
+        h5{
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+        p {
+            font-size: 0.75rem;
+        }
+
+        .dates{
+            display: flex;
+            align-items: center;
+            b{
+                font-size:  0.75rem;
+                padding: 0px 5px 0px 5px;
+            }
+        }
+    }
+
+    .middle {
+        display: flex;
+        width: 33%;
+        justify-content: flex-end;
+        //padding-left: 25%;
+        
+        p{
+            font-size: 0.9375rem;
+        }
+    }
+
+    .right-side {
+        .button-medium {
+            background-color: #597A9D;
+        }
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+    :host{
+
+        .middle {
+            p{
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
