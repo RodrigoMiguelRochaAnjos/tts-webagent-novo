@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { BalanceService } from "src/app/shared/services/balance.service";
 import { ReservationProcess, ReservationProcessesState } from "../features/search/models/reservation-process.enum";
 import { Balance } from "src/app/shared/models/balance.model";
@@ -8,6 +8,7 @@ import { Providers } from "../models/providers.enum";
 import { AirCheckoutDetailsRequest } from "../features/search/models/air-checkout-details-request.model";
 import { AirCheckoutDetailsResponse } from "../features/search/models/air-checkout-details-response.model";
 import { CheckoutService } from "./checkout.service";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -21,30 +22,25 @@ export class ReservationService {
     private checkoutDetails$!: Observable<AirCheckoutDetailsResponse | null>;
 
     private reservationProcess$: BehaviorSubject<ReservationProcessesState> = new BehaviorSubject<ReservationProcessesState>({
-        FUNDS_CHECKED: Promise.resolve(false),
-        AIR_CHECKOUT_DETAILS: Promise.resolve(false),
-        TRAVELLER_DETAILS_VALID: Promise.resolve(false),
-        AIR_CHECKOUT_PRICE: Promise.resolve(false),
-        BOOKING: Promise.resolve(false),
+        FUNDS_CHECKED: new Promise<boolean>((resolve) => resolve(false)),
+        AIR_CHECKOUT_DETAILS: new Promise<boolean>((resolve) => resolve(false)),
+        TRAVELLER_DETAILS_VALID: new Promise<boolean>((resolve) => resolve(false)),
+        AIR_CHECKOUT_PRICE: new Promise<boolean>((resolve) => resolve(false)),
+        BOOKING: new Promise<boolean>((resolve) => resolve(false)),
     });
     
 
     constructor(
         private balanceService: BalanceService,
-        private checkoutService: CheckoutService
+        private checkoutService: CheckoutService,
+        private destroyService: DestroyService
     ) {
         this.balance$ = this.balanceService.getBalance();
         this.checkoutDetails$ = this.checkoutService.getDetails();
-
-        const reservationProgress: string | null = localStorage.getItem("reservationProgress");
-
-        if(reservationProgress == null) return;
-        
-        this.reservationProcess$.next(JSON.parse(reservationProgress) as ReservationProcessesState);
     }
 
     public getSelectedFlights(): Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }> {
-        return this.selectedFlights$;
+        return this.selectedFlights$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getSelectedFlightsValue(): { [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null } {
@@ -105,6 +101,10 @@ export class ReservationService {
         flights[type] = option;
 
         this.selectedFlights$.next(flights);
+    }
+
+    public getProgress(): Observable<ReservationProcessesState> {
+        return this.reservationProcess$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     private saveProcess() {

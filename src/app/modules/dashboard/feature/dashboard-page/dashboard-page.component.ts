@@ -3,7 +3,11 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { UserService } from 'src/app/core/authentication/user/user.service';
 import { User } from 'src/app/core/models/user/user.model';
+import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
+import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
+import { DoublyLinkedList } from 'src/app/core/utils/doubly-linked-list.structure';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -15,10 +19,22 @@ export class DashboardPageComponent implements OnInit{
     user$!: Observable<User>;
 
     testResult!: AirSearchResponse;
+    private doubleList: CircularLinkedList<string> = new CircularLinkedList<string>();
+    private forwardsIterator: Iterator<string>;
+    private reverseIterator: Iterator<string>;
 
     constructor(
-        private authService: AuthService
+        private authService: AuthService,
+        private alertService: AlertService
     ) {
+        this.doubleList.append("1");
+        this.doubleList.append("2");
+        this.doubleList.append("3");
+        this.doubleList.append("4");
+
+        this.forwardsIterator = this.doubleList.forwardsIterator();
+        this.reverseIterator = this.doubleList.backwardIterator();
+
         this.testResult = JSON.parse(`
         {
     "show": true,
@@ -316,5 +332,13 @@ export class DashboardPageComponent implements OnInit{
     }
     ngOnInit(): void {
         this.user$ = this.authService.getUser();
+    }
+
+    public forwardInList(): void {
+        console.log(this.forwardsIterator.next())
+    }
+
+    public backwardsList(): void {
+        console.log(this.reverseIterator.next())
     }
 }

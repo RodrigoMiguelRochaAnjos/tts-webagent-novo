@@ -1,0 +1,9 @@
+<div
+	class="terminal-content"
+	[style.font-size.em]="fontSize"
+	[innerHTML]="content"
+	(click)="emitClickEvent($event)"
+	(keypress)="emitSubmitEvent($event)"
+	(keyup)="onKeyUpEvent($event)"
+	id="terminal-window"
+></div>

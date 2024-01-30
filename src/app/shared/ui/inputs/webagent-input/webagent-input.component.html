@@ -1,2 +1,2 @@
-<label *ngIf="this.label && !this.hideDefault">{{ this.label }}</label>
+<label *ngIf="this.label && !this.hideDefault">{{ this.label }} <ng-container *ngIf="this.required">*</ng-container></label>
 <ng-container #mutableComponentContainer></ng-container>

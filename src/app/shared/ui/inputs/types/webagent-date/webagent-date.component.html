@@ -1,5 +1,5 @@
 <form [formGroup]="this.dateForm" >
-    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" />
+    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" [required]="this.required"/>
 </form>
 
 <div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">

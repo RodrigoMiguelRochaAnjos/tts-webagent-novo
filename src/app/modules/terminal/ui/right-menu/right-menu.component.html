@@ -1,0 +1,60 @@
+<div class="header">
+	<div class="tabs">
+		<div class="tab" [class.active]="0 === activeTab" (click)="onTabChange(0)">
+			PKeys
+		</div>
+		<div class="tab" [class.active]="1 === activeTab" (click)="onTabChange(1)">
+			{{ 'HISTORY' | translate }}
+		</div>
+		<div class="tab" [class.active]="2 === activeTab" (click)="onTabChange(2)">
+			{{ 'QUEUES' | translate }}
+		</div>
+		<div class="tab" [class.active]="3 === activeTab" (click)="onTabChange(3)">
+			{{ 'TOOLS' | translate }}
+		</div>
+	</div>
+</div>
+
+<div class="side-content">
+    <div *ngIf="activeTab === 0" class="menu-tab-content">
+        <ul>
+            <li *ngFor="let pkey of (this.pkeys$ | async); index as pkeyIndex" (click)="openPKey(pkeyIndex)">
+                <label>{{ pkey.name }}</label>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="activeTab === 1" class="menu-tab-content">
+        <ng-container *ngIf="!hasCommandsInHistory">
+            <div class="no-results">
+                {{'EMPTY_HISTORY_COMMANDS' | translate}}.
+            </div>
+        </ng-container>
+        <ul>
+            <li *ngFor="let command of (history$ | async)?.toList(); index as cmdIndex;"(click)="onCommandClick(command)">
+                <label>{{ command }}</label>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="activeTab === 2" class="menu-tab-content">
+        <ul lines="full">
+            <li *ngFor="let queue of queues" (click)="executeQueueCommand(queue.id)" button detail>
+                <label>{{ queue.name }} ({{ queue.totalBfs }})</label>
+            </li>
+        </ul>
+        <div *ngIf="!queuesAreLoading && !hasQueues" class="no-results">
+            {{'EMPTY_ACTIVE_QUEUES' | translate}}.
+        </div>
+        <div *ngIf="queuesAreLoading" class="loading">
+            {{'LOADING' | translate}}...
+        </div>
+    </div>
+    <div *ngIf="activeTab === 3" class="menu-tab-content">
+        <ul lines="full">
+            <li button detail (click)="getPnrs()">
+                <label>{{'MY_PNRS' | translate}}</label>
+                <i class="fa-solid fa-calendar"></i>
+                <!-- <ion-icon slot="start" name="calendar"></ion-icon> -->
+            </li>
+        </ul>
+    </div>
+</div>

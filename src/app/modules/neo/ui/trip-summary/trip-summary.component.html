@@ -1,0 +1,55 @@
+
+<h3>Trip Summary</h3>
+<div class="summary-container">
+    <h6>Tickets</h6>
+    <app-flight-option *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [option]="(selectedFlights$ | async)!.OUTBOUNDS!" [displayOnly]="true" (click)="outboundSegments = !outboundSegments"/>
+    <div class="segments" *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [ngClass]="{ 'open': outboundSegments }">
+        <div>
+            <ng-container *ngFor="let segment of (selectedFlights$ | async)!.OUTBOUNDS!.segments; let i = index">
+                <summary-segment [segment]="segment" />
+            </ng-container>
+        </div>
+    </div>
+    <app-flight-option *ngIf="(selectedFlights$ | async)!.INBOUNDS" [option]="(selectedFlights$ | async)!.INBOUNDS!" [displayOnly]="true" (click)="inboundSegments = !inboundSegments"/>
+    <div class="segments" *ngIf="(selectedFlights$ | async)!.INBOUNDS" [ngClass]="{ 'open': inboundSegments }" >
+        <div>
+            <ng-container *ngFor="let segment of (selectedFlights$ | async)!.INBOUNDS!.segments; let i = index">
+                <summary-segment [segment]="segment" />
+            </ng-container>
+        </div>
+    </div>
+    <!-- <div class="supplier-infos" *ngIf="(this.details$ | async) != null">
+        <div class="supplier-info" *ngFor="let info of (this.details$ | async)!.supplierInfos | keyvalue ">
+            {{ info.key }}{{ info.value }}
+        </div>
+    </div>
+    <div class="supplier-params" *ngIf="(this.details$ | async) != null">
+        <div class="supplier-param" *ngFor="let info of (this.details$ | async)!.supplierParameters ">
+            <p>{{ info.displayText}}</p>
+            <p>{{ info.isOptional}}</p>
+            <p>{{ info.name}}</p>
+            <p>{{ info.perPassenger}}</p>
+            <p>{{ info.type }}</p>
+        </div>
+    </div> -->
+
+</div>
+<div class="price">
+    <h6>Total price</h6>
+    <div class="total-price">
+        {{ (this.details$ | async)?.price?.amount }} {{ (this.details$ | async)?.price?.currency }}
+    </div>
+</div>
+<div class="prices-per-psg" *ngIf="(this.details$ | async)?.price?.passengersPrices">
+    <div class="psg-price" *ngFor="let psgPrice of (this.details$ | async)?.price?.passengersPrices">
+        <span>
+            <span *ngIf="totalPassengers(psgPrice.ptc)">
+                {{ totalPassengers(psgPrice.ptc) + 1 }}
+            </span>
+            {{ passengerDefinition(psgPrice.ptc) }}:
+        </span>
+        {{ psgPrice.totalAmount }} {{psgPrice.preferredCurrency }}
+    </div>
+</div>
+<button class="button-large call-to-action" (click)="next()">PROCEED</button>
+

@@ -1,3 +1,4 @@
+import { Settings } from "src/app/modules/home/models/settings.model";
 import { patterns } from "../../../shared/utils/validation-patterns";
 import { GDS } from "../gds/gds.model";
 import { Contact } from "./contact/contact.model";
@@ -8,6 +9,7 @@ export abstract class User {
     public languageCode!: string;
     public currency: string = 'EUR';
     public contact!: Contact;
+    public settings!: Settings;
     [key: string]: any;
 
     public gds!: GDS;
@@ -31,4 +33,5 @@ export abstract class User {
     }
 
     public abstract save(): void;
+    public abstract copy(user: User): User;
 }

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Observable, Subscription, catchError, map } from "rxjs";
+import { BehaviorSubject, Observable, Subscription, catchError, map, takeUntil } from "rxjs";
 import { User } from "../models/user/user.model";
 import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { UserService } from "./user/user.service";
@@ -13,22 +13,46 @@ import { Settings } from "src/app/modules/home/models/settings.model";
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { UserMapper } from "./user.mapper";
 import { SyncData } from "src/app/modules/home/models/sync-data.model";
+import { DestroyService } from "../services/destroy.service";
+import { PkeysService } from "src/app/modules/terminal/data-access/pkeys.service";
+import { AlertService } from "../services/alert.service";
+import { AlertType } from "src/app/shared/ui/alerts/alert-type.enum";
+import { TranslateService } from "@ngx-translate/core";
+import { deepClone } from "../utils/deep-clone.tool";
 
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService implements OnDestroy{
+export class AuthService implements OnDestroy {
     private user$: BehaviorSubject<User> = new BehaviorSubject<User>(new AnonymousUser());
 
     private keepAliveSubscription!: Subscription;
+
+    private messages: {[key: string]: string} = {
+        INVALID_LICENSE: '',
+        INVALID_SETTINGS: '',
+        ERROR: '',
+        DELETE: '',
+        INVALID_FIELDS_MESSAGE: '',
+        DELETE_ITEM_MESSAGE: '',
+        LOGOUT: '',
+    }
 
     constructor(
         private userService: UserService,
         private loginValidator: AuthValidationService,
         private router: Router,
         private keepAliveService: KeepAliveService,
+        private destroyService: DestroyService,
+        private alertService: AlertService,
+        translate: TranslateService
     ) {
-        if(this.keepAliveSubscription != null) return;
+
+        Object.keys(this.messages).forEach((key: string) => {
+            translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
+        });
+
+        if (this.keepAliveSubscription != null) return;
 
         this.keepAliveSubscription = this.keepAliveService.getSessionStatus().subscribe({
             next: (valid: boolean) => {
@@ -39,56 +63,63 @@ export class AuthService implements OnDestroy{
         });
     }
     ngOnDestroy(): void {
-        if(this.keepAliveSubscription == null) return;
+        if (this.keepAliveSubscription == null) return;
 
         this.keepAliveSubscription.unsubscribe();
     }
 
-    public getUser() : Observable<User> {
-        return this.user$;
+    public getUser(): Observable<User> {
+        return this.user$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public getUserValue(): User {
         return this.user$.value;
     }
 
-    login(loginRequest: LoginRequest): void{
-        this.userService.login(loginRequest).subscribe({
-            next: (response: LoginResponse) => {
+    login(loginRequest: LoginRequest): void {
+        this.userService.login(loginRequest)
+            .pipe(takeUntil(this.destroyService.getDestroyOrder()))
+            .subscribe({
+                next: (response: LoginResponse) => {
 
-                if(response.syncData) {
-                    Object.setPrototypeOf(response.syncData, SyncData.prototype)
-                    Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
+                    if (response.syncData) {
+                        Object.setPrototypeOf(response.syncData, SyncData.prototype)
+                        Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
+                    }
+                    console.log("SYNC DATA: ", response.syncData);
+                    if (response.syncData && response.syncData.pkeys) console.log(response.syncData.pkeys);
+
+                    switch (this.loginValidator.validateLogin(response)) {
+                        case Validators.VALID:
+                            this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as AuthenticatedUser));
+                            break;
+                        case Validators.INVALID_LICENSE:
+                            this.alertService.show(AlertType.ERROR, this.messages['INVALID_LICENSE'])
+                            break;
+                        case Validators.INVALID_SETTINGS:
+                            console.log("RES: ", response);
+
+                            this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
+
+                            response.syncData.settings = Settings.default();
+
+                            console.log("RES: ", response);
+                            this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
+                            break;
+                        case Validators.HAS_ALERT:
+                            this.alertService.show(AlertType.ERROR, 'HAS ALERTS');
+                            break;
+                        case Validators.INVALID_REQUEST:
+                            this.alertService.show(AlertType.ERROR, 'INVALID_LOGIN');
+                            break;
+                    }
+
+
+                },
+                error: (err: any) => {
+                    console.log(err)
                 }
-
-                switch (this.loginValidator.validateLogin(response)){
-                    case Validators.VALID:
-                        this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as AuthenticatedUser));
-                        break;
-                    case Validators.INVALID_LICENSE:
-                        alert("INVALID LICENSE");
-                        break;
-                    case Validators.INVALID_SETTINGS:
-                        alert("INVALID SETTINGS");
-
-                        response.syncData.settings = Settings.default();
-
-                        this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
-                        break;
-                    case Validators.HAS_ALERT:
-                        alert("HAS ALERTS");
-                        break;
-                    case Validators.INVALID_REQUEST:
-                        alert("INVALID LOGIN");
-                        break;
-                }
-                
-                
-            },
-            error: (err: any) => {
-                console.log(err)
-            }
-        })
+            })
     }
 
 
@@ -112,20 +143,22 @@ export class AuthService implements OnDestroy{
             user: (this.user$.getValue() as AuthenticatedUser).gds.son,
         };
 
-        this.userService.logout(postData).subscribe({
-            next: (result) => {
-                this.reset();
-            },
-            error: (err: Error) => {
-                this.reset()
-            }
-        });
+        this.userService.logout(postData)
+            .pipe(takeUntil(this.destroyService.getDestroyOrder()))
+            .subscribe({
+                next: (result) => {
+                    this.reset();
+                },
+                error: (err: Error) => {
+                    this.reset()
+                }
+            });
     }
 
     private reset(): void {
         this.user$.next(new AnonymousUser());
         this.user$.getValue().save();
-        
+
         this.keepAliveService.stop();
 
         this.router.navigate(['home']);
@@ -133,7 +166,7 @@ export class AuthService implements OnDestroy{
 
     public loadUserFromStorage(): void {
         const storageItem: string | null = localStorage.getItem("user");
-        
+
         let user: User = UserMapper.mapStorageToUser(storageItem);
 
         if (!(user instanceof AuthenticatedUser)) {
@@ -152,5 +185,46 @@ export class AuthService implements OnDestroy{
                 this.user$.next(user)
             }
         )
+    }
+
+    updateUserSettings(newSettings: Settings): void {
+        const user: User = this.user$.value;
+
+        if (!(user instanceof AuthenticatedUser || user instanceof IncompleteUser)) return;
+
+        if (!newSettings.isValid()) {
+            console.log("INVALID")
+            this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
+
+            return;
+        }
+
+        newSettings.lastUpdate = new Date().getTime();
+        newSettings.profileUserName = newSettings.profileUserName.trim();
+        newSettings.profileUserEmail = newSettings.profileUserEmail.trim();
+        newSettings.profileUserPhone = newSettings.profileUserPhone.trim();
+        const postData: { sessionId: string, settings: Settings } = {
+            sessionId: user.id,
+            settings: newSettings,
+        };
+
+        this.userService.updateSettings(postData).subscribe({
+            next: (result: { message: string}) => {
+                if(result.message !== 'OK') return;
+
+                let user: AuthenticatedUser = new AuthenticatedUser().copy(this.user$.value);
+                
+                user.settings = newSettings;
+                console.log("My new user: ", user);
+                console.log(user instanceof AuthenticatedUser);
+
+                user.save();
+
+                this.user$.next(user);
+
+                this.alertService.show(AlertType.SUCCESS, result.message);
+            },
+        });
+
     }
 }

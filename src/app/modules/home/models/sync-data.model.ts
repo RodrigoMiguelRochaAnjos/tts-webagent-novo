@@ -1,4 +1,5 @@
-import { PKeys } from "./pkey.model"
+
+import { PKeys } from "../../terminal/models/pkey.model"
 import { Settings } from "./settings.model"
 
 export class SyncData {

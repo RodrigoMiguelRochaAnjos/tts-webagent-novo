@@ -1,0 +1,74 @@
+:host {
+    position: relative;
+    padding: 8px 19px;
+    display: block;
+    font-size: 0.75rem;
+    color: #11214A;
+
+    p {
+        font-size: inherit;
+    }
+
+    b {
+        font-size: inherit;
+    }
+
+    .informations {
+        display: flex;
+        margin-top: 17px;
+        font-size: inherit;
+
+        .information {
+            text-align: center;
+            margin: 7px;
+            font-size: inherit;
+            font-size: inherit;
+        }
+    }
+
+    .price {
+        position: absolute;
+        right: 19px;
+        top: 8px;
+        font-size: 1.6em;
+    }
+
+    .fare-details {
+        p {
+            padding: 11px 19px;
+            border-top: 1px solid #DFDFDF;
+            border-bottom: 1px solid #DFDFDF;
+        }
+        &:hover .fares{
+            grid-template-rows: 1fr;
+        }
+
+        .fares {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows ease-in-out .3s;
+
+            &:hover {
+                grid-template-rows: 1fr;
+            }
+
+            div {
+                overflow: hidden;
+            }
+
+            .fare {
+                overflow: auto;
+
+                p {
+                    padding: 0px;
+                    border: none;
+                    padding-left: 25px;
+                }
+
+                .passenger-type {
+                    padding: 5px 20px;
+                }
+            }
+        }
+    }
+}

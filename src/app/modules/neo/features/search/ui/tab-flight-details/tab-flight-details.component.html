@@ -4,7 +4,12 @@
 
 <div class="info-segments">
     <div class="segment" *ngFor="let segment of this.option.segments; let i = index">
-        <div class="time-info">
+        <air-segment 
+            [segmentIndex]="i"
+            [segment]="segment"
+            [numberOfStops]="numberOfStops"
+        />
+        <!-- <div class="time-info">
             <div class="segment-date">
                 {{ segment.departureDatetime | date:'fullDate' }}
                 <ng-container *ngIf="!isSameDay(segment.arrivalDatetime, segment.departureDatetime)">
@@ -19,14 +24,14 @@
                     <div *ngIf="segment.departureTerminal">Terminal: {{ segment.departureTerminal }}</div>
                 </div>
                 <div class="flight-progress">
-                    <div class="title">
-                        {{ segmentDuration(segment) }}
-                    </div>
                     <div class="stops">
                         <div class="stop" [ngClass]="{ 'blue': true }">
                         </div>
                         <div class="stop" *ngFor="let number of range(1, numberOfStops); let index = index" [ngClass]="{ 'blue': index <= i }"></div>
                         <div class="stop" [ngClass]="{ 'blue': numberOfStops == i }" ></div>
+                    </div>
+                    <div class="title" [style.left]="((100 / ((numberOfStops + 1))) * ((i + 1))) - ((100 / ((numberOfStops + 1))/2 )) + '%'">
+                        {{ segmentDuration(segment) }}
                     </div>
                     <span class="progress-bar" [style.width]="(((i + 1) / (numberOfStops + 1)) * 100) +'%'"></span>
                 
@@ -61,6 +66,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>

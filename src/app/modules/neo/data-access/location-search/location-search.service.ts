@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
 import { LocationSearchResponse } from "../../models/responses/location-search-response.model";
+import { DestroyService } from "src/app/core/services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -13,10 +14,13 @@ export class LocationSearchService {
 
     private readonly ENDPOINT: string = `${environment.endpoints.REFERENCE_DATA}/cities_airports`;
 
-    constructor(private httpClient: HttpClient) {}
+    constructor(
+        private httpClient: HttpClient,
+        private destroyService: DestroyService
+        ) {}
 
     public getResults(): Observable<LocationSearchResponse> {
-        return this.results$;
+        return this.results$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     public search(term: string) : void {

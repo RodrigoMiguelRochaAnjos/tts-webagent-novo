@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, takeUntil } from "rxjs";
+import { DestroyService } from "../services/destroy.service";
 
 @Injectable({
     providedIn: 'root'
@@ -7,10 +8,12 @@ import { BehaviorSubject, Observable } from "rxjs";
 export class LoadingService {
     public show$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    constructor() {}
+    constructor(
+        private destroyService: DestroyService
+    ) {}
 
     getLoadingStatus(): Observable<boolean> {
-        return this.show$;
+        return this.show$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
     show(): void {

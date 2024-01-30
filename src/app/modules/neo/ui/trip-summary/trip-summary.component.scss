@@ -1,0 +1,72 @@
+:host{
+    padding: 12px 19px;
+    display: block;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px #3333;
+    border-radius: 11px;
+    max-height: calc(100vh - 157px);
+    position: relative;
+    h3{
+        color: #11214A;
+        padding-top: 12px;
+        padding-bottom: 26px;
+    }
+
+    .summary-container{
+        padding: 0px 19px;
+        max-height: calc(calc(100vh - 157px) * .65 );
+        overflow: hidden;
+        overflow-y: auto;
+        h6{
+            margin-top: 26px;
+        }
+        app-flight-option {
+            border-bottom: 1px solid #3333;
+    
+            &:hover + .segments{
+                grid-template-rows: 1fr;
+            }
+        }
+    
+        .segments{
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows ease-in-out 1s;
+            div{
+                overflow: hidden;
+            }
+    
+            &:hover{
+                grid-template-rows: 1fr;
+            }
+    
+            &.open {
+                grid-template-rows: 1fr;
+            }
+            summary-segment {
+                border-bottom: 1px solid #DFDFDF;
+            }
+        }
+
+    }
+
+    .price{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 38px;
+    }
+
+    .prices-per-psg{
+        .psg-price {
+            padding: 0px 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+    button {
+        margin-top: 30px;
+        margin-left: auto;
+    }
+}

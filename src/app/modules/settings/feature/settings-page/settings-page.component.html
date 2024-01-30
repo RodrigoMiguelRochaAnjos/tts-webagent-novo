@@ -1,43 +1,41 @@
 <div class="card">
     <h4>User Profile</h4>
-
-    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.name.source" [label]="'Name *'" />
-
-    <div class="double-fields">
-        <webagent-input [type]="InputType.TEXT" [required]="true" [placeholder]="'dd/mm/yyyy'"
-            [label]="'Date of Birth *'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.email.source"
-            [label]="'Email *'" />
-    </div>
+    <webagent-input [type]="InputType.TEXT" [required]="true" [(ngModel)]="this.tmpSettings.profileUserName"
+        [pattern]="patterns.name.source" [label]="'Name'" />
 
     <div class="double-fields">
-        <webagent-input id="countryDial" [type]="InputType.DROPDOWN" [options]="countriesDialCodeOptions" [required]="true"
-            [pattern]="'[a-z]'" [label]="'Country Dial Code *'" />
-        <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [label]="'Phone number *'" />
+        <webagent-input [type]="InputType.TEXT" [required]="true" [(ngModel)]="this.tmpSettings.profileUserEmail" [pattern]="patterns.email.source" [label]="'Email'" />
+        <div class="double-fields">
+            <webagent-input id="countryDial" [type]="InputType.DROPDOWN" [(ngModel)]="this.tmpSettings.profileUserDialCode"  [options]="countriesDialCodeOptions"
+                [required]="true" [pattern]="'[a-z]'" [label]="'Country Dial Code'" />
+            <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [(ngModel)]="this.tmpSettings.profileUserPhone"
+                [label]="'Phone number'" />
+        </div>
     </div>
+
+
 </div>
 
 <div class="card address">
     <h4>Address</h4>
-    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source"
-        [label]="'Entity Name *'" />
-    
+    <webagent-input [type]="InputType.TEXT" [required]="true" [pattern]="patterns.text.source" [(ngModel)]="this.tmpSettings.agencyEntityName"
+        [label]="'Entity Name'" />
+
     <div class="address-column">
-        <webagent-input class="street" [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+        <webagent-input class="street" [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.tmpSettings.street"
             [label]="'Street'" />
         <webagent-input class="flat" [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
-            [label]="'Flat'" />
-        <webagent-input class="post-code" [type]="InputType.TEXT" [required]="false" [pattern]="patterns.postCode.source"
-            [label]="'Post Code'" />
+            [label]="'Flat'"[(ngModel)]="this.tmpSettings.flat"  />
+        <webagent-input class="post-code" [type]="InputType.TEXT" [required]="false"
+            [pattern]="patterns.postCode.source"  [(ngModel)]="this.tmpSettings.postCode" [label]="'Post Code'" />
 
     </div>
 
     <div class="triple-fields">
-        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.tmpSettings.locality"
             [label]="'Locality'" />
-        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.city.source"
-            [label]="'City'" />
-        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source"
+        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.city.source" [label]="'City'" [(ngModel)]="this.tmpSettings.city" />
+        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source" [(ngModel)]="this.tmpSettings.countryCode"
             [placeholder]="'E.g. PT'" [label]="'Country Code'" />
     </div>
 
@@ -47,8 +45,10 @@
     <h4>App Settings</h4>
 
     <div class="double-fields">
-        <webagent-input [label]="'Select a language'" [type]="InputType.DROPDOWN" [options]="['English', 'Portuguese']" />
-        <webagent-input [label]="'Select a currency'" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" />
+        <webagent-input [label]="'Select a language'" [type]="InputType.DROPDOWN" [(ngModel)]="this.tmpSettings.languageCode"
+            [options]="['English', 'Portuguese']" />
+        <webagent-input [label]="'Select a currency'" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" [(ngModel)]="this.tmpSettings.currency" />
     </div>
-    <webagent-input [type]="InputType.CHECKBOX" [label]="" />
+
+    <button class="button-medium" (click)="update()">SAVE</button>
 </div>
