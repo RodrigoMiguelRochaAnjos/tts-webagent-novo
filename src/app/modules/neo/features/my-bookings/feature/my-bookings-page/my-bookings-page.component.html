@@ -11,7 +11,7 @@
 
     <div class="booking-container">
         <ng-container>
-            <app-booking [bookings]="booking" *ngFor="let booking of (this.bookings$ | async)"/>
+            <app-booking [booking]="booking" *ngFor="let booking of (this.bookings$ | async)"/>
         </ng-container>
     </div>
 </div>

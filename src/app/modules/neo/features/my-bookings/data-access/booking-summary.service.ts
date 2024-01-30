@@ -11,6 +11,7 @@ import { AuthenticatedUser } from 'src/app/core/models/user/types/authenticated-
 import { environment } from 'src/environments/environment';
 import { PageableWrapper } from 'src/app/core/models/pageable-wrapper.model';
 import * as moment from 'moment';
+import { Status } from '../../../models/status.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -40,16 +41,14 @@ export class BookingSummaryService {
   }
 
   public getBookingsSummary(
-    status: string[],
-    creationDateStart: string,
-    creationDateEnd: string,
-    startDateStart: string,
-    startDateEnd: string
+    status?: string[],
+    creationDateStart?: string,
+    creationDateEnd?: string,
+    startDateStart?: string,
+    startDateEnd?: string
   ): void {
     this.authService.getUser().subscribe((user: User) => {
       if (!(user instanceof AuthenticatedUser)) return;
-
-      if(status == null) return;
 
       const headers: HttpHeaders = new HttpHeaders({
         Authorization: `Bearer ${user.token}`,
@@ -61,25 +60,22 @@ export class BookingSummaryService {
 
       let remoteUrl: string = `${this.ENDPOINT}?page=${this.page}&size=${this.size}&minprice=${this.minPrice}&maxprice=${this.maxPrice}`;
 
-      let statusQueryString = this.arrayToQueryString('status', status);
+      if (status != null) remoteUrl += `&${this.arrayToQueryString('status', status)}`;
+      else remoteUrl += `&${this.arrayToQueryString('status', Object.values(Status))}`;
 
-      if (status != null) remoteUrl += `&${statusQueryString}`;
+      if (creationDateStart != null) remoteUrl += `&creationdate=${creationDateStart}`;
+      else remoteUrl += `&creationdate=${this.defaultCreationDateMin}`;
 
-      if (creationDateStart != null)
-        remoteUrl += `&creationdate=${creationDateStart}`;
-
-      if (creationDateEnd != null)
-        remoteUrl += `&creationdate=${creationDateEnd}`;
+      if (creationDateEnd != null) remoteUrl += `&creationdate=${creationDateEnd}`;
+      else remoteUrl += `&creationdate=${this.defaultCreationDateMax}`;
 
       if (startDateStart != null) remoteUrl += `&startdate=${startDateStart}`;
+      else remoteUrl += `&startdate=${this.defaultStartDateMin}`;
 
       if (startDateEnd != null) remoteUrl += `&startdate=${startDateEnd}`;
+      else remoteUrl += `&startdate=${this.defaultStartDateMax}`;
 
-      this.http
-        .get<PageableWrapper<BookingSummaryResponse>>(remoteUrl, {
-          headers: headers,
-        })
-        .subscribe({
+      this.http.get<PageableWrapper<BookingSummaryResponse>>(remoteUrl, { headers: headers }).subscribe({
           next: (data: PageableWrapper<BookingSummaryResponse>) => {
             if (data) {
               let currentBookings = this.bookings$.getValue();
@@ -147,5 +143,6 @@ export class BookingSummaryService {
 
   resetBookings(): void{
     this.bookings$.next([]);
+    this.page = 0;
   }
 }

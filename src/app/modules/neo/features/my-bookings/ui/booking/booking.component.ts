@@ -9,7 +9,7 @@ import * as moment from 'moment';
 })
 export class BookingComponent {
 
-  @Input() public bookings!: BookingSummary;
+  @Input() public booking!: BookingSummary;
   
   moment = moment;
 }

@@ -1,15 +1,15 @@
 <div class="left-side">
-    <h5>{{ this.bookings.passengersNames[0] }} <sup *ngIf="this.bookings.passengersNames.length > 1">{{ this.bookings.passengersNames.length - 1 }}</sup></h5>
+    <h5>{{ this.booking.passengersNames[0] }} <sup *ngIf="this.booking.passengersNames.length > 1">{{ this.booking.passengersNames.length - 1 }}</sup></h5>
     
     <div class="dates">
-        <p> Data de criação:</p> <b>{{ moment(this.bookings.createdAt).format('DD-MM-YYYY') }}</b>
-        <p> Data de inicio:</p> <b>{{ moment(this.bookings.startDate).format('DD-MM-YYYY') }}</b>
+        <p> Data de criação:</p> <b>{{ moment(this.booking.createdAt).format('DD-MM-YYYY') }}</b>
+        <p> Data de inicio:</p> <b>{{ moment(this.booking.startDate).format('DD-MM-YYYY') }}</b>
     </div>
 </div>
 
 <div class="middle">
     <p>
-        {{this.bookings.price.amount}} {{ this.bookings.price.currency }}
+        {{this.booking.price.amount}} {{ this.booking.price.currency }}
     </p>
 </div>
 
