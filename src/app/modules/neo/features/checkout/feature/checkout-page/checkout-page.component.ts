@@ -339,8 +339,7 @@ export class CheckoutPageComponent implements OnInit {
 
     this.checkoutService.loadPrice(requestData);
 
-    this.checkoutService.getPrice().subscribe(
-      async (response: AirCheckoutPriceResponse): AirCheckoutPriceResponse => {
+    this.checkoutService.getPrice().subscribe((response: AirCheckoutPriceResponse | null) => {
         this.travellerService.getTravellers().forEach((traveller) => {
           traveller.frequentFlyerNumbers =
             traveller.frequentFlyerNumbers.filter(
@@ -350,14 +349,7 @@ export class CheckoutPageComponent implements OnInit {
 
         this.travellerService.setTraveller(this.travellersRequestData);
 
-        this.checkoutService.loadPrice(response);
-
-        this.loadingService.dismiss();
-
         this.router.navigate(['finish-booking']);
-      },
-      async (error) => {
-        await this.loadingService.dismiss();
       }
     );
   }
