@@ -46,7 +46,8 @@ const routes: Routes = [
     {
         path: 'traveller-details',
         loadChildren: () => import('./modules/neo/features/traveller-details/feature/traveller-details-shell/traveller-details-shell.module').then((m) => m.TravellerDetailsShellModule),
-        canActivateChild: [AuthGuardService]
+        canActivateChild: [AuthGuardService],
+        title: 'Traveller'
     },
     {
         path: 'checkout',
@@ -62,7 +63,7 @@ const routes: Routes = [
         path: 'booking-info',
         loadChildren: () => import("./modules/neo/features/booking-info/feature/boooking-info-shell/booking-info-shell.module").then((m) => m.BookingInfoShellModule),
         title: "Booking"
-    }
+    },
     
 ];
 

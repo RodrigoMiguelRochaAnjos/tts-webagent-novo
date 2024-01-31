@@ -2,13 +2,18 @@
     <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" [required]="this.required"/>
 </form>
 
+<ng-template #year>
+    <h3>Choose a year</h3>
+    <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" />
+</ng-template>
+
 <div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">
     <div class="date-range-container">
         <div class="month-control flex-container flex-center flex-middle">
             <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
                 <
             </div>
-            <div>{{ date.format('MMMM') }} {{ date.format('YYYY') }}</div>
+            <div>{{ date.format('MMMM') }} <span (click)="showYearPopup(year, 'year-popup')">{{ date.format('YYYY') }}</span></div>
             <div class="left-control flex-container flex-middle flex-left" (click)="nextMonth()">
                 >
             </div>

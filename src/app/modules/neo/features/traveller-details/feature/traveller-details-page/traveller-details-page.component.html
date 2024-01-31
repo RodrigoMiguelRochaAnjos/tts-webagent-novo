@@ -20,7 +20,7 @@
             <div class="triple-fields">
                 <webagent-input [type]="InputType.DATE" [required]="false" [(ngModel)]="traveller.dateOfBirth" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
                 <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
             </div>
         
             <button class="button-small">Add frequent flyer number</button>

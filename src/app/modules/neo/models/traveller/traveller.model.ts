@@ -20,7 +20,7 @@ export abstract class Traveller {
     public abstract toString(): PassengerType;
 
     public isValid() : boolean {
-
+        console.log(this.form, this.contact)
         return (
             this.form.valid &&
             (this.refuseInfo || this.contact.isValid())

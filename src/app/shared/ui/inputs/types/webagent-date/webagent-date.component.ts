@@ -3,6 +3,7 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
 import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
 
 @Component({
   selector: 'app-webagent-date',
@@ -20,6 +21,7 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
 
     constructor(
         private formBuilder: FormBuilder,
+        private modalService: ModalControllerService
     ) {
         super();
         this.initDateForm();
@@ -114,5 +116,23 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
 
         this.daysArray = this.createCalendar(this.date);
 
+    }
+
+    public getPreviousYears(): string[] {
+        return Array.from({ length: 200 }, (_, index) => moment().add(100).subtract(index, 'years').format('YYYY'));
+    }
+
+    public changeYear(event: string): void {
+        if(!this.isNumeric(event)) return;
+
+        this.date = this.date.year(Number.parseInt(event))
+
+        this.daysArray = this.createCalendar(this.date);
+
+        this.modalService.hideModal('year-popup');
+    }
+
+    showYearPopup(modalContent: any, id: string): void{
+        this.modalService.showModal(modalContent, id);
     }
 }

@@ -1,6 +1,6 @@
 
 <div class="row">
-    <h3>Flight Search</h3>
+    <h3>{{ 'FLIGHT_SEARCH' | translate }}</h3>
     <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (change)="typeChanged($event)" />
 </div>
 <div class="row">

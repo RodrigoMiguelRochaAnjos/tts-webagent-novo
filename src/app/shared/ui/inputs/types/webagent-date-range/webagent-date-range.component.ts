@@ -4,6 +4,8 @@ import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DateRange } from 'src/app/shared/models/date-range.model';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
+import { deepClone } from 'src/app/core/utils/deep-clone.tool';
 
 @Component({
     selector: 'app-webagent-date-range',
@@ -37,6 +39,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
     constructor(
         private formBuilder: FormBuilder,
+        private modalService: ModalControllerService
     ) {
         super();
 
@@ -213,5 +216,27 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
             if ((entry.boundingClientRect.y + entry.boundingClientRect.height) > entry.rootBounds!.bottom) this.alignTop = true;
         });
+    }
+
+    public getPreviousYears(): string[] {
+        return Array.from({ length: 200 }, (_, index) => moment().add(100).subtract(index, 'years').format('YYYY'));
+    }
+
+    public changeYear(event: string): void {
+        if (!this.isNumeric(event)) return;
+
+        this.date = this.date.year(Number.parseInt(event))
+
+        this.daysArray = this.createCalendar(this.date);
+
+        this.dateNext = this.dateNext.year(Number.parseInt(event));
+
+        this.daysNextArray = this.createCalendar(this.dateNext);
+
+        this.modalService.hideModal('year-popup');
+    }
+
+    showYearPopup(modalContent: any, id: string): void {
+        this.modalService.showModal(modalContent, id);
     }
 }

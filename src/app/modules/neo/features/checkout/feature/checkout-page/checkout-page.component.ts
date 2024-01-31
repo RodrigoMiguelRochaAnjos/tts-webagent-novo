@@ -1,9 +1,9 @@
 import {
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  ViewChildren,
+    Component,
+    ElementRef,
+    OnInit,
+    QueryList,
+    ViewChildren,
 } from '@angular/core';
 import { Providers } from 'src/app/modules/neo/models/providers.enum';
 import { Traveller } from 'src/app/modules/neo/models/traveller/traveller.model';
@@ -27,493 +27,544 @@ import { TravellerService } from 'src/app/modules/neo/data-access/traveller.serv
 import { AirCheckoutPriceRequest } from '../../../search/models/air-checkout-price-request.model';
 import { AirCheckoutPriceResponse } from '../../../search/models/air-checkout-price-response.model';
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
+import { Observable } from 'rxjs';
+import { AirCheckoutDetailsResponse } from '../../../search/models/air-checkout-details-response.model';
 
 @Component({
-  selector: 'app-checkout-page',
-  templateUrl: './checkout-page.component.html',
-  styleUrls: ['./checkout-page.component.scss'],
+    selector: 'app-checkout-page',
+    templateUrl: './checkout-page.component.html',
+    styleUrls: ['./checkout-page.component.scss'],
 })
 export class CheckoutPageComponent implements OnInit {
-  Providers = Providers;
-  InputType = InputType;
+    Providers = Providers;
+    InputType = InputType;
 
-  patterns = patterns;
+    patterns = patterns;
 
-  private travellersRequestData!: Traveller[];
-  private paymentsRequestData!: Payment[];
-  private currency!: string;
+    private travellersRequestData!: Traveller[];
+    private paymentsRequestData!: Payment[];
+    private currency!: string;
 
-  @ViewChildren('reusableCreditCards')
-  reusableCreditCards!: QueryList<ElementRef>;
+    @ViewChildren('reusableCreditCards')
+    reusableCreditCards!: QueryList<ElementRef>;
 
-  public paymentsData: { id: string; searchId: string; payment: Payment }[] =
-    [];
 
-  PaymentOption = PaymentOption;
+    PaymentOption = PaymentOption;
 
-  travellerinfo!: FormGroup;
+    travellerinfo!: FormGroup;
 
-  constructor(
-    private reservationService: ReservationService,
-    private alertService: AlertService,
-    private router: Router,
-    private checkoutService: CheckoutService,
-    private authService: AuthService,
-    private loadingService: LoadingService,
-    private travellerService: TravellerService
-  ) {
-    this.currency = this.authService.getUserValue().settings.currency;
-  }
+    details$!: Observable<AirCheckoutDetailsResponse | null>;
+    public paymentsData: { id: string; searchId: string; payment: Payment }[] = [];
 
-  ngOnInit() {
-    const uniqueSearchIds: Set<string> = new Set();
+    constructor(
+        private reservationService: ReservationService,
+        private alertService: AlertService,
+        private router: Router,
+        private checkoutService: CheckoutService,
+        private authService: AuthService,
+        private loadingService: LoadingService,
+        private travellerService: TravellerService
+    ) {
+        this.currency = this.authService.getUserValue().settings.currency;
+    }
 
-    this.checkoutService
-      .getDetailsValue()
-      ?.flights.forEach((flight: FlightOption, index: number) => {
-        const searchId: string =
-          flight.provider == Providers.TRAVELFUSION
-            ? flight.searchId
-            : flight.provider;
-        const supportedPayments: SupportedPayments | undefined =
-          this.checkoutService.getDetailsValue()!.formOfPayments.get(searchId);
+    ngOnInit() {
+        const uniqueSearchIds: Set<string> = new Set();
 
-        if (!supportedPayments) return;
+        this.details$ = this.checkoutService.getDetails();
 
-        if (uniqueSearchIds.has(searchId)) {
-          for (let data of this.paymentsData) {
-            if (data.searchId === searchId) {
-              data.id = flight.id;
-              return;
+        this.details$.subscribe((details: AirCheckoutDetailsResponse | null) => {
+            if (details == null) return;
+
+
+            details.flights.forEach((flight: FlightOption) => {
+                const searchId: string = flight.provider == Providers.TRAVELFUSION ? flight.searchId : flight.provider;
+                const supportedPayments: SupportedPayments | undefined = details.formOfPayments.get(searchId);
+
+                console.log(supportedPayments);
+
+                if (!supportedPayments) return;
+
+
+                if (uniqueSearchIds.has(searchId)) {
+                    for (let data of this.paymentsData) {
+                        if (data.searchId === searchId) {
+                            data.id = flight.id;
+                            return;
+                        }
+                    }
+                    return;
+                }
+
+
+                uniqueSearchIds.add(searchId);
+
+                this.paymentsData.push({
+                    id: flight.id,
+                    searchId: searchId,
+                    payment: new Payment(
+                        searchId,
+                        supportedPayments.supportedTypes[0],
+                        '',
+                        new CreditCard(
+                            '',
+                            '',
+                            '',
+                            '',
+                            ''
+                        ),
+                        new Address()
+                    )
+                });
+            });
+        })
+
+        // this.checkoutService
+        //   .getDetailsValue()
+        //   ?.flights.forEach((flight: FlightOption, index: number) => {
+        //     const searchId: string =
+        //       flight.provider == Providers.TRAVELFUSION
+        //         ? flight.searchId
+        //         : flight.provider;
+        //     const supportedPayments: SupportedPayments | undefined =
+        //       this.checkoutService.getDetailsValue()!.formOfPayments.get(searchId);
+
+        //     if (!supportedPayments) return;
+
+        //     if (uniqueSearchIds.has(searchId)) {
+        //       for (let data of this.paymentsData) {
+        //         if (data.searchId === searchId) {
+        //           data.id = flight.id;
+        //           return;
+        //         }
+        //       }
+        //     }
+
+        //     uniqueSearchIds.add(searchId);
+
+        //     this.paymentsData.push({
+        //       id: flight.id,
+        //       searchId: searchId,
+        //       payment: new Payment(
+        //         searchId,
+        //         supportedPayments.supportedTypes[0],
+        //         '',
+        //         new CreditCard('', '', '', '', ''),
+        //         new Address()
+        //       ),
+        //     });
+        //   });
+
+        const obj: any = {
+            countryCodePaymentInfo: new FormControl(),
+            countryDialCode: new FormControl(),
+            countryCodeContact: new FormControl(),
+        };
+
+        this.travellerinfo = new FormGroup(obj);
+    }
+
+    getPaymentOptionDisplay(id: string): string[] {
+        const supportedPayments: SupportedPayments | undefined = this.getPaymentOption(id);
+
+        if(supportedPayments == null) return [];
+
+        return Object.values(supportedPayments);
+    }
+
+    getPaymentOption(id: string): SupportedPayments | undefined {
+        let searchId = '';
+
+        for (let obj of this.paymentsData) {
+            if (obj.id != id) continue;
+
+            searchId = obj.searchId;
+            break;
+        }
+
+        return this.formsOfPayment.get(searchId);
+    }
+
+    get formsOfPayment(): Map<string, SupportedPayments> {
+        return this.checkoutService.getDetailsValue()!.formOfPayments;
+    }
+
+    flightItinerary(searchId: string): string {
+        const flights = this.checkoutService
+            .getDetailsValue()
+            ?.flights.filter((f) => f.searchId === searchId);
+        let price = 0;
+
+        if (!flights) return '';
+
+        for (const flight of flights) {
+            if (flight.price && flight.price.totalAmount)
+                price += flight.price.totalAmount;
+        }
+
+        return price === 0
+            ? ''
+            : price +
+            ' ' +
+            this.checkoutService.getDetailsValue()?.flights[0].price
+                .preferredCurrency;
+    }
+
+    continue(): void {
+        let valid = true;
+
+        const invalidCreditCards: string[] = [];
+        const invalidAddresses: string[] = [];
+        const invalidEntityNames: string[] = [];
+
+        this.paymentsData.forEach(
+            (value: { id: string; searchId: string; payment: Payment }) => {
+                if (
+                    !value.payment.creditCard!.isValid() &&
+                    value.payment.type !== PaymentOption.CASH
+                ) {
+                    valid = false;
+                    invalidCreditCards.push(
+                        `${value.payment.creditCard!.cardType} ${value.payment.creditCard!.number
+                        }`
+                    );
+                    return;
+                }
+
+                if (
+                    !value.payment.address!.isValid() &&
+                    value.payment.type !== PaymentOption.CASH
+                ) {
+                    valid = false;
+                    invalidAddresses.push(
+                        value.payment.address!.street ? value.payment.address!.street : ''
+                    );
+                    return;
+                }
+
+                if (
+                    (value.payment.entityName == '' ||
+                        value.payment.entityName == null) &&
+                    value.payment.type !== PaymentOption.CASH
+                ) {
+                    valid = false;
+                    invalidEntityNames.push(
+                        value.payment.entityName ? value.payment.entityName : ''
+                    );
+                    return;
+                }
             }
-          }
+        );
+
+        if (!valid) {
+            if (
+                invalidCreditCards.length > 0 &&
+                invalidCreditCards.filter((value: string) => value != ' ').length == 0
+            ) {
+                this.alertService.show(
+                    AlertType.ERROR,
+                    `The credit card(s) provided are not valid`
+                );
+
+                return;
+            }
+
+            if (invalidCreditCards.length > 0) {
+                this.alertService.show(
+                    AlertType.ERROR,
+                    `The following credit card(s) are not valid: \n${invalidCreditCards.join(
+                        '\n'
+                    )}`
+                );
+
+                return;
+            }
+
+            if (
+                invalidAddresses.length > 0 &&
+                invalidAddresses.filter((value: string) => value != '').length == 0
+            ) {
+                this.alertService.show(
+                    AlertType.ERROR,
+                    `The address(es) provided are not valid`
+                );
+                return;
+            }
+
+            if (invalidAddresses.length > 0) {
+                this.alertService.show(
+                    AlertType.ERROR,
+                    `The following addresses are not valid: \n${invalidAddresses.join(
+                        '\n'
+                    )}`
+                );
+                return;
+            }
+
+            if (
+                invalidEntityNames.length > 0 &&
+                invalidEntityNames.filter((value: string) => value != '').length == 0
+            ) {
+                this.alertService.show(
+                    AlertType.ERROR,
+                    `The entity names provided are not valid`
+                );
+                return;
+            }
+
+            if (invalidEntityNames.length > 0) {
+                this.alertService.show(AlertType.ERROR,
+                    `The following entity name(s) are not valid: \n${invalidEntityNames.join('\n')}`
+                );
+                return;
+            }
+
+            return;
         }
 
-        uniqueSearchIds.add(searchId);
+        this.loadingService.show();
+        this.travellersRequestData = deepClone(
+            this.travellerService.getTravellers()
+        );
+        this.paymentsRequestData = [];
 
-        this.paymentsData.push({
-          id: flight.id,
-          searchId: searchId,
-          payment: new Payment(
-            searchId,
-            supportedPayments.supportedTypes[0],
-            '',
-            new CreditCard('', '', '', '', ''),
-            new Address()
-          ),
-        });
-      });
+        //transform data
+        for (let i = 0; i < this.travellersRequestData.length; i++) {
+            if (
+                this.travellersRequestData[i].dateOfBirth != null &&
+                this.travellersRequestData[i].dateOfBirth.length > 0
+            ) {
+                const date: Date = new Date(this.travellersRequestData[i].dateOfBirth);
 
-    const obj: any = {
-      countryCodePaymentInfo: new FormControl(),
-      countryDialCode: new FormControl(),
-      countryCodeContact: new FormControl(),
-    };
-
-    this.travellerinfo = new FormGroup(obj);
-  }
-
-  getFlight(): FlightOption[] {
-    return this.checkoutService.getDetailsValue()!.flights;
-  }
-
-  getPaymentOption(id: string): SupportedPayments | undefined {
-    let searchId = '';
-
-    for (let obj of this.paymentsData) {
-      if (obj.id != id) continue;
-
-      searchId = obj.searchId;
-      break;
-    }
-
-    return this.formsOfPayment.get(searchId);
-  }
-
-  get formsOfPayment(): Map<string, SupportedPayments> {
-    return this.checkoutService.getDetailsValue()!.formOfPayments;
-  }
-
-  flightItinerary(searchId: string): string {
-    const flights = this.checkoutService
-      .getDetailsValue()
-      ?.flights.filter((f) => f.searchId === searchId);
-    let price = 0;
-
-    if (!flights) return '';
-
-    for (const flight of flights) {
-      if (flight.price && flight.price.totalAmount)
-        price += flight.price.totalAmount;
-    }
-
-    return price === 0
-      ? ''
-      : price +
-          ' ' +
-          this.checkoutService.getDetailsValue()?.flights[0].price
-            .preferredCurrency;
-  }
-
-  continue(): void {
-    let valid = true;
-
-    const invalidCreditCards: string[] = [];
-    const invalidAddresses: string[] = [];
-    const invalidEntityNames: string[] = [];
-
-    this.paymentsData.forEach(
-      (value: { id: string; searchId: string; payment: Payment }) => {
-        if (
-          !value.payment.creditCard!.isValid() &&
-          value.payment.type !== PaymentOption.CASH
-        ) {
-          valid = false;
-          invalidCreditCards.push(
-            `${value.payment.creditCard!.cardType} ${
-              value.payment.creditCard!.number
-            }`
-          );
-          return;
+                this.travellersRequestData[i].dateOfBirth =
+                    date.getFullYear() +
+                    '-' +
+                    (date.getMonth() + 1).toString().padStart(2, '0') +
+                    '-' +
+                    date.getDate().toString().padStart(2, '0');
+            }
         }
 
-        if (
-          !value.payment.address!.isValid() &&
-          value.payment.type !== PaymentOption.CASH
-        ) {
-          valid = false;
-          invalidAddresses.push(
-            value.payment.address!.street ? value.payment.address!.street : ''
-          );
-          return;
+        //remove unecessary data
+        for (const obj of this.paymentsData) {
+            if (obj.payment.type == PaymentOption.CASH) continue;
+
+            obj.payment.creditCard = null;
+            obj.payment.address = null;
         }
 
-        if (
-          (value.payment.entityName == '' ||
-            value.payment.entityName == null) &&
-          value.payment.type !== PaymentOption.CASH
-        ) {
-          valid = false;
-          invalidEntityNames.push(
-            value.payment.entityName ? value.payment.entityName : ''
-          );
-          return;
-        }
-      }
-    );
+        this.paymentsData.forEach(
+            (
+                obj: { id: string; searchId: string; payment: Payment },
+                index: number
+            ) => {
+                const value: Payment = obj.payment;
 
-    if (!valid) {
-      if (
-        invalidCreditCards.length > 0 &&
-        invalidCreditCards.filter((value: string) => value != ' ').length == 0
-      ) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The credit card(s) provided are not valid`
+                if (value.type === PaymentOption.CASH) {
+                    this.paymentsRequestData.push(value);
+                    return;
+                }
+
+                if (!value.creditCard!.isValid()) return;
+
+                value.creditCard!.number = value.creditCard!.number.toString();
+
+                this.paymentsRequestData.push(value);
+            }
         );
 
-        return;
-      }
-
-      if (invalidCreditCards.length > 0) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The following credit card(s) are not valid: \n${invalidCreditCards.join(
-            '\n'
-          )}`
-        );
-
-        return;
-      }
-
-      if (
-        invalidAddresses.length > 0 &&
-        invalidAddresses.filter((value: string) => value != '').length == 0
-      ) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The address(es) provided are not valid`
-        );
-        return;
-      }
-
-      if (invalidAddresses.length > 0) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The following addresses are not valid: \n${invalidAddresses.join(
-            '\n'
-          )}`
-        );
-        return;
-      }
-
-      if (
-        invalidEntityNames.length > 0 &&
-        invalidEntityNames.filter((value: string) => value != '').length == 0
-      ) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The entity names provided are not valid`
-        );
-        return;
-      }
-
-      if (invalidEntityNames.length > 0) {
-        this.alertService.show(
-          AlertType.ERROR,
-          `The following entity name(s) are not valid: \n${invalidEntityNames.join(
-            '\n'
-          )}`
-        );
-        return;
-      }
-
-      return;
-    }
-
-    this.loadingService.show();
-    this.travellersRequestData = deepClone(
-      this.travellerService.getTravellers()
-    );
-    this.paymentsRequestData = [];
-
-    //transform data
-    for (let i = 0; i < this.travellersRequestData.length; i++) {
-      if (
-        this.travellersRequestData[i].dateOfBirth != null &&
-        this.travellersRequestData[i].dateOfBirth.length > 0
-      ) {
-        const date: Date = new Date(this.travellersRequestData[i].dateOfBirth);
-
-        this.travellersRequestData[i].dateOfBirth =
-          date.getFullYear() +
-          '-' +
-          (date.getMonth() + 1).toString().padStart(2, '0') +
-          '-' +
-          date.getDate().toString().padStart(2, '0');
-      }
-    }
-
-    //remove unecessary data
-    for (const obj of this.paymentsData) {
-      if (obj.payment.type == PaymentOption.CASH) continue;
-
-      obj.payment.creditCard = null;
-      obj.payment.address = null;
-    }
-
-    this.paymentsData.forEach(
-      (
-        obj: { id: string; searchId: string; payment: Payment },
-        index: number
-      ) => {
-        const value: Payment = obj.payment;
-
-        if (value.type === PaymentOption.CASH) {
-          this.paymentsRequestData.push(value);
-          return;
-        }
-
-        if (!value.creditCard!.isValid()) return;
-
-        value.creditCard!.number = value.creditCard!.number.toString();
-
-        this.paymentsRequestData.push(value);
-      }
-    );
-
-    this.travellersRequestData.forEach((element) => {
-      element.frequentFlyerNumbers = element.frequentFlyerNumbers.filter(
-        (flyerNumber) => flyerNumber.trim() != ''
-      );
-    });
-
-    const requestData: AirCheckoutPriceRequest = new AirCheckoutPriceRequest();
-
-    requestData.price = this.checkoutService.getDetailsValue()!.price;
-    requestData.flights = this.checkoutService.getDetailsValue()!.flights;
-    requestData.passengers = this.travellersRequestData;
-    requestData.contact = this.authService.getUserValue().contact;
-    requestData.payments = this.paymentsRequestData;
-    requestData.currency = this.currency;
-
-    this.checkoutService.loadPrice(requestData);
-
-    this.checkoutService.getPrice().subscribe((response: AirCheckoutPriceResponse | null) => {
-        this.travellerService.getTravellers().forEach((traveller) => {
-          traveller.frequentFlyerNumbers =
-            traveller.frequentFlyerNumbers.filter(
-              (flyerNumber) => flyerNumber.trim() !== ''
+        this.travellersRequestData.forEach((element) => {
+            element.frequentFlyerNumbers = element.frequentFlyerNumbers.filter(
+                (flyerNumber) => flyerNumber.trim() != ''
             );
         });
 
-        this.travellerService.setTraveller(this.travellersRequestData);
+        const requestData: AirCheckoutPriceRequest = new AirCheckoutPriceRequest();
 
-        this.router.navigate(['finish-booking']);
-      }
-    );
-  }
+        requestData.price = this.checkoutService.getDetailsValue()!.price;
+        requestData.flights = this.checkoutService.getDetailsValue()!.flights;
+        requestData.passengers = this.travellersRequestData;
+        requestData.contact = this.authService.getUserValue().contact;
+        requestData.payments = this.paymentsRequestData;
+        requestData.currency = this.currency;
 
-	removeLastOccurrence(term: string, search: string): string {
-		const lastIndex = term.lastIndexOf(search);
-		if (lastIndex !== -1) {
-		const before = term.substring(0, lastIndex);
-		const after = term.substring(lastIndex + search.length);
+        this.checkoutService.loadPrice(requestData);
 
-		return before + after;
-		}
+        this.checkoutService.getPrice().subscribe((response: AirCheckoutPriceResponse | null) => {
+            this.travellerService.getTravellers().forEach((traveller) => {
+                traveller.frequentFlyerNumbers =
+                    traveller.frequentFlyerNumbers.filter(
+                        (flyerNumber) => flyerNumber.trim() !== ''
+                    );
+            });
 
-		return term;
-	}
+            this.travellerService.setTraveller(this.travellersRequestData);
 
-	get arePaymentsOnlyCash(): boolean {
-		for(const obj of this.paymentsData) {
-			if(obj.payment.type != PaymentOption.CASH) return false;
-		}
-
-		return true
-	}
-	
-	public isSupportedPaymentType(searchId: string, type?: string): boolean {
-		
-		if(type == null) return false;
-
-		const paymentOptions: SupportedPayments | undefined = this.getPaymentOption(searchId);
-
-		if(paymentOptions == null) return false;
-
-		for (let supportedCard of paymentOptions.supportedCreditCards) {
-			if(supportedCard.cardType == type ) return true;
-		}
-
-		return false;
-	}
-
-	public useSameCardAs(card: CreditCard | null, address: Address | null, entityName: string, id: string): void {
-		const payment: Payment | undefined = this.getPayment(id);
-
-		if(payment == null) return;
-
-		if(card == null) return;
-
-		payment.type = PaymentOption.CREDIT_CARD;
-		payment.creditCard = card.copy();
-		
-		if(address == null) return;
-
-		payment.address = address.copy();
-
-		if(entityName == null) return;
-
-		payment.entityName = entityName;
-	}
-
-	clearForm(id: string): void {
-		const payment = this.getPayment(id);
-
-		if(payment == null) return;
-
-		payment.creditCard = new CreditCard('','','','','');
-	}
-
-	isSameDay(day1: string, day2: string): boolean {
-		const date1 = new Date(day1);
-		const date2 = new Date(day2);
-
-		return(
-			date1.getFullYear() == date2.getFullYear() &&
-			date1.getMonth() == date2.getMonth() &&
-			date1.getDate() == date2.getDate()
-		)
-	}
-
-	cardNumberDisplayFormatted(creditCard: CreditCard | null) : string {
-		if(creditCard == null) return "";
-
-		const formattedNumber: string = creditCard?.number.toString().substring(creditCard.number.toString().length - 4, creditCard.number.toString().length);
-
-		return `${formattedNumber} - ${creditCard.cardType}`; 
-	}
-
-	
-	public findPayment(id: string): Payment | undefined {
-		for (let obj of this.paymentsData) {
-			if (obj.id == id) return obj.payment;
+            this.router.navigate(['finish-booking']);
         }
-		
+        );
+    }
+
+    removeLastOccurrence(term: string, search: string): string {
+        const lastIndex = term.lastIndexOf(search);
+        if (lastIndex !== -1) {
+            const before = term.substring(0, lastIndex);
+            const after = term.substring(lastIndex + search.length);
+
+            return before + after;
+        }
+
+        return term;
+    }
+
+    get arePaymentsOnlyCash(): boolean {
+        for (const obj of this.paymentsData) {
+            if (obj.payment.type != PaymentOption.CASH) return false;
+        }
+
+        return true
+    }
+
+    public isSupportedPaymentType(searchId: string, type?: string): boolean {
+
+        if (type == null) return false;
+
+        const paymentOptions: SupportedPayments | undefined = this.getPaymentOption(searchId);
+
+        if (paymentOptions == null) return false;
+
+        for (let supportedCard of paymentOptions.supportedCreditCards) {
+            if (supportedCard.cardType == type) return true;
+        }
+
+        return false;
+    }
+
+    public useSameCardAs(card: CreditCard | null, address: Address | null, entityName: string, id: string): void {
+        const payment: Payment | undefined = this.getPayment(id);
+
+        if (payment == null) return;
+
+        if (card == null) return;
+
+        payment.type = PaymentOption.CREDIT_CARD;
+        payment.creditCard = card.copy();
+
+        if (address == null) return;
+
+        payment.address = address.copy();
+
+        if (entityName == null) return;
+
+        payment.entityName = entityName;
+    }
+
+    clearForm(id: string): void {
+        const payment = this.getPayment(id);
+
+        if (payment == null) return;
+
+        payment.creditCard = new CreditCard('', '', '', '', '');
+    }
+
+    isSameDay(day1: string, day2: string): boolean {
+        const date1 = new Date(day1);
+        const date2 = new Date(day2);
+
+        return (
+            date1.getFullYear() == date2.getFullYear() &&
+            date1.getMonth() == date2.getMonth() &&
+            date1.getDate() == date2.getDate()
+        )
+    }
+
+    cardNumberDisplayFormatted(creditCard: CreditCard | null): string {
+        if (creditCard == null) return "";
+
+        const formattedNumber: string = creditCard?.number.toString().substring(creditCard.number.toString().length - 4, creditCard.number.toString().length);
+
+        return `${formattedNumber} - ${creditCard.cardType}`;
+    }
+
+
+    public findPayment(id: string): Payment | undefined {
+        for (let obj of this.paymentsData) {
+            if (obj.id == id) return obj.payment;
+        }
+
         return undefined;
     }
-	
-	public findPayments(id: string): Payment[] {
-		const payments: Payment[] = [];
-		
-		for(let obj of this.paymentsData) {
-			if(obj.searchId == id) payments.push(obj.payment);
-		}
-		
-		return payments;
-	}
-	
-	getPayment(id: string): Payment | undefined {
-		const payment: Payment | undefined = this.findPayment(id);
 
-		return payment;
-	}
-	
-	getPayments(): Payment[] {
-		const payments: Payment[] = [];
+    public findPayments(id: string): Payment[] {
+        const payments: Payment[] = [];
 
-		return payments;
-	}
+        for (let obj of this.paymentsData) {
+            if (obj.searchId == id) payments.push(obj.payment);
+        }
 
-	getPaymentCreditCard(id: string): CreditCard {
-		const payment: Payment | undefined  = this.findPayment(id);
+        return payments;
+    }
 
-		if(payment == null) return new CreditCard('','','','','');
+    getPayment(id: string): Payment | undefined {
+        const payment: Payment | undefined = this.findPayment(id);
 
-        if(payment.creditCard == null) return new CreditCard('', '', '', '', '');
-		
-		return payment.creditCard;
-	}
+        return payment;
+    }
 
-	getPaymentAddress(id: string ): Address {
-		const payment: Payment | undefined = this.getPayment(id);
+    getPayments(): Payment[] {
+        const payments: Payment[] = [];
 
-		if(payment == null) return new Address();
+        return payments;
+    }
 
-		if(payment.address == null) return new Address();
+    getPaymentCreditCard(id: string): CreditCard {
+        const payment: Payment | undefined = this.findPayment(id);
 
-		return payment.address;
-	}
+        if (payment == null) return new CreditCard('', '', '', '', '');
 
-	onDateInput(event: Event, flightId: string): void {
-		const inputElement = event.target as HTMLInputElement;
+        if (payment.creditCard == null) return new CreditCard('', '', '', '', '');
 
-		let inputValue = inputElement.value.replace(/[^0-9]/g, ''); // remove non numeric numbers
+        return payment.creditCard;
+    }
 
-		if(inputValue.length >= 2 ) inputValue = inputValue.slice(0, 2) + '/' + inputValue.slice(2);
+    getPaymentAddress(id: string): Address {
+        const payment: Payment | undefined = this.getPayment(id);
 
-		inputElement.value = inputValue;
-		this.getPaymentCreditCard(flightId).expiryDate = inputValue;
-	}
+        if (payment == null) return new Address();
 
-	isDateInvalid(input: string): boolean {
-		const regex = /^([\d]{2})\/([\d]{4})$/;;
-		const match = input.match(regex);
+        if (payment.address == null) return new Address();
 
-		if(!match) return true;
+        return payment.address;
+    }
 
-		const month = parseInt(match[1], 10);
-		const year = parseInt(match[2], 10);
-		
-		if(isNaN(month) || isNaN(year)) return true;
+    onDateInput(event: Event, flightId: string): void {
+        const inputElement = event.target as HTMLInputElement;
 
-		const currentYear = new Date().getFullYear();
-		const currentMonth = new Date().getMonth() + 1;
-		
-		//Compare only year and month
-        if(year < currentYear || (year === currentYear && month < currentMonth)) return true; // Input date is before the current date
+        let inputValue = inputElement.value.replace(/[^0-9]/g, ''); // remove non numeric numbers
 
-		return false;
-	}
+        if (inputValue.length >= 2) inputValue = inputValue.slice(0, 2) + '/' + inputValue.slice(2);
+
+        inputElement.value = inputValue;
+        this.getPaymentCreditCard(flightId).expiryDate = inputValue;
+    }
+
+    isDateInvalid(input: string): boolean {
+        const regex = /^([\d]{2})\/([\d]{4})$/;;
+        const match = input.match(regex);
+
+        if (!match) return true;
+
+        const month = parseInt(match[1], 10);
+        const year = parseInt(match[2], 10);
+
+        if (isNaN(month) || isNaN(year)) return true;
+
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+
+        //Compare only year and month
+        if (year < currentYear || (year === currentYear && month < currentMonth)) return true; // Input date is before the current date
+
+        return false;
+    }
 }
