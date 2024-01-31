@@ -3,7 +3,7 @@
 #terminal-page {
     position: relative;
     width: 100%;
-    height: calc(100% - calc(1.2rem + 25px));
+    height: calc(100vh - calc(5rem + 23px));
     background-color: var(--tma-color-white);
     display: flex;
     flex-direction: column;

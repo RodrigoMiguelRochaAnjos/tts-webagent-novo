@@ -10,6 +10,8 @@ import { AuthService } from "src/app/core/authentication/auth.service";
 import { User } from "src/app/core/models/user/user.model";
 import { AuthenticatedUser } from "src/app/core/models/user/types/authenticated-user.model";
 import { DestroyService } from "src/app/core/services/destroy.service";
+import { SupplierInfo } from "../features/search/models/supplier-info.model";
+import { SupportedPayments } from "../features/search/models/supported-payments.model";
 
 @Injectable({
     providedIn: 'root'
@@ -55,10 +57,35 @@ export class CheckoutService {
                         "Authorization": `Bearer ${user.token}`
                     }
                 }).subscribe({
-                    next: (response: AirCheckoutDetailsResponse) => this.details$.next(response),
+                    next: (response: AirCheckoutDetailsResponse) => {
+                        const details: any = response as AirCheckoutDetailsResponse;
+
+
+                        const supplierInfos = new Map<string, SupplierInfo[]>();
+
+                        if (details.supplierInfos != null) {
+                            for (const key in details.supplierInfos) {
+                                supplierInfos.set(key, (details.supplierInfos[key] as SupplierInfo[]));
+                            }
+                        }
+
+                        details.supplierInfos = supplierInfos;
+
+                        const formOfPayments = new Map<string, SupportedPayments>();
+
+                        if (details.formOfPayments != null) {
+                            for (const key in details.formOfPayments) {
+                                formOfPayments.set(key, (details.formOfPayments[key] as SupportedPayments))
+                            }
+                        }
+
+                        details.formOfPayments = formOfPayments;
+                        
+                        this.details$.next(details);
+                    },
                     error: () => {
-                        resolve();
                         this.details$.next(null)
+                        resolve();
                     },
                     complete: () => resolve()
                 });

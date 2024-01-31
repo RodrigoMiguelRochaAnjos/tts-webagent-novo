@@ -96,14 +96,14 @@ export class AuthService implements OnDestroy {
                         case Validators.INVALID_LICENSE:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_LICENSE'])
                             break;
-                        case Validators.INVALID_SETTINGS:
-                            console.log("RES: ", response);
-
+                        case Validators.NO_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
                             response.syncData.settings = Settings.default();
+                            break;
+                        case Validators.INVALID_SETTINGS:
+                            this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
-                            console.log("RES: ", response);
                             this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
                             break;
                         case Validators.HAS_ALERT:
@@ -199,6 +199,7 @@ export class AuthService implements OnDestroy {
             return;
         }
 
+        if(!newSettings.sendByEmailItems) newSettings.sendByEmailItems = [];
         newSettings.lastUpdate = new Date().getTime();
         newSettings.profileUserName = newSettings.profileUserName.trim();
         newSettings.profileUserEmail = newSettings.profileUserEmail.trim();

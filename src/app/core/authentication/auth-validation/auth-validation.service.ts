@@ -5,6 +5,7 @@ import { AlertValidator } from "./validations/alert.validator";
 import { LicenseValidator } from "./validations/license.validator";
 import { SettingsValidator } from "./validations/settings.validator";
 import { RequestValidator } from "./validations/request.validator";
+import { NoSettingsValidator } from "./validations/no-settings.validator";
 
 @Injectable({
     providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthValidationService{
             new RequestValidator(),
             new AlertValidator(),
             new LicenseValidator(),
-            new SettingsValidator()
+            new NoSettingsValidator(),
+            new SettingsValidator(),
         )
         
         return middlewares.check(loginResponse);
@@ -28,6 +30,7 @@ export enum Validators {
     HAS_ALERT,
     INVALID_LICENSE,
     INVALID_SETTINGS,
+    NO_SETTINGS,
     INVALID_REQUEST,
     VALID
 }

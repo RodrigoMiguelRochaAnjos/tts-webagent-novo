@@ -35,7 +35,6 @@ export class Settings {
             ${this.profileUserEmail != null} &&
             ${this.profileUserDialCode != null} &&
             ${this.profileUserPhone != null} &&
-            ${this.sendByEmailItems != null} &&
             ${this.languageCode != null}
         `)
         return (
@@ -44,7 +43,6 @@ export class Settings {
             this.profileUserEmail != null &&
             this.profileUserDialCode != null &&
             this.profileUserPhone != null &&
-            this.sendByEmailItems != null &&
             this.languageCode != null
         )
     }

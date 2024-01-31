@@ -1,6 +1,6 @@
 
 <div class="row">
-    <h3>Flight Search</h3>
+    <h3>{{ 'FLIGHT_SEARCH' | translate }}</h3>
     <webagent-input id="flight-switch" [type]="InputType.SWITCH" [(ngModel)]="typeSwitch" [hideDefault]="true" (change)="typeChanged($event)" />
 </div>
 <div class="row">
@@ -8,7 +8,8 @@
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.destination" [label]="'To'"/>
 </div>
 <div class="row">
-    <webagent-input class="dates" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
+    <webagent-input *ngIf="this.isRoundTrip" class="dates" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
+    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="'Departure Date'" />
 </div>
 
 <div class="row controls">

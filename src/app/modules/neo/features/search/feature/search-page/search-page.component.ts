@@ -62,7 +62,7 @@ export class SearchPageComponent implements OnInit {
 
     hasOptions(result: AirSearchResponse): boolean {
         if (result.outbounds.filter((option: FlightOption) => option.show).length <= 0) return false;
-        if (result.inbounds.length > 0 && result.inbounds.filter((option: FlightOption) => option.show).length <= 0) return false;
+        if (result?.inbounds?.length > 0 && result?.inbounds?.filter((option: FlightOption) => option.show).length <= 0) return false;
 
         return true;
     }
