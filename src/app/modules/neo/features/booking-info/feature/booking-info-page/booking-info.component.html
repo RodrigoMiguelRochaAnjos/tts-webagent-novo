@@ -1,0 +1,119 @@
+<div class="content" *ngIf="(this.booking$ | async)">
+    <div class="card">
+        <div class="row">
+            <div class="booking-id">
+                <h4>Booking ID</h4>
+                <p>
+                    {{ booking.id }}
+                </p>
+            </div>
+            <div class="booking-status">
+                <h4>{{ "LAST_KNOWN_STATUS" | translate }}</h4>
+                <p>
+                    <b>{{ booking.status }}</b>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="provider-codes">
+                <h4>Provider Codes</h4>
+                <div class="booking-codes">
+                    <p class="booking-code" *ngFor="let ref of (this.booking$ | async)?.bookingRefs | keyvalue">
+                        {{ getProviderByKey(ref.key) }} Code: <b>{{ ref.value.bookingCode}}</b>
+                    </p>
+                </div>
+            </div>
+            <div class="dates">
+                <div class="creation-date" *ngIf="(this.booking$ | async)?.createdAt">
+                    <h4>{{ "BOOKING_CREATION_DATE" | translate }}</h4>
+                    <p>
+                        <b>{{ (this.booking$ | async)?.createdAt | date: 'dd.MM.y' }}</b>
+                    </p>
+                </div>
+                <div class="creation-date">
+                    <h4>{{ "BOOKING_START_DATE" | translate }}</h4>
+                    <p>
+                        <b>{{ startDate | date: 'dd.MM.y' }}</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <br *ngIf="!hasErrors" />
+        <div class="buttons" *ngIf="showButtons">
+            <button expand="block" *ngIf="!hasErrors">{{ 'ISSUE_TICKET' | translate }}</button>
+            <!--(click)="emitTicket()"-->
+            <button expand="block" *ngIf="!hasErrors">{{ 'CANCEL_BOOKING' | translate }}</button>
+            <!--(click)="cancel()"-->
+        </div>
+
+        <!-- <app-price-summary [priceInput]="(this.booking$ | async)?.price" [flights]="(this.booking$ | async)?.flights" style="width:100%"></app-price-summary> -->
+
+    </div>
+    
+    <div class="card" *ngFor="let e of booking.errors">
+        {{ e }}
+    </div>
+    <div class="card" *ngFor="let w of booking.warnings">
+        {{ w }}
+    </div>
+    
+    <div class="card agent-contact">
+        <div class="header">
+            <h1>Contact Information</h1>
+        </div>
+        <div class="row">
+            <div>
+                <h4>Email:</h4>
+                <p>
+                    {{ (this.booking$ | async)?.contact?.email }}
+                </p>
+            </div>
+            <div>
+                <h4>Phone number:</h4>
+                <p>
+                    {{ (this.booking$ | async)?.contact?.phone?.dialCode }} {{ (this.booking$ | async)?.contact?.phone?.number }}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card travellers">
+        <div class="traveller" *ngFor="let passenger of (this.booking$ | async)?.passengers">
+            <div class="header">
+                <h1>Traveller</h1>
+            </div>
+            <div class="row">
+                <div>
+                    <h4>Name:</h4>
+                    <p>
+                        {{ this.passenger.title }} {{ this.passenger.firstName }} {{ this.passenger.lastName
+                        }}
+                    </p>
+                </div>
+                <div>
+                    <h4>Date of birth:</h4>
+                    <p>
+                        {{ this.passenger.dateOfBirth }}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div *ngIf="this.passenger.contact.email != ''">
+                    <h4>Email:</h4>
+                    <p>
+                        {{ this.passenger.contact.email }}
+                    </p>
+                </div>
+                <div
+                    *ngIf="this.passenger.contact.phone && this.passenger.contact.phone.dialCode != '' && this.passenger.contact.phone.number != '' ">
+                    <h4>Phone number:</h4>
+                    <p>
+                        {{ this.passenger.contact.phone.dialCode }} {{ this.passenger.contact.phone.number }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-flight-options-info [options]="booking.flights" [bookingRefs]="booking.bookingRefs" style="width: 84%;display: flex;flex-wrap: wrap;margin: 20px auto;" />
+</div>

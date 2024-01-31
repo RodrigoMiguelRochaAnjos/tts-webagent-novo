@@ -18,6 +18,10 @@ const routes: Routes = [
     {
         path: 'checkout',
         loadChildren: () => import("../checkout/feature/checkout-shell/checkout-shell.module").then((m) => m.CheckoutShellModule)
+    },
+    {
+        path: 'booking-info',
+        loadChildren: () => import("../booking-info/feature/boooking-info-shell/booking-info-shell.module").then((m) => m.BookingInfoShellModule),
     }
 
 ]

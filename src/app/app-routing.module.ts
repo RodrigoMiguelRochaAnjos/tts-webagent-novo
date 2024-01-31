@@ -57,6 +57,11 @@ const routes: Routes = [
         path: 'my-bookings',
         loadChildren: () => import('./modules/neo/features/my-bookings/feature/my-bookings-shell/my-bookings-shell.module').then((m) => m.MyBookingsShellModule),
         title: 'MyBookings'
+    },
+    {
+        path: 'booking-info',
+        loadChildren: () => import("./modules/neo/features/booking-info/feature/boooking-info-shell/booking-info-shell.module").then((m) => m.BookingInfoShellModule),
+        title: "Booking"
     }
     
 ];

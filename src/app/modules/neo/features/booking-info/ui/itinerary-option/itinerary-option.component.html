@@ -1,0 +1,68 @@
+<div class="option-info-segment segment-left">
+    <div class="option-info-segment-image" [title]="segment.marketingCarrier.name"
+        [ngStyle]="{'background-image': 'url(' + segment.marketingCarrier.logo_url + ')' }"></div>
+</div>
+<div class="option-info-segment segment-center">
+    <div class="main-info">
+        <div class="info">
+            <div class="title">{{ "FLIGHT" | translate }}</div>
+            <div class="value">{{ segment.flightNumber }}</div>
+        </div>
+        <div class="info">
+            <div class="title">{{ "BOARDING_TIME" | translate }}</div>
+            <div class="value">{{ segment.departureDatetime | date:'HH:mm' }}</div>
+        </div>
+        <div class="info">
+            <div class="title">{{ "TERMINAL" | translate }}</div>
+            <div class="value" *ngIf="segment.departureTerminal">
+                {{ segment.departureTerminal }}
+            </div>
+            <div class="value" *ngIf="!segment.departureTerminal">
+                --------
+            </div>
+        </div>
+        <div class="info">
+            <div class="title">{{"DURATION" | translate}}</div>
+            <div class="value">{{ segmentDuration(segment) }}</div>
+        </div>
+    </div>
+
+    <div class="description">
+        <div class="flight-class" *ngIf="segment.fareDetailsList && segment.fareDetailsList.length > 0">
+            <span>{{ "CLASS" | translate}}:</span> {{ segment.fareDetailsList[0].bookingClass }}
+        </div>
+        <div class="from">
+            <span>{{ "FROM" | translate}}:</span> {{ segment.origin.type }}/{{ segment.origin.code }}
+            <span>{{ "TO" | translate}}:</span> {{ segment.destination.type }}/{{ segment.destination.code }}
+        </div>
+        <div class="departure">
+            <span>{{ "DEPARTURE" | translate}}:</span> {{ segment.departureDatetime | date:'HH:mm' }}
+            <span>{{ "ARRIVAL" | translate}}:</span> {{ segment.arrivalDatetime | date:'HH:mm' }}
+            <span class="next-day" *ngIf="daysDifference > 0">+{{daysDifference}}</span>
+        </div>
+    </div>
+</div>
+<div class="option-info-segment segment-center-right">
+    <div class="tags" *ngIf="this.tags">
+        <span class="tag" *ngFor="let tag of this.tags">{{ tag }}</span>
+    </div>
+</div>
+<div class="option-info-segment segment-right">
+    <div class="flight-class" *ngIf="segment.fareDetailsList && segment.fareDetailsList.length > 0">
+        <span>{{ "CLASS" | translate}}:</span> {{ segment.fareDetailsList[0].bookingClass }}
+    </div>
+    <div class="from">
+        <span>{{ "FROM" | translate}}:</span> {{ segment.origin.type }}/{{ segment.origin.code }}
+        <span>{{ "TO" | translate}}:</span> {{ segment.destination.type }}/{{ segment.destination.code }}
+    </div>
+    <div class="departure">
+        <span>{{ "DEPARTURE" | translate}}:</span> {{ segment.departureDatetime | date:'HH:mm' }}
+        <span>{{ "ARRIVAL" | translate}}:</span> {{ segment.arrivalDatetime | date:'HH:mm' }}
+    </div>
+    <div class="date">
+        <span>{{ "DATE" | translate}}:</span> {{ segment.departureDatetime | date:'d MMM' }}
+    </div>
+    <div class="equipment" *ngIf="segment.equipment && segment.equipment.name && segment.equipment.code">
+        <span>{{ "EQUIPMENT" | translate}}:</span> {{ segment.equipment.name }}
+    </div>
+</div>

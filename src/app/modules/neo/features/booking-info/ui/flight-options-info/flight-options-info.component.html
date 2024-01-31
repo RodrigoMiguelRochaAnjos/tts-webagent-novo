@@ -1,0 +1,36 @@
+<div class="option-info" *ngFor="let option of options">
+    <div class="option-info-segments">
+        <div class="option-info-segments-date">
+            <div class="booking-departure-date">
+                <label>
+                    {{ this.option.segments[0].departureDatetime | date:'fullDate' }}
+                </label>
+            </div>
+            <ng-container
+                *ngIf="!isSameDay(this.option.segments[this.option.segments.length-1].arrivalDatetime, this.option.segments[this.option.segments.length-1].departureDatetime)">
+                - {{ this.option.segments[this.option.segments.length-1].arrivalDatetime | date:'fullDate' }}
+            </ng-container>
+            <ng-container *ngIf="option.provider == Providers.XMLSELECT">
+                <div class="booking-status">
+                    <div *ngIf="this.tmpBookingRefs != null" (click)="toggleMessage(this.tmpBookingRefs.get(Providers.XMLSELECT)!)" [class.yellow]="this.tmpBookingRefs.get(Providers.XMLSELECT)?.status == 'UNCONFIRMED'" [class.green]="this.tmpBookingRefs.get(Providers.XMLSELECT)?.status == 'CONFIRMED'" [class.red]="this.tmpBookingRefs.get(Providers.XMLSELECT)?.status == 'CANCELED'">
+                        <label>
+                            {{ this.tmpBookingRefs.get(Providers.XMLSELECT)?.status }}
+                        </label>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="option.provider != Providers.XMLSELECT">
+                <div class="booking-status">
+                    <div *ngIf="this.tmpBookingRefs != null" (click)="toggleMessage(this.tmpBookingRefs.get(option.searchId)!)" [class.yellow]="this.tmpBookingRefs.get(option.searchId)?.status == 'UNCONFIRMED'" [class.green]="this.tmpBookingRefs.get(option.searchId)?.status == 'CONFIRMED'" [class.red]="this.tmpBookingRefs.get(option.searchId)?.status == 'CANCELED'">
+                        <label>
+                            {{ this.tmpBookingRefs.get(option.searchId)?.status }}
+                        </label>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="option-info-segments-inner" *ngFor="let segment of this.option.segments">
+            <app-itinerary-option [segment]="segment"></app-itinerary-option>
+        </div>
+    </div>
+</div>
