@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { AirSegmentComponent } from './modules/neo/ui/air-segment/air-segment.component';
 import { SummarySegmentComponent } from './modules/neo/ui/summary-segment/summary-segment.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');

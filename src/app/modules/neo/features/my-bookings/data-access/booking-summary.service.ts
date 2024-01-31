@@ -3,7 +3,7 @@ import {
   BookingSummary,
   BookingSummaryResponse,
 } from '../models/booking-summary-response.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from 'src/app/core/models/user/user.model';
 import { AuthService } from 'src/app/core/authentication/auth.service';
@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment';
 import { PageableWrapper } from 'src/app/core/models/pageable-wrapper.model';
 import * as moment from 'moment';
 import { Status } from '../../../models/status.enum';
+import { DestroyService } from 'src/app/core/services/destroy.service';
+import { AirBooking } from 'src/app/shared/models/air-booking.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,14 +32,18 @@ export class BookingSummaryService {
   defaultCreationDateMax: string = moment().format('YYYY-MM-DD');
 
   private bookings$: BehaviorSubject<BookingSummaryResponse> = new BehaviorSubject<BookingSummaryResponse>([]);
-  private booking$: BehaviorSubject<BookingSummary> = new BehaviorSubject<BookingSummary>(new BookingSummary());
+  private booking$: BehaviorSubject<AirBooking> = new BehaviorSubject<AirBooking>(new AirBooking());
   
   isLoading: boolean = false;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService, private destroyService: DestroyService) { }
 
   public getBookings(): Observable<BookingSummaryResponse> {
-    return this.bookings$;
+    return this.bookings$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
+  }
+
+  public getBooking(): Observable<AirBooking> {
+    return this.booking$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
   }
 
   public getBookingsSummary(
@@ -119,9 +125,11 @@ export class BookingSummaryService {
           Authorization: `Bearer ${user.token}`,
         });
 
-        this.http.get<BookingSummary>(`${this.ENDPOINT}/${id}`, { headers: headers}).subscribe({
-          next: (result: BookingSummary) => this.booking$.next(result),
-          error: (err: any) => this.booking$.next(new BookingSummary())
+        this.http.get<AirBooking>(`${this.ENDPOINT}/${id}`, { headers: headers}).subscribe({
+          next: (result: AirBooking) => {
+            this.booking$.next(result as AirBooking)
+          },
+          error: (err: any) => this.booking$.next(new AirBooking())
         });
       },
     });

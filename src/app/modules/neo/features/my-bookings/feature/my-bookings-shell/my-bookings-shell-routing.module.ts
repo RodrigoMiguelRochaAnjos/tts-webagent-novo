@@ -8,7 +8,8 @@ const routes: Routes = [
       path: '',
       component: MyBookingsPageComponent,
       loadChildren: () => MyBookingsPageModule,
-  }
+  },
+  
 ];
 
 @NgModule({
