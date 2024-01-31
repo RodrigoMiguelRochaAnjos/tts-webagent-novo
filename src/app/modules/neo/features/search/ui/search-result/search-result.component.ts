@@ -86,7 +86,7 @@ export class SearchResultComponent implements OnInit {
     }
 
     get canBook(): boolean {
-        return this.reservationService.canBook(this.result.id, this.result.inbounds.length > 0);
+        return this.reservationService.canBook(this.result.id, this.result?.inbounds?.length > 0);
     }
 
     get isCurrentResult() : boolean {

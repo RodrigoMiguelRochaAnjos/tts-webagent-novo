@@ -93,10 +93,13 @@ export class SearchService {
                         option.show= true
                         return option;
                     });
-                    result.inbounds = result.inbounds.map((option: FlightOption) => {
-                        option.show = true
-                        return option;
-                    });
+
+                    if(result.inbounds) {
+                        result.inbounds = result.inbounds.map((option: FlightOption) => {
+                            option.show = true
+                            return option;
+                        });
+                    }
                     observer.next(result);
 
                     index++;

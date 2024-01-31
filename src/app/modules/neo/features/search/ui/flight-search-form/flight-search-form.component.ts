@@ -34,6 +34,8 @@ export class FlightSearchFormComponent {
         'ONEWAY': false
     };
 
+    oneWayDate?: moment.Moment;
+
     constructor(
         private searchService: SearchService,
         private router: Router,
@@ -46,12 +48,18 @@ export class FlightSearchFormComponent {
         if (this.travellerService.getTravellers().length === 0) this.travellerService.addTraveller(TravellerTypes.ADULTS);
     }
 
+    get isRoundTrip(): boolean {
+        return this.journey instanceof RoundTrip;
+    }
+
     private saveTravellers(): void {
         this.journey.travellers = this.travellerService.getTravellers();
     }
 
     search(): void {
         this.saveTravellers();
+
+        if (this.oneWayDate != null) this.journey.departureDate = this.oneWayDate.format('YYYY-MM-DD')
 
         const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
 

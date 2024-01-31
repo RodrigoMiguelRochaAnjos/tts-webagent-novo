@@ -14,6 +14,16 @@ import { PKey } from "src/app/modules/terminal/models/pkey.model";
 
 export class UserMapper {
     static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
+
+        let user: AuthenticatedUser = new AuthenticatedUser();
+
+
+        if (!response.syncData.settings) {
+            user = new IncompleteUser();
+            user.settings = Settings.default();
+            return user;
+        }
+
         const phone: Phone = new Phone();
 
         phone.dialCode = response.syncData.settings.profileUserDialCode;
@@ -26,14 +36,7 @@ export class UserMapper {
 
         UserMapper.loadPKeysFromServer(response.syncData.pkeys);
 
-        let user: AuthenticatedUser = new AuthenticatedUser();
-
         
-        if (!response.syncData.settings) {
-            user = new IncompleteUser();
-            user.settings = Settings.default();
-            return user;
-        }
 
         user.id = response.sessionId;
         user.token = response.token;

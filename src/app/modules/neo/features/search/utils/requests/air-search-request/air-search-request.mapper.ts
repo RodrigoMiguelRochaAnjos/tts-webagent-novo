@@ -7,6 +7,7 @@ import { Place } from "src/app/modules/neo/models/place.model";
 import { Passenger, Passengers } from "./passager.model";
 import { Traveller } from "src/app/modules/neo/models/traveller/traveller.model";
 import { JourneyType } from "../../journey-type.enum";
+import { RoundTrip } from "src/app/modules/neo/models/journey/types/round-trip.model";
 
 export class AirSearchRequestMapper implements Mapper<Journey, AirSearchRequest>{
     
@@ -26,11 +27,11 @@ export class AirSearchRequestMapper implements Mapper<Journey, AirSearchRequest>
             .passengers(obj.travellers?.map((traveller: Traveller) => new Passenger(traveller.toString())))
             .outbound(new FlightRoute(origin, destination, obj.departureDate));
 
-        if(obj.toString() === JourneyType.ROUND_TRIP) {
+        if(obj instanceof RoundTrip) {
             req.inbound(new FlightRoute(destination, origin, obj.returnDate));
         }
 
-
+        
         return req.build();
     }
 

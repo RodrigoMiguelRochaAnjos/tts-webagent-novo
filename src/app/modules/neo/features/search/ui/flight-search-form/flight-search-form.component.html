@@ -8,7 +8,8 @@
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.destination" [label]="'To'"/>
 </div>
 <div class="row">
-    <webagent-input class="dates" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
+    <webagent-input *ngIf="this.isRoundTrip" class="dates" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
+    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="'Departure Date'" />
 </div>
 
 <div class="row controls">

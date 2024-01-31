@@ -105,4 +105,10 @@ export class CircularLinkedList<T> {
 
         return result;
     }
+
+    public getTail(): T | null {
+        if(this.tail == null) return null;
+        
+        return this.tail.data;
+    }
 }
