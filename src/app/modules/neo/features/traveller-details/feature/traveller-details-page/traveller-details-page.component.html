@@ -4,50 +4,51 @@
     <div class="left-section">
     
         <div class="container" *ngFor="let traveller of this.travellers">
+            <h4>{{ "TRAVELLERS_DETAILS" | translate }}</h4>
             <div class="traveller-type">
                 {{ traveller.toString() }}
             </div>
             <div class="traveller-title">
-                <webagent-input [type]="InputType.DROPDOWN" [required]="false" [label]="'Title'" [(ngModel)]="traveller.title" [options]="['MR', 'MRS', 'MS']" />
+                <webagent-input [type]="InputType.DROPDOWN" [required]="false" [label]="('TITLE' | translate)" [(ngModel)]="traveller.title" [options]="['MR', 'MRS', 'MS']"></webagent-input>
 
             </div>
         
             <div class="triple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [(ngModel)]="traveller.contact.phone.dialCode" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="('FIRST_NAME' | translate)" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="('LAST_NAME' | translate)" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
+                <webagent-input [type]="InputType.DATE" [required]="false" [(ngModel)]="traveller.dateOfBirth" [label]="('DATE_OF_BIRTH' | translate)" [placeholder]="'E.g. 01/01/1999'" />
             </div>
             <div class="triple-fields">
-                <webagent-input [type]="InputType.DATE" [required]="false" [(ngModel)]="traveller.dateOfBirth" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email" [pattern]="patterns.email.source" [label]="('EMAIL' | translate)" [placeholder]="'E.g. traveller@tts.com'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [(ngModel)]="traveller.contact.phone.dialCode" [label]="('COUNTRY_DIAL_CODE' | translate )" [placeholder]="'E.g. 351'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="('PHONE_NUMBER' | translate )" [placeholder]="'E.g. 913502195'" />
             </div>
         
-            <button class="button-small">Add frequent flyer number</button>
+            <button class="button-small">{{ "FREQUENT_FLYER_NUMBER" | translate }}</button>
         </div>
         
         <div class="container">
-            <h4>Agency Contact</h4>
+            <h4>{{ "CONTACT_INFO" | translate }}</h4>
         
             <div class="triple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [placeholder]="'E.g. John'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [placeholder]="'E.g. Doe'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="('FIRST_NAME' | translate)" [placeholder]="'E.g. John'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="('LAST_NAME' | translate)" [placeholder]="'E.g. Doe'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [label]="('EMAIL' | translate)" [placeholder]="'E.g. traveller@tts.com'" />
             </div>
             <div class="triple-fields">
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="'Entity Name'" [placeholder]="'E.g. TTS'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="('COUNTRY_DIAL_CODE' | translate )" [placeholder]="'E.g. 351'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [label]="('PHONE_NUMBER' | translate )" [placeholder]="'E.g. 913502195'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="('ENTITY_NAME' | translate )" [placeholder]="'E.g. TTS'" />
             </div>
             <div class="double-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="'Street'" [placeholder]="'E.g. Rua da tecnologia 21'"/>
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="'City'" [placeholder]="'E.g. Ponta Delgada'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="('STREET' | translate )" [placeholder]="'E.g. Rua da tecnologia 21'"/>
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="('CITY' | translate)" [placeholder]="'E.g. Ponta Delgada'" />
             </div>
             <div class="quadruple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="'Locality'" [placeholder]="'E.g. Rosário '" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="'Flat'" [placeholder]="'E.g. R/S/'" />
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.postCode.source" [label]="'Post Code'" [placeholder]="'E.g. 9500-285'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source" [label]="'Country Code'" [placeholder]="'E.g. PT'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="('LOCALITY' | translate )" [placeholder]="'E.g. Rosário '" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [label]="('FLAT' | translate )" [placeholder]="'E.g. R/S/'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.postCode.source" [label]="('POST_CODE' | translate )" [placeholder]="'E.g. 9500-285'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source" [label]="('COUNTRY_CODE' | translate )" [placeholder]="'E.g. PT'" />
             </div>
         </div>
     </div>

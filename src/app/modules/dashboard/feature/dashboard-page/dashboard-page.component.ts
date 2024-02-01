@@ -35,7 +35,6 @@ export class DashboardPageComponent implements OnInit{
         this.forwardsIterator = this.doubleList.forwardsIterator();
         this.reverseIterator = this.doubleList.backwardIterator();
 
-        this.alertService.show(AlertType.SUCCESS, "A minha mensagem");
 
         this.testResult = JSON.parse(`
         {

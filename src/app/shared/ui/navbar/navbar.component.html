@@ -5,13 +5,17 @@
                 <a [routerLink]="item.route" routerLinkActive="active">{{item.label}}</a>
             </li>
             <div class="line"></div>
-            <li (click)="logout()">
+            <li class="logout" (click)="logout()">
                 <a>Logout</a>
             </li>
         </ul>
     </ng-container>
 
     <ng-container *ngIf="!side">
+        
+        <div class="logo">
+            <img src="assets/webagent-logo-colour-cropped.png">
+        </div>
         <div class="user">
             <div class="info">
                 <div class="name">

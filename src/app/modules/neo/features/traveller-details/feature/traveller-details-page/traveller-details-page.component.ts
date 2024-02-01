@@ -11,6 +11,7 @@ import { Contact } from 'src/app/core/models/user/contact/contact.model';
 import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -28,7 +29,8 @@ export class TravellerDetailsPageComponent {
     constructor(
         private reservationService: ReservationService,
         private travellerService: TravellerService,
-        private router: Router
+        private router: Router,
+        private translate: TranslateService
     ) {
         this.option = this.reservationService.getSelectedFlights();
 

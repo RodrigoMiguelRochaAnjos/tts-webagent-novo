@@ -12,7 +12,7 @@ export class AirSegment {
 	departureTerminal!: string;
 	destination!: Place;
 	duration!: number;
-	equipment!: Aircraft;
+	equipment?: Aircraft;
 	fareDetailsList!: FareDetails[];
 	flightNumber!: string;
 	marketingCarrier!: Carrier;

@@ -82,6 +82,7 @@ export class SettingsPageComponent implements OnInit{
         user.contact.phone.number = this.tmpSettings.profileUserPhone;
 
 
+
         try {
             user.save();
             this.authService.updateUserSettings(this.tmpSettings);

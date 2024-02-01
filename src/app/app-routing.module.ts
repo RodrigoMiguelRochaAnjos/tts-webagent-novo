@@ -57,6 +57,7 @@ const routes: Routes = [
     {
         path: 'my-bookings',
         loadChildren: () => import('./modules/neo/features/my-bookings/feature/my-bookings-shell/my-bookings-shell.module').then((m) => m.MyBookingsShellModule),
+        canActivateChild: [AuthGuardService],
         title: 'MyBookings'
     },
     {

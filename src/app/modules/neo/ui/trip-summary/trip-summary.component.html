@@ -1,5 +1,5 @@
 
-<h3>Trip Summary</h3>
+<h4>Trip Summary</h4>
 <div class="summary-container">
     <h6>Tickets</h6>
     <app-flight-option *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [option]="(selectedFlights$ | async)!.OUTBOUNDS!" [displayOnly]="true" (click)="outboundSegments = !outboundSegments"/>
@@ -44,7 +44,7 @@
     <div class="psg-price" *ngFor="let psgPrice of (this.details$ | async)?.price?.passengersPrices">
         <span>
             <span *ngIf="totalPassengers(psgPrice.ptc)">
-                {{ totalPassengers(psgPrice.ptc) + 1 }}
+                {{ totalPassengers(psgPrice.ptc) }}
             </span>
             {{ passengerDefinition(psgPrice.ptc) }}:
         </span>

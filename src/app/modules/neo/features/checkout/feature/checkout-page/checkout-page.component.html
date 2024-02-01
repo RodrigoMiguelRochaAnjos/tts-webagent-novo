@@ -63,7 +63,7 @@
         <div class="mid-section" *ngIf="getPayment(flight.id)">
             <div class="half-section left">
                 <div class="first-row">
-                    <h4>Payment Card</h4>
+                    <h4>Payment</h4>
                     <webagent-input [type]="InputType.DROPDOWN" [required]="true" [label]="'Card type'" [options]="this.getPaymentOptionDisplay(flight.id)" />
                 </div>
     
