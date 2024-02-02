@@ -58,6 +58,7 @@ export class SearchService {
 
     public search(searchId: string) : Promise<boolean> {
 
+
         return new Promise((resolve) => {
 
             const user = this.authService.getUserValue();
@@ -66,7 +67,6 @@ export class SearchService {
     
             this.previousSearchId = searchId;
     
-            this.results$.next([]);
     
             this.isLoading = true;
             new Observable<AirSearchResponse>((observer: Subscriber<AirSearchResponse>) => {
@@ -120,11 +120,7 @@ export class SearchService {
                 }
             }).subscribe({
                 next: (result: AirSearchResponse) => {
-                    const results: AirSearchResults = this.results$.value;
-    
-                    results.push(result);
-    
-                    this.results$.next(results);
+                    this.results$.next(this.results$.value.concat(result));
                 }
             })
         });
@@ -145,5 +141,7 @@ export class SearchService {
         )
     }
 
-    
+    reset(): void {
+        this.results$.next([]);
+    }
 }

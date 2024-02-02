@@ -19,7 +19,7 @@
 </div>
 <p>From: <b>{{ this.segment.origin.type }}/{{this.segment.origin.code}}</b> To: <b>{{ this.segment.destination.type }}/{{this.segment.destination.code}}</b></p>
 <p>Departure: <b>{{ this.segment.departureDatetime | date: 'HH:mm' }}</b> Arrival: <b>{{ this.segment.arrivalDatetime | date: 'HH:mm' }}</b></p>
-<p>Equipment: <b>{{ this.segment.equipment.name }}</b> Code: <b>{{ this.segment.equipment.code }}</b></p>
+<p>Equipment: <b>{{ this.segment.equipment?.name }}</b> Code: <b>{{ this.segment.equipment?.code }}</b></p>
 
 <div class="fare-details">
     <p>Fare details</p>

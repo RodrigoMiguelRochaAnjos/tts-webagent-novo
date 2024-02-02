@@ -46,7 +46,7 @@
 
     <div class="double-fields">
         <webagent-input [label]="('SELECT_LANGUAGE' | translate)" [type]="InputType.DROPDOWN" [(ngModel)]="this.tmpSettings.languageCode"
-            [options]="['English', 'Portuguese']" />
+            [options]="['en', 'pt']" />
         <webagent-input [label]="('SELECT_CURRENCY' | translate)" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" [(ngModel)]="this.tmpSettings.currency" />
     </div>
 

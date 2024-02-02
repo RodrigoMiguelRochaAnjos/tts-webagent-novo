@@ -153,7 +153,7 @@ export class PkeysService {
 
     public loadPkeysFromStorage(): void {
         const pkeys: string | null = localStorage.getItem('pkeys');
-        console.log(pkeys);
+
         if(pkeys == null) return;
 
         this.pkeys$.next(JSON.parse(pkeys) as PKey[]);

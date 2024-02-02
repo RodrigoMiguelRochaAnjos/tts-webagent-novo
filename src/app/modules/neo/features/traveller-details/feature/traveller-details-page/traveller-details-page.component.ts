@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { patterns } from 'src/app/shared/utils/validation-patterns';
 import { FlightOption } from '../../../../models/flight-option.model';
-import { ReservationService } from '../../../../data-access/reservation.service';
+import { ReservationService } from '../../../../data-access/reservation/reservation.service';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
@@ -11,6 +11,13 @@ import { Contact } from 'src/app/core/models/user/contact/contact.model';
 import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { TranslateService } from '@ngx-translate/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/core/authentication/auth.service';
+import { User } from 'src/app/core/models/user/user.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -22,17 +29,64 @@ export class TravellerDetailsPageComponent {
     patterns = patterns;
 
     public date: moment.Moment = moment();
+    contactRequestData: Contact;
 
-    option!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
+    option$!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
+
 
     constructor(
         private reservationService: ReservationService,
         private travellerService: TravellerService,
+        private alertService: AlertService,
+        private translate: TranslateService,
+        private authService: AuthService,
         private router: Router
     ) {
-        this.option = this.reservationService.getSelectedFlights();
+        this.option$ = this.reservationService.getSelectedFlights();
+        
+        this.contactRequestData = new Contact();
+        
+        this.contactRequestData.phone = new Phone();
+        this.contactRequestData.address = new Address();
+        this.contactRequestData.address.street = '';
+        this.contactRequestData.address.city = '';
+        this.contactRequestData.address.locality = '';
+        this.contactRequestData.address.flat = '';
+        this.contactRequestData.address.postCode = '';
+        this.contactRequestData.address.countryCode = '';
+        this.contactRequestData.phone.dialCode = '351';
+        this.contactRequestData.phone.number = '';
+        this.contactRequestData.title = 'MR';
+        this.contactRequestData.firstName = '';
+        this.contactRequestData.lastName = '';
+        this.contactRequestData.email = '';
 
-        this.travellerService.setTraveller(
+        this.authService.getUser().subscribe((user: User) => {
+            this.contactRequestData.title = user.contact.title ? user.contact.title : 'MR';
+            this.contactRequestData.firstName = user.contact.firstName ? user.contact.firstName : '';
+            this.contactRequestData.lastName = user.contact.lastName ? user.contact.lastName : '';
+            this.contactRequestData.email = user.contact.email ? user.contact.email : '';
+            this.contactRequestData.entityName = user.contact.entityName;
+
+            if (user.contact.address && this.contactRequestData.address){
+                this.contactRequestData.address.street = user.contact.address.street ? user.contact.address.street : '';
+                this.contactRequestData.address.city = user.contact.address.city ? user.contact.address.city : '';
+                this.contactRequestData.address.locality = user.contact.address.locality ? user.contact.address.locality : '';
+                this.contactRequestData.address.flat = user.contact.address.flat ? user.contact.address.flat : '';
+                this.contactRequestData.address.postCode = user.contact.address.postCode ? user.contact.address.postCode : '';
+                this.contactRequestData.address.countryCode = user.contact.address.countryCode ? user.contact.address.countryCode : '';
+            }
+
+            if (user.contact.phone) {
+                this.contactRequestData.phone.dialCode = user.contact.phone.dialCode ? user.contact.phone.dialCode : '';
+                this.contactRequestData.phone.number = user.contact.phone.number ? user.contact.phone.number : '';
+            }
+            
+        })
+
+
+
+        this.travellerService.setTravellers(
             this.travellerService.getTravellers().map((traveller: Traveller) => {
                 traveller.contact = new Contact();
                 traveller.contact.phone = new Phone();
@@ -58,12 +112,76 @@ export class TravellerDetailsPageComponent {
     }
 
     advance(): void {
-        if(!this.travellerService.areTravellersValid()) {
-            console.log(this.travellerService.getTravellers());
-            alert("traveller fields are invalid");
-            return;
+        let valid = true;
+
+        this.travellerService.getTravellers().forEach((traveller: Traveller, index: number) => {
+            if(traveller.isValid()) return;
+
+            valid = false;
+
+            let message = "Please fill in all required fields ";
+
+            message += `Traveller ${index + 1}: `;
+            for (const name in traveller.form.controls) {
+                let tmpTranslation: string = "";
+
+
+                this.translate.stream(name).subscribe((text: string) => {
+                    tmpTranslation = text;
+                });
+
+                if (traveller.form.controls[name].invalid) message += `${tmpTranslation}, `;
+            }
+        })
+
+
+        if (!this.contactRequestData.form().valid) {
+            valid = false;
+            let message = "Please fill in all required fields: "
+
+            for (const name in this.contactRequestData.form().controls) {
+                let tmpTranslation: string = "";
+                this.translate.stream(name).subscribe((text: string) => {
+                    tmpTranslation = text;
+                });
+
+                if (this.contactRequestData.form().controls[name].invalid) message += `${tmpTranslation}, `;
+            }
+
+            message = this.removeLastOccurrence(message, ", ");
+            this.alertService.show(AlertType.ERROR, message);
+
         }
 
+        if (!valid) return;
+        
+        this.reservationService.checkTravellers();
+
+        // this.statisticsService.addClientStat("traveller/details");
+
+        this.authService.updateUserContact(this.contactRequestData);
+
+        
         this.router.navigate(['neo/checkout'])
+    }
+
+    updateTravellerDOB(date: moment.Moment, index: number): void{
+        const traveller: Traveller | undefined = this.travellerService.getTraveller(index);
+
+        if(traveller == null) return;
+
+        traveller.dateOfBirth = date.utc().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+        this.travellerService.setTraveller(traveller, index);
+    }
+    
+    removeLastOccurrence(str: string, search: string): string {
+        const lastIndex = str.lastIndexOf(search);
+        if (lastIndex !== -1) {
+            const before = str.substring(0, lastIndex);
+            const after = str.substring(lastIndex + search.length);
+            return before + after;
+        }
+        return str;
     }
 }

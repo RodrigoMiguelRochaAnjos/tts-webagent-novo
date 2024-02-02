@@ -15,8 +15,6 @@ export class CircularLinkedList<T> {
     append(data: T): void {
         const newNode = new Node(data);
 
-        console.log("IS HEAD NULL: ", this.head == null);
-        console.log("HEAD: ", this.head?.data);
         if (this.head == null) {
             this.head = newNode;
             this.tail = newNode;

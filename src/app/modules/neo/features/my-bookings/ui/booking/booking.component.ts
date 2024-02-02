@@ -21,6 +21,6 @@ export class BookingComponent {
 	) { }
 
 	goToBooking(): void {
-		this.router.navigate([`booking-info/${this.booking.bookingId}`]);
+		this.router.navigate([`neo/booking-info/${this.booking.bookingId}`]);
 	}
 }

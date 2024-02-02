@@ -2,7 +2,7 @@
     {{ value ? value: 'Select an option' }} <span class="arrow-icon" [class.up]="isDropdownOpen"></span>
 </div>
 <ul class="dropdown-list" [class.active]="isDropdownOpen">
-    <li (click)="selectOption('Select an option')">Select an option</li>
+    <li (click)="selectOption('')">Select an option</li>
     <li *ngFor="let option of options" (click)="selectOption(option)">
         {{ option }}
     </li>

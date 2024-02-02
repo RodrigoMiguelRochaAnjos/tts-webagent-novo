@@ -1,11 +1,11 @@
 import { LoginResponse } from "src/app/modules/home/models/login.response";
-import { Middleware } from "../handler.model";
-import { Validators } from "../auth-validation.service";
+import { Middleware } from "../../../utils/middleware.structure";
+import { AuthValidators } from "../auth-validation.service";
 
-export class SettingsValidator extends Middleware {
+export class SettingsValidator extends Middleware<LoginResponse, AuthValidators>  {
 
-    public override check(loginResponse: LoginResponse): Validators {
-        if(!loginResponse.syncData.settings.isValid()) return Validators.INVALID_SETTINGS;
+    public override check(loginResponse: LoginResponse): AuthValidators {
+        if(!loginResponse.syncData.settings.isValid()) return AuthValidators.INVALID_SETTINGS;
 
         return this.checkNext(loginResponse);
     }

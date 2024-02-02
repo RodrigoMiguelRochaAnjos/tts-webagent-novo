@@ -1,11 +1,11 @@
 import { LoginResponse } from "src/app/modules/home/models/login.response";
-import { Validators } from "../auth-validation.service";
-import { Middleware } from "../handler.model";
+import { AuthValidators } from "../auth-validation.service";
+import { Middleware } from "../../../utils/middleware.structure";
 
-export class RequestValidator extends Middleware {
+export class RequestValidator extends Middleware<LoginResponse, AuthValidators> {
 
-    public override check(loginResponse: LoginResponse): Validators {
-        if(!loginResponse.success) return Validators.INVALID_REQUEST
+    public override check(loginResponse: LoginResponse): AuthValidators {
+        if(!loginResponse.success) return AuthValidators.INVALID_REQUEST
 
         return this.checkNext(loginResponse);
     }

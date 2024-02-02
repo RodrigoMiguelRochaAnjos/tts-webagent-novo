@@ -184,7 +184,6 @@ export class TerminalService {
         }
 
         if (serverData.msgAlert) {
-            console.log();
             this.alertService.show(AlertType.WARNING, serverData.msgObj[serverData.msgObj.type].message).subscribe((value: AlertAction) => {
                 switch(value){
                     case AlertAction.EXECUTE:
@@ -274,7 +273,6 @@ export class TerminalService {
     }
 
     executeTerminalCommand(command: string | string[] | Object, emailElement?: HTMLElement, history?: boolean): void {
-        console.log("Command:", command);
         if (command === 'SOF') {
             this.authService.logout();
             return;
@@ -325,7 +323,6 @@ export class TerminalService {
     }
 
     public get currentTerminal() {
-        console.log("terminals:", this.terminals$.value);
         return this.terminals$.value.filter((val: { terminal: HTMLElement, selected: boolean }) => val.selected == true).map((val: { terminal: HTMLElement, selected: boolean }) => val.terminal)[0];
     }
 

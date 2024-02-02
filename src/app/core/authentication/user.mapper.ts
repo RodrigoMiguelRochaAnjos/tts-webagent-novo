@@ -11,6 +11,7 @@ import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { PKey } from "src/app/modules/terminal/models/pkey.model";
+import { Address } from "../models/user/contact/segments/address.model";
 
 export class UserMapper {
     static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
@@ -33,6 +34,29 @@ export class UserMapper {
 
         contact.email = response.syncData.settings.profileUserEmail;
         contact.phone = phone;
+
+        if (response.syncData.settings.profileUserName) {
+            const names: string[] = response.syncData.settings.profileUserName.split(" ");
+
+            if (names.length === 1) {
+                contact.firstName = names[0];
+                contact.lastName = '';
+            } else {
+                contact.firstName = names[0];
+                contact.lastName = names[names.length - 1];
+            }
+        }
+
+        contact.entityName = response.syncData.settings.agencyEntityName;
+        contact.address = new Address();
+        contact.address.street = response.syncData.settings.street ? response.syncData.settings.street : ''; 
+        contact.address.flat = response.syncData.settings.flat ? response.syncData.settings.flat : ''; 
+        contact.address.locality = response.syncData.settings.locality ? response.syncData.settings.locality : ''; 
+        contact.address.city = response.syncData.settings.city ? response.syncData.settings.city : ''; 
+        contact.address.province = response.syncData.settings.province ? response.syncData.settings.province : ''; 
+        contact.address.postCode = response.syncData.settings.postCode ? response.syncData.settings.postCode : ''; 
+        contact.address.countryCode = response.syncData.settings.countryCode ? response.syncData.settings.countryCode : ''; 
+
 
         UserMapper.loadPKeysFromServer(response.syncData.pkeys);
 
@@ -76,7 +100,6 @@ export class UserMapper {
         if(obj == null) {
             return new AnonymousUser();
         }
-
         const storedObject: any = JSON.parse(obj);
 
         if (storedObject.type == 'AnonymousUser' || storedObject.type != 'AuthenticatedUser') {
@@ -88,11 +111,10 @@ export class UserMapper {
         user.name = storedObject.data.name
         user.languageCode = storedObject.data.languageCode
         user.currency = storedObject.data.currency
-        user.contact = storedObject.data.contact
         user.id = storedObject.data.id
         user.token = storedObject.data.token
-        console.log("Stored object: ",storedObject.data.settings);
         user.settings = Object.assign(new Settings(), JSON.parse(storedObject.data.settings));
+        user.contact = Object.assign(new Contact(), JSON.parse(storedObject.data.contact));
 
         switch (storedObject.data.gds) {
             case 'Galileo':
@@ -109,9 +131,6 @@ export class UserMapper {
         }
 
         user.gds = user.gds.load();
-
-        user.contact = new Contact();
-        user.contact.load();
 
 
         return user;

@@ -24,11 +24,12 @@ export class AuthenticatedUser extends User {
                 currency: this.currency,
                 gds: this.gds.toString(),
                 token: this.token,
-                settings: JSON.stringify(this.settings)
+                settings: JSON.stringify(this.settings),
+                contact: JSON.stringify(this.contact)
             }
         });
 
-        this.contact.save();
+        
         this.gds.save();
 
         localStorage.removeItem("user");
