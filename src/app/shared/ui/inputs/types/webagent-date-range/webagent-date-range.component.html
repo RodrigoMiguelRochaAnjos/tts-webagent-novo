@@ -1,12 +1,12 @@
 <form [formGroup]="this.dateForm" class="date-input">
-    <webagent-input [type]="InputType.TEXT" [label]="'Start Date'" [placeholder]="'Start Date'"
+    <webagent-input [type]="InputType.TEXT" [label]="('START_DATE' | translate )" [placeholder]="('START_DATE' | translate )"
         [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="openCalendar()"></webagent-input>
-    <webagent-input [type]="InputType.TEXT" [label]="'End Date'" [placeholder]="'End Date'"
+    <webagent-input [type]="InputType.TEXT" [label]="('END_DATE' | translate )" [placeholder]="('END_DATE' | translate )"
         [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="openCalendar()"></webagent-input>
 </form>
 
 <ng-template #year>
-    <h3>Choose a year</h3>
+    <h3>{{ 'CHOOSE_YEAR' | translate }}</h3>
     <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" />
 </ng-template>
 

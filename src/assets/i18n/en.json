@@ -307,6 +307,14 @@
 	"TRAVELLER": "Traveller",
 	"CODE": "Code",
 	"WALLET": "Wallet",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "Your account settings are invalid",
+	
+	"START_DATE": "Start Date",
+	"END_DATE": "End Date",
+	"CHOOSE_YEAR": "Choose a year",
+	"ADDRESS": "Address",
+	"APP_SETTINGS": "App Settings",
+	"SELECT_LANGUAGE": "Select a language",
+	"SELECT_CURRENCY": "Select a currency"
 }
 
