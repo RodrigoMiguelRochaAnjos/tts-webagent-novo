@@ -6,8 +6,12 @@ import { User } from 'src/app/core/models/user/user.model';
 import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 import { DoublyLinkedList } from 'src/app/core/utils/doubly-linked-list.structure';
+import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
+import { ReservationService } from 'src/app/modules/neo/data-access/reservation/reservation.service';
+import { AirCheckoutDetailsResponse } from 'src/app/modules/neo/features/search/models/air-checkout-details-response.model';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -15,6 +19,8 @@ import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
   styleUrls: ['./dashboard-page.component.scss']
 })
 export class DashboardPageComponent implements OnInit{
+
+    InputType = InputType;
 
     user$!: Observable<User>;
 
@@ -27,6 +33,7 @@ export class DashboardPageComponent implements OnInit{
         private authService: AuthService,
         private alertService: AlertService
     ) {
+
         this.doubleList.append("1");
         this.doubleList.append("2");
         this.doubleList.append("3");
@@ -35,6 +42,18 @@ export class DashboardPageComponent implements OnInit{
         this.forwardsIterator = this.doubleList.forwardsIterator();
         this.reverseIterator = this.doubleList.backwardIterator();
 
+        this.alertService.show(AlertType.CONFIRMATION, "Are you sure you want to book this flight?").subscribe((action: AlertAction) => {
+            if(action === AlertAction.WAITING) return;
+
+            switch(action) {
+                case AlertAction.EXECUTE:
+                    alert("I executed");
+                    break;
+                case AlertAction.CANCEL:
+                    alert("I canceled");
+                    break;
+            }
+        });
 
         this.testResult = JSON.parse(`
         {

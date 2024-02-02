@@ -8,7 +8,7 @@ import { LoginRequest } from "../models/requests/login-request.model";
 import { LoginResponse } from "src/app/modules/home/models/login.response";
 import { Router } from "@angular/router";
 import { KeepAliveService } from "./keep-alive.service";
-import { AuthValidationService, Validators } from "./auth-validation/auth-validation.service";
+import { AuthValidationService, AuthValidators } from "./auth-validation/auth-validation.service";
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { IncompleteUser } from "../models/user/types/incomplete-user.model";
 import { UserMapper } from "./user.mapper";
@@ -19,6 +19,7 @@ import { AlertService } from "../services/alert.service";
 import { AlertType } from "src/app/shared/ui/alerts/alert-type.enum";
 import { TranslateService } from "@ngx-translate/core";
 import { deepClone } from "../utils/deep-clone.tool";
+import { Contact } from "../models/user/contact/contact.model";
 
 @Injectable({
     providedIn: 'root'
@@ -86,30 +87,28 @@ export class AuthService implements OnDestroy {
                         Object.setPrototypeOf(response.syncData, SyncData.prototype)
                         Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
                     }
-                    console.log("SYNC DATA: ", response.syncData);
-                    if (response.syncData && response.syncData.pkeys) console.log(response.syncData.pkeys);
 
                     switch (this.loginValidator.validateLogin(response)) {
-                        case Validators.VALID:
+                        case AuthValidators.VALID:
                             this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as AuthenticatedUser));
                             break;
-                        case Validators.INVALID_LICENSE:
+                        case AuthValidators.INVALID_LICENSE:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_LICENSE'])
                             break;
-                        case Validators.NO_SETTINGS:
+                        case AuthValidators.NO_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
                             response.syncData.settings = Settings.default();
                             break;
-                        case Validators.INVALID_SETTINGS:
+                        case AuthValidators.INVALID_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
                             this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
                             break;
-                        case Validators.HAS_ALERT:
+                        case AuthValidators.HAS_ALERT:
                             this.alertService.show(AlertType.ERROR, 'HAS ALERTS');
                             break;
-                        case Validators.INVALID_REQUEST:
+                        case AuthValidators.INVALID_REQUEST:
                             this.alertService.show(AlertType.ERROR, 'INVALID_LOGIN');
                             break;
                     }
@@ -117,7 +116,6 @@ export class AuthService implements OnDestroy {
 
                 },
                 error: (err: any) => {
-                    console.log(err)
                 }
             })
     }
@@ -173,6 +171,7 @@ export class AuthService implements OnDestroy {
             this.user$.next(user);
             return;
         }
+
         this.keepAliveService.checkSession(user.id).subscribe(
             (response) => {
                 if (!response.status || !(user instanceof AuthenticatedUser)) {
@@ -193,7 +192,6 @@ export class AuthService implements OnDestroy {
         if (!(user instanceof AuthenticatedUser || user instanceof IncompleteUser)) return;
 
         if (!newSettings.isValid()) {
-            console.log("INVALID")
             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
             return;
@@ -216,8 +214,6 @@ export class AuthService implements OnDestroy {
                 let user: AuthenticatedUser = new AuthenticatedUser().copy(this.user$.value);
                 
                 user.settings = newSettings;
-                console.log("My new user: ", user);
-                console.log(user instanceof AuthenticatedUser);
 
                 user.save();
 
@@ -227,5 +223,13 @@ export class AuthService implements OnDestroy {
             },
         });
 
+    }
+
+    updateUserContact(contact: Contact): void {
+        const user: User = this.user$.value;
+
+        user.contact = contact;
+
+        this.user$.next(user);
     }
 }

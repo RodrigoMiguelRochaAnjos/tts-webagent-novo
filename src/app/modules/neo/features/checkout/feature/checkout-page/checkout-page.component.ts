@@ -3,6 +3,8 @@ import {
     ElementRef,
     OnInit,
     QueryList,
+    TemplateRef,
+    ViewChild,
     ViewChildren,
 } from '@angular/core';
 import { Providers } from 'src/app/modules/neo/models/providers.enum';
@@ -12,9 +14,9 @@ import { patterns } from 'src/app/shared/utils/validation-patterns';
 import { Payment } from '../../../search/models/payment.model';
 import { PaymentOption } from '../../../search/models/payment-option.enum';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ReservationService } from 'src/app/modules/neo/data-access/reservation.service';
+import { ReservationService } from 'src/app/modules/neo/data-access/reservation/reservation.service';
 import { Router } from '@angular/router';
-import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { SupportedPayments } from '../../../search/models/supported-payments.model';
@@ -29,6 +31,11 @@ import { AirCheckoutPriceResponse } from '../../../search/models/air-checkout-pr
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
 import { Observable } from 'rxjs';
 import { AirCheckoutDetailsResponse } from '../../../search/models/air-checkout-details-response.model';
+import { SupportedCreditCard } from '../../../search/models/supported-credit-card.model';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
+import { BookingService } from '../../data-access/booking.service';
+import { AirBooking } from 'src/app/shared/models/air-booking.model';
+import { AirBookingRequest } from 'src/app/shared/models/air-booking-request.model';
 
 @Component({
     selector: 'app-checkout-page',
@@ -48,22 +55,28 @@ export class CheckoutPageComponent implements OnInit {
     @ViewChildren('reusableCreditCards')
     reusableCreditCards!: QueryList<ElementRef>;
 
+    @ViewChild('confirmPrice')
+    confirmPrice!: TemplateRef<any>;
+
 
     PaymentOption = PaymentOption;
 
     travellerinfo!: FormGroup;
 
     details$!: Observable<AirCheckoutDetailsResponse | null>;
+    price$!: Observable<AirCheckoutPriceResponse | null>;
     public paymentsData: { id: string; searchId: string; payment: Payment }[] = [];
 
+
     constructor(
-        private reservationService: ReservationService,
         private alertService: AlertService,
-        private router: Router,
         private checkoutService: CheckoutService,
         private authService: AuthService,
         private loadingService: LoadingService,
-        private travellerService: TravellerService
+        private travellerService: TravellerService,
+        private modalService: ModalControllerService,
+        private bookingService: BookingService,
+        private router: Router
     ) {
         this.currency = this.authService.getUserValue().settings.currency;
     }
@@ -72,6 +85,7 @@ export class CheckoutPageComponent implements OnInit {
         const uniqueSearchIds: Set<string> = new Set();
 
         this.details$ = this.checkoutService.getDetails();
+        this.price$ = this.checkoutService.getPrice();
 
         this.details$.subscribe((details: AirCheckoutDetailsResponse | null) => {
             if (details == null) return;
@@ -81,7 +95,6 @@ export class CheckoutPageComponent implements OnInit {
                 const searchId: string = flight.provider == Providers.TRAVELFUSION ? flight.searchId : flight.provider;
                 const supportedPayments: SupportedPayments | undefined = details.formOfPayments.get(searchId);
 
-                console.log(supportedPayments);
 
                 if (!supportedPayments) return;
 
@@ -117,6 +130,7 @@ export class CheckoutPageComponent implements OnInit {
                     )
                 });
             });
+
         })
 
         // this.checkoutService
@@ -164,12 +178,20 @@ export class CheckoutPageComponent implements OnInit {
         this.travellerinfo = new FormGroup(obj);
     }
 
-    getPaymentOptionDisplay(id: string): string[] {
-        const supportedPayments: SupportedPayments | undefined = this.getPaymentOption(id);
+    getPaymentOptionSupportedTypes(id: string): string[] {
+        const supportedPayments: PaymentOption[] | undefined = this.getPaymentOption(id)?.supportedTypes;
 
-        if(supportedPayments == null) return [];
+        if (supportedPayments == null) return [];
 
         return Object.values(supportedPayments);
+    }
+
+    getPaymentOptionSupportedCards(id: string): string[] {
+        const supportedPayments: SupportedCreditCard[] | undefined = this.getPaymentOption(id)?.supportedCreditCards;
+
+        if (supportedPayments == null) return [];
+
+        return supportedPayments.map((value: SupportedCreditCard) => value.cardType);
     }
 
     getPaymentOption(id: string): SupportedPayments | undefined {
@@ -329,48 +351,47 @@ export class CheckoutPageComponent implements OnInit {
         this.paymentsRequestData = [];
 
         //transform data
-        for (let i = 0; i < this.travellersRequestData.length; i++) {
-            if (
-                this.travellersRequestData[i].dateOfBirth != null &&
-                this.travellersRequestData[i].dateOfBirth.length > 0
-            ) {
-                const date: Date = new Date(this.travellersRequestData[i].dateOfBirth);
+        // for (let i = 0; i < this.travellersRequestData.length; i++) {
+        //     if (
+        //         this.travellersRequestData[i].dateOfBirth != null &&
+        //         this.travellersRequestData[i].dateOfBirth.length > 0
+        //     ) {
+        //         const date: Date = new Date(this.travellersRequestData[i].dateOfBirth);
 
-                this.travellersRequestData[i].dateOfBirth =
-                    date.getFullYear() +
-                    '-' +
-                    (date.getMonth() + 1).toString().padStart(2, '0') +
-                    '-' +
-                    date.getDate().toString().padStart(2, '0');
-            }
-        }
+        //         this.travellersRequestData[i].contact.address = null
+
+        //         this.travellersRequestData[i].dateOfBirth =
+        //             date.getFullYear() +
+        //             '-' +
+        //             (date.getMonth() + 1).toString().padStart(2, '0') +
+        //             '-' +
+        //             date.getDate().toString().padStart(2, '0');
+        //     }
+        // }
 
         //remove unecessary data
+
         for (const obj of this.paymentsData) {
-            if (obj.payment.type == PaymentOption.CASH) continue;
+            if (obj.payment.type != PaymentOption.CASH) continue;
 
             obj.payment.creditCard = null;
             obj.payment.address = null;
         }
 
-        this.paymentsData.forEach(
-            (
-                obj: { id: string; searchId: string; payment: Payment },
-                index: number
-            ) => {
-                const value: Payment = obj.payment;
+        this.paymentsData.forEach((obj: { id: string; searchId: string; payment: Payment }, index: number) => {
+            const value: Payment = obj.payment;
 
-                if (value.type === PaymentOption.CASH) {
-                    this.paymentsRequestData.push(value);
-                    return;
-                }
-
-                if (!value.creditCard!.isValid()) return;
-
-                value.creditCard!.number = value.creditCard!.number.toString();
-
+            if (value.type === PaymentOption.CASH) {
                 this.paymentsRequestData.push(value);
+                return;
             }
+
+            if (!value.creditCard?.isValid()) return;
+
+            value.creditCard!.number = value.creditCard!.number.toString();
+
+            this.paymentsRequestData.push(value);
+        }
         );
 
         this.travellersRequestData.forEach((element) => {
@@ -391,6 +412,10 @@ export class CheckoutPageComponent implements OnInit {
         this.checkoutService.loadPrice(requestData);
 
         this.checkoutService.getPrice().subscribe((response: AirCheckoutPriceResponse | null) => {
+            if (response == null) return;
+
+            this.modalService.showModal(this.confirmPrice, "price-confirmation");
+
             this.travellerService.getTravellers().forEach((traveller) => {
                 traveller.frequentFlyerNumbers =
                     traveller.frequentFlyerNumbers.filter(
@@ -398,9 +423,8 @@ export class CheckoutPageComponent implements OnInit {
                     );
             });
 
-            this.travellerService.setTraveller(this.travellersRequestData);
+            this.travellerService.setTravellers(this.travellersRequestData);
 
-            this.router.navigate(['finish-booking']);
         }
         );
     }
@@ -566,5 +590,38 @@ export class CheckoutPageComponent implements OnInit {
         if (year < currentYear || (year === currentYear && month < currentMonth)) return true; // Input date is before the current date
 
         return false;
+    }
+
+    book(): void {
+        this.price$.subscribe((price: AirCheckoutPriceResponse | null) => {
+            if(price == null) return;
+
+            const request: AirBookingRequest = new AirBookingRequest(price.id); 
+
+            this.alertService.show(AlertType.CONFIRMATION, "Are you sure you want to book this flight?").subscribe((action: AlertAction) => {
+                if(action === AlertAction.WAITING) return;
+
+                switch(action) {
+                    case AlertAction.EXECUTE:
+                        this.bookingService.book(request).then((success: boolean) => {
+                            if (!success) {
+                                this.alertService.show(AlertType.ERROR, "Booking failed");
+                                return;
+                            }
+
+                            this.router.navigate([`neo/booking-info/${price.id}`]);
+                        });
+                        break;
+                    case AlertAction.CANCEL:
+                        return;
+                }
+            })
+
+            
+
+
+        });
+
+
     }
 }

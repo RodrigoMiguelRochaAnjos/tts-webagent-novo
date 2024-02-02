@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { ReservationService } from '../../data-access/reservation.service';
+import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { ReservationService } from '../../data-access/reservation/reservation.service';
 import { Observable } from 'rxjs';
 import { FlightOption } from '../../models/flight-option.model';
 import { TravellerService } from '../../data-access/traveller.service';
@@ -8,6 +8,8 @@ import { AirCheckoutDetailsResponse } from '../../features/search/models/air-che
 import { Traveller, Travellers } from '../../models/traveller/traveller.model';
 import { PassengerType } from '../../features/search/utils/requests/air-search-request/passenger-type.enum';
 import { SearchService } from '../../features/search/data-access/search.service';
+import { AirCheckoutPriceResponse } from '../../features/search/models/air-checkout-price-response.model';
+import { Providers } from '../../models/providers.enum';
 
 @Component({
     selector: 'trip-summary',
@@ -16,6 +18,8 @@ import { SearchService } from '../../features/search/data-access/search.service'
 })
 export class TripSummaryComponent {
 
+    Providers = Providers;
+
     @Output() nextPressed: EventEmitter<void> = new EventEmitter<void>();
 
     outboundSegments: boolean = false;
@@ -23,6 +27,15 @@ export class TripSummaryComponent {
 
     selectedFlights$!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
     details$!: Observable<AirCheckoutDetailsResponse | null>;
+    price$!: Observable<AirCheckoutPriceResponse | null>;
+
+    @Input() buttonText: string = "PROCEED";
+    @Input() summaryTitle: string = "Trip Summary";
+
+    @HostBinding("class.keep-open")
+    @HostBinding("class.hide-default")
+    @Input() hideDefault: boolean = false;
+    
 
     constructor(
         private reservationService: ReservationService,
@@ -31,9 +44,13 @@ export class TripSummaryComponent {
         private searchService: SearchService
     ) {
         this.selectedFlights$ = this.reservationService.getSelectedFlights();
-        this.details$ = checkoutService.getDetails();
+        this.details$ = this.checkoutService.getDetails();
+        this.price$ = this.checkoutService.getPrice();
 
-        console.log(this.checkoutService.getDetailsValue())
+        this.price$.subscribe((price: AirCheckoutPriceResponse | null) => {
+            if(price == null) return;
+            // price.bookingRefs.ge
+        });
     }
 
     public get travellers(): Travellers {

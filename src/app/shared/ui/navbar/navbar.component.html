@@ -2,11 +2,15 @@
     <ng-container *ngIf="this.side">
         <ul>
             <li *ngFor="let item of this.routes">
-                <a [routerLink]="item.route" routerLinkActive="active">{{item.label}}</a>
+                
+                <a [routerLink]="item.route" routerLinkActive="active">
+                    <i class="{{ item.data?.icon }}"></i>
+                    {{item.label}}
+                </a>
             </li>
             <div class="line"></div>
-            <li class="logout" (click)="logout()">
-                <a>Logout</a>
+            <li (click)="logout()">
+                <a><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
             </li>
         </ul>
     </ng-container>

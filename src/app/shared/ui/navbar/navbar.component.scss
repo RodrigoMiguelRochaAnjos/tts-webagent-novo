@@ -31,6 +31,10 @@
                     &.active {
                         background-color: #e3ecf1;
                     }
+                    i{
+                        display: block;
+                        padding: 10px;
+                    }
                 }
     
                 &:hover a{
@@ -45,6 +49,9 @@
                     a {
                         background-color: #ff00000e;
                         color: #FF0000;
+                        i{
+                            transform: scale(-1);
+                        }
                     }
                 }
             }

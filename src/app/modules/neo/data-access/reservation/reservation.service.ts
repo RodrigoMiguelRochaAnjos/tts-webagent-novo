@@ -1,14 +1,17 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { BalanceService } from "src/app/shared/services/balance.service";
-import { ReservationProcess, ReservationProcessesState } from "../features/search/models/reservation-process.enum";
+import { ReservationProcess, ReservationProcessesState } from "../../features/search/models/reservation-process.enum";
 import { Balance } from "src/app/shared/models/balance.model";
-import { FlightOption } from "../models/flight-option.model";
-import { Providers } from "../models/providers.enum";
-import { AirCheckoutDetailsRequest } from "../features/search/models/air-checkout-details-request.model";
-import { AirCheckoutDetailsResponse } from "../features/search/models/air-checkout-details-response.model";
-import { CheckoutService } from "./checkout.service";
+import { FlightOption } from "../../models/flight-option.model";
+import { Providers } from "../../models/providers.enum";
+import { AirCheckoutDetailsRequest } from "../../features/search/models/air-checkout-details-request.model";
+import { AirCheckoutDetailsResponse } from "../../features/search/models/air-checkout-details-response.model";
+import { CheckoutService } from "../checkout.service";
 import { DestroyService } from "src/app/core/services/destroy.service";
+import { Middleware } from "src/app/core/utils/middleware.structure";
+import { Travellers } from "../../models/traveller/traveller.model";
+import { TravellerService } from "../traveller.service";
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +36,8 @@ export class ReservationService {
     constructor(
         private balanceService: BalanceService,
         private checkoutService: CheckoutService,
-        private destroyService: DestroyService
+        private destroyService: DestroyService,
+        private travellerService: TravellerService
     ) {
         this.balance$ = this.balanceService.getBalance();
         this.checkoutDetails$ = this.checkoutService.getDetails();
@@ -69,6 +73,14 @@ export class ReservationService {
         
 
         return this.reservationProcess$.value.FUNDS_CHECKED;
+    }
+
+    public checkTravellers(): void {
+        const tmp: ReservationProcessesState = this.reservationProcess$.value;
+
+        tmp.TRAVELLER_DETAILS_VALID = Promise.resolve(this.travellerService.areTravellersValid());
+
+        this.reservationProcess$.next(tmp);
     }
 
     public async getCheckoutDetails(body: AirCheckoutDetailsRequest): Promise<boolean> {

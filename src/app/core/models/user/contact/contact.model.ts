@@ -10,6 +10,7 @@ export class Contact {
 	lastName!: string;
 	address!: Address | null;
     email!: string;
+    entityName?: string;
 
     public isValid(): boolean {
         return (

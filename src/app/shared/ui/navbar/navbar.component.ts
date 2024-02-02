@@ -65,7 +65,8 @@ export class NavbarComponent implements OnInit, OnDestroy{
             .filter((route: Route) => route.path && route.title)
             .map((route: Route) => ({
                 label: route.title,
-                route: `/${route.path}`
+                route: `/${route.path}`,
+                data: new NavIcon(route.data?.['icon'])
             } as NavItem));
     }
 
@@ -103,4 +104,12 @@ export class NavbarComponent implements OnInit, OnDestroy{
 interface NavItem {
     label: string;
     route: string;
+    data?: NavIcon
+}
+
+class NavIcon {
+    icon?: string
+    constructor(icon: string) {
+        this.icon = icon;
+    }
 }

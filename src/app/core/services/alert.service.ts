@@ -1,12 +1,13 @@
 import { ApplicationRef, ComponentRef, EnvironmentInjector, Injectable, Type, createComponent } from "@angular/core";
 import { BehaviorSubject, Observable, takeUntil } from "rxjs";
 import { AlertType } from "src/app/shared/ui/alerts/alert-type.enum";
-import { Alert } from "src/app/shared/ui/alerts/alert.interface";
+import { Alert } from "src/app/shared/ui/alerts/alert.model";
 import { ErrorAlertComponent } from "src/app/shared/ui/alerts/types/error-alert/error-alert.component";
 import { WarningAlertComponent } from "src/app/shared/ui/alerts/types/warning-alert/warning-alert.component";
 import { UUID } from "../utils/uuid.type";
 import { DestroyService } from "./destroy.service";
 import { SuccessAlertComponent } from "src/app/shared/ui/alerts/types/success-alert/success-alert.component";
+import { ConfirmationAlertComponent } from "src/app/shared/ui/alerts/types/confirmation-alert/confirmation-alert.component";
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +34,6 @@ export class AlertService {
     close(id: UUID, action: AlertAction): void {
         this.alerts$.next(
             this.alerts$.value.map((value: { id: UUID, component: ComponentRef<Alert>, show: boolean, response: BehaviorSubject<AlertAction> }) => {
-                console.log(`${id.toString()} === ${value.id.toString()} result: ${id.toString() === value.id.toString() }`)
                 if(id.toString() !== value.id.toString()) return value;
 
                 value.show = false;
@@ -57,6 +57,8 @@ export class AlertService {
                 return WarningAlertComponent;
             case AlertType.SUCCESS:
                 return SuccessAlertComponent;
+            case AlertType.CONFIRMATION:
+                return ConfirmationAlertComponent;
         }
     }
 

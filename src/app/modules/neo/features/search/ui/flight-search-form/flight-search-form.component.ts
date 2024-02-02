@@ -69,6 +69,9 @@ export class FlightSearchFormComponent {
 
         searchId.subscribe({
             next: (response: AirSearchIdResponse) => {
+
+                this.searchService.reset();
+
                 this.router.navigate([`neo/search/${response.id}`]);
             },
         });

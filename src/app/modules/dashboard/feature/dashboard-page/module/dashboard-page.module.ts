@@ -7,6 +7,7 @@ import { SearchResultModule } from "src/app/modules/neo/features/search/ui/searc
 import { ReservationStateModule } from "src/app/modules/neo/ui/reservation-state/module/reservation-state.module";
 import { TripSummaryModule } from "src/app/modules/neo/ui/trip-summary/module/trip-summary.module";
 import { FlightOptionModule } from "src/app/modules/neo/features/search/ui/flight-option/module/flight-option.module";
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
     declarations: [DashboardPageComponent],
@@ -15,7 +16,8 @@ import { FlightOptionModule } from "src/app/modules/neo/features/search/ui/fligh
         SearchResultModule,
         FormsModule,
         ReservationStateModule,
-        TripSummaryModule
+        TripSummaryModule,
+        SharedModule
     ],
     exports: [DashboardPageComponent]
 })
