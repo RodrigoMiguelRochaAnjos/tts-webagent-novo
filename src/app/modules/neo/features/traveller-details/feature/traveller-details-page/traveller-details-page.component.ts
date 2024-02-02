@@ -13,7 +13,6 @@ import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
-import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
