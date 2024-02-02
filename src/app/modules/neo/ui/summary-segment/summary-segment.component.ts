@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 import { AirSegment } from '../../models/air-segment.model';
 
 @Component({

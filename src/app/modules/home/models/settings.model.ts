@@ -29,14 +29,6 @@ export class Settings {
     default: boolean = false;
 
     public isValid(): boolean {
-        console.log(`
-            ${this.qks != null} && 
-            ${this.profileUserName != null} &&
-            ${this.profileUserEmail != null} &&
-            ${this.profileUserDialCode != null} &&
-            ${this.profileUserPhone != null} &&
-            ${this.languageCode != null}
-        `)
         return (
             this.qks != null && 
             this.profileUserName != null &&

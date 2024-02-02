@@ -26,7 +26,6 @@ export class FlightOptionsInfoComponent  implements OnInit {
     }
 
 	ngOnInit(): void {
-		console.log(this.bookingRefs);
 		this.tmpBookingRefs = Object.assign(new Map<string, BookingRef>(), this.bookingRefs);
 	}
 

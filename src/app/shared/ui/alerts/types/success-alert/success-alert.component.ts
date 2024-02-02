@@ -1,5 +1,5 @@
 import { Component, ComponentRef, HostBinding } from '@angular/core';
-import { Alert } from '../../alert.interface';
+import { Alert } from '../../alert.model';
 import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { BehaviorSubject } from 'rxjs';
 import { UUID } from 'src/app/core/utils/uuid.type';
@@ -28,7 +28,6 @@ export class SuccessAlertComponent extends Alert{
     }
 
     close(action: AlertAction): void {
-        console.log("reached");
         this.alertService.close(this.alertId!, action);
     }
 }

@@ -56,14 +56,12 @@ export class SettingsPageComponent implements OnInit{
 
     ngOnInit(): void {
         this.user$.subscribe((user: User) => {
-            console.log("User settings: ",user.settings);
             this.oldSettings = user.settings ? user.settings : new Settings();
             this.tmpSettings = user.settings ? user.settings : new Settings();
         })
     }
 
     get canSave() : boolean {
-        console.log("can save? ",JSON.stringify(this.oldSettings) !== JSON.stringify(this.tmpSettings))
         return JSON.stringify(this.oldSettings) !== JSON.stringify(this.tmpSettings);
     }
 
@@ -82,12 +80,12 @@ export class SettingsPageComponent implements OnInit{
         user.contact.phone.number = this.tmpSettings.profileUserPhone;
 
 
+
         try {
             user.save();
             this.authService.updateUserSettings(this.tmpSettings);
             this.changeLanguage();
         } catch (er) {
-            console.log("INVALID FIELDS");
             er = er as Error;
             this.alertService.show(AlertType.ERROR, this.messages['INVALID_FIELDS_MESSAGE'])
         }

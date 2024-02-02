@@ -1,0 +1,12 @@
+<div class="modal-center">
+    <div class="close" (click)="this.close(AlertAction.CANCEL)">
+        <i class="fa-solid fa-x"></i>
+    </div>
+    <p>
+        {{ content }}
+    </p>
+    <div class="buttons">
+        <button (click)="this.close(AlertAction.EXECUTE)" class="button-medium call-to-action">YES</button>
+        <button (click)="this.close(AlertAction.CANCEL)" class="button-medium">NO</button>
+    </div>
+</div>

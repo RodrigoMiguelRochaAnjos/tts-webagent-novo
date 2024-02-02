@@ -3,7 +3,7 @@ import { SearchService } from '../../data-access/search.service';
 import { AirSearchRequest } from '../../utils/requests/air-search-request/air-search-request.model';
 import { Observable, elementAt } from 'rxjs';
 import { AirSearchResponse, AirSearchResults } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Route, Router } from '@angular/router';
 import { AirSearchIdResponse } from '../../utils/responses/air-search-id-response.model';
 import { LoadingService } from 'src/app/core/interceptors/loading.service';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
@@ -30,19 +30,24 @@ export class SearchPageComponent implements OnInit {
         this.results$ = this.searchService.getResults();
 
         this.id = this.route.snapshot.paramMap.get("id");
-
-        if (this.id == null) return;
-
-        this.searchService.search(this.id).then((success: boolean) => {
-            if (success === false && this.searchService.getResultsValue().length <= 0) {
-                this.searchService.previousSearchId = undefined;
-                this.router.navigate(['neo/search/']);
-            }
-        });
-
     }
 
     ngOnInit(): void {
+        this.route.paramMap.subscribe((params: ParamMap) => {
+            // Access the value of the 'id' parameter
+            this.id = params.get('id');
+
+            if (this.id == null) return;
+
+            this.searchService.search(this.id).then((success: boolean) => {
+                if (success === false && this.searchService.getResultsValue().length <= 0) {
+                    this.searchService.previousSearchId = undefined;
+                    this.router.navigate(['neo/search/']);
+                }
+            });
+        });
+        
+
         if (this.searchService.previousSearchId != null) this.router.navigate([`neo/search/${this.searchService.previousSearchId}`]);
     }
 

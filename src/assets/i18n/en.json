@@ -307,6 +307,7 @@
 	"TRAVELLER": "Traveller",
 	"CODE": "Code",
 	"WALLET": "Wallet",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "Your account settings are invalid",
+	"FREQUENT_FLYER_NUMBER": "Add frequent flyer number"
 }
 

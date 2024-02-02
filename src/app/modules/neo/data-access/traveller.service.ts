@@ -1,6 +1,6 @@
 import { Type } from "@angular/compiler";
 import { Injectable } from "@angular/core";
-import { Travellers } from "../models/traveller/traveller.model";
+import { Traveller, Travellers } from "../models/traveller/traveller.model";
 import { AdultTraveller } from "../models/traveller/types/adult-traveller.model";
 import { ChildTraveller } from "../models/traveller/types/child-traveller.model";
 import { GovernmentTraveller } from "../models/traveller/types/government-traveller.model";
@@ -65,8 +65,16 @@ export class TravellerService {
         return this._travellers
     }
 
-    public setTraveller(travellers: Travellers): void {
+    public setTravellers(travellers: Travellers): void {
         this._travellers = travellers;
+    }
+
+    public getTraveller(index: number): Traveller | undefined {
+        return this._travellers[index];
+    }
+
+    public setTraveller(traveller: Traveller, index: number): void {
+        this._travellers[index] = traveller;
     }
 
     private getType(travellerType: TravellerTypes): any {

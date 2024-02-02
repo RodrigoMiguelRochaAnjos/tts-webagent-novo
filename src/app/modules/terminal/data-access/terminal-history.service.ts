@@ -45,9 +45,9 @@ export class TerminalHistoryService {
     }
 
     public loadCommandHistory(): void {
-        const savedCommandsString = localStorage.getItem("commands");
+        const savedCommandsString: string | null = localStorage.getItem("commands");
 
-        if (savedCommandsString == null) return;
+        if (savedCommandsString == null || savedCommandsString == '[]') return;
 
         const commands: CircularLinkedList<string> = new CircularLinkedList<string>(50);
 

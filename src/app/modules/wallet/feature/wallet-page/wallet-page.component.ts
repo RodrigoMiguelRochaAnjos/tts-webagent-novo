@@ -19,7 +19,7 @@ export class WalletPageComponent implements OnInit{
 
     transactions$!: Observable<Transactions>;
 
-    numDays?: number = 90;
+    numDays?: number = 30;
 
     dateRange: DateRange = new DateRange();
     constructor(

@@ -11,7 +11,7 @@ import { Balance } from "src/app/shared/models/balance.model";
 import { FlightOptionTabs } from "../../models/flight-option-tabs.enum";
 import { BalanceService } from "src/app/shared/services/balance.service";
 import { AirCheckoutDetailsRequest } from "../../models/air-checkout-details-request.model";
-import { ReservationService } from "src/app/modules/neo/data-access/reservation.service";
+import { ReservationService } from "src/app/modules/neo/data-access/reservation/reservation.service";
 import { AirSegment } from "src/app/modules/neo/models/air-segment.model";
 
 
@@ -39,7 +39,6 @@ export class SearchResultComponent implements OnInit {
     
     ngOnInit() {
         this.currency = this.authService.getUserValue().currency;
-        console.log(JSON.stringify(this.result));
     }
 
     get originDestinationLabel(): string {
@@ -104,7 +103,6 @@ export class SearchResultComponent implements OnInit {
         )?.concat(this.result.inbounds?.flatMap(inbound =>
             inbound.segments.map(segment => segment.destination.code)
         ));
-        console.log(destinations.toString());
         return destinations.toString();
     }
 

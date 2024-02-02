@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { ReservationService } from 'src/app/modules/neo/data-access/reservation.service';
+import { ReservationService } from 'src/app/modules/neo/data-access/reservation/reservation.service';
 import { Carrier } from 'src/app/modules/neo/models/carrier.model';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';

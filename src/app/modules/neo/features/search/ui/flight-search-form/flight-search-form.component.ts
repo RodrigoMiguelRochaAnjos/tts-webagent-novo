@@ -69,6 +69,9 @@ export class FlightSearchFormComponent {
 
         searchId.subscribe({
             next: (response: AirSearchIdResponse) => {
+
+                this.searchService.reset();
+
                 this.router.navigate([`neo/search/${response.id}`]);
             },
         });
@@ -111,5 +114,17 @@ export class FlightSearchFormComponent {
 
     counterNumber(field: TravellerTypes): number {
         return this.travellerService.numTravellers(field)
+    }
+
+    get minDate(): string {
+        const dateMin = moment().subtract(1, 'day').format('DD/MM/YYYY');
+
+        return dateMin;
+    }
+
+    get maxDate(): string {
+        const dateMax = moment().add(1, 'year').format('DD/MM/YYYY');
+
+        return dateMax;
     }
 }

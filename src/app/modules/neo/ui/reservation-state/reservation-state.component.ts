@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ReservationService } from '../../data-access/reservation.service';
+import { ReservationService } from '../../data-access/reservation/reservation.service';
 import { Observable } from 'rxjs';
 import { ReservationProcess, ReservationProcessesState } from '../../features/search/models/reservation-process.enum';
 
@@ -26,7 +26,6 @@ export class ReservationStateComponent {
 
         this.reservationProcess$.subscribe({
             next: (state: ReservationProcessesState) => {
-                console.log(state);
                 state.FUNDS_CHECKED.then((complete: boolean) => this.fundsChecked = complete);
                 state.AIR_CHECKOUT_DETAILS.then((complete: boolean) => this.airCheckoutDetails = complete);
                 state.TRAVELLER_DETAILS_VALID.then((complete: boolean) => this.travellerDetailsValid = complete);

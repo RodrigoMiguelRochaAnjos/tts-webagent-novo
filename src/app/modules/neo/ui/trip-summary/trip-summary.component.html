@@ -1,23 +1,65 @@
-
-<h3>Trip Summary</h3>
+<h4>{{ summaryTitle }}</h4>
 <div class="summary-container">
     <h6>Tickets</h6>
-    <app-flight-option *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [option]="(selectedFlights$ | async)!.OUTBOUNDS!" [displayOnly]="true" (click)="outboundSegments = !outboundSegments"/>
+    <app-flight-option *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [option]="(selectedFlights$ | async)!.OUTBOUNDS!"
+        [displayOnly]="true" (click)="outboundSegments = !outboundSegments" />
     <div class="segments" *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [ngClass]="{ 'open': outboundSegments }">
         <div>
             <ng-container *ngFor="let segment of (selectedFlights$ | async)!.OUTBOUNDS!.segments; let i = index">
                 <summary-segment [segment]="segment" />
             </ng-container>
         </div>
+        <div class="booking-refs" *ngIf="(this.price$ | async)">
+
+            <div *ngIf="(selectedFlights$ | async)!.OUTBOUNDS?.provider === Providers.TRAVELFUSION; else gdsFlight ">
+                <ul>
+                    <li
+                        *ngFor="let ref of (this.price$ | async)?.bookingRefs?.get((selectedFlights$ | async)!.OUTBOUNDS!.searchId)">
+                        {{ ref.bookingCode }}
+                    </li>
+                </ul>
+            </div>
+
+            <ng-template #gdsFlight>
+                <ul>
+                    <li *ngFor="let ref of (this.price$ | async)?.bookingRefs?.get(Providers.XMLSELECT)">
+                        {{ ref.bookingCode }}
+                    </li>
+                </ul>
+            </ng-template>
+        </div>
+
     </div>
-    <app-flight-option *ngIf="(selectedFlights$ | async)!.INBOUNDS" [option]="(selectedFlights$ | async)!.INBOUNDS!" [displayOnly]="true" (click)="inboundSegments = !inboundSegments"/>
-    <div class="segments" *ngIf="(selectedFlights$ | async)!.INBOUNDS" [ngClass]="{ 'open': inboundSegments }" >
+    <app-flight-option *ngIf="(selectedFlights$ | async)?.INBOUNDS" [option]="(selectedFlights$ | async)?.INBOUNDS!"
+        [displayOnly]="true" (click)="inboundSegments = !inboundSegments" />
+    <div class="segments" *ngIf="(selectedFlights$ | async)!.INBOUNDS" [ngClass]="{ 'open': inboundSegments }">
         <div>
             <ng-container *ngFor="let segment of (selectedFlights$ | async)!.INBOUNDS!.segments; let i = index">
                 <summary-segment [segment]="segment" />
             </ng-container>
         </div>
+
+        <div class="booking-refs" *ngIf="(this.price$ | async)">
+
+            <div *ngIf="(selectedFlights$ | async)!.INBOUNDS?.provider === Providers.TRAVELFUSION; else gdsFlight ">
+                <ul>
+                    <li
+                        *ngFor="let ref of (this.price$ | async)?.bookingRefs?.get((selectedFlights$ | async)!.INBOUNDS!.searchId)">
+                        {{ ref.bookingCode }}
+                    </li>
+                </ul>
+            </div>
+
+            <ng-template #gdsFlight>
+                <ul>
+                    <li *ngFor="let ref of (this.price$ | async)?.bookingRefs?.get(Providers.XMLSELECT)">
+                        {{ ref.bookingCode }}
+                    </li>
+                </ul>
+            </ng-template>
+        </div>
     </div>
+
     <!-- <div class="supplier-infos" *ngIf="(this.details$ | async) != null">
         <div class="supplier-info" *ngFor="let info of (this.details$ | async)!.supplierInfos | keyvalue ">
             {{ info.key }}{{ info.value }}
@@ -34,22 +76,67 @@
     </div> -->
 
 </div>
-<div class="price">
-    <h6>Total price</h6>
-    <div class="total-price">
-        {{ (this.details$ | async)?.price?.amount }} {{ (this.details$ | async)?.price?.currency }}
-    </div>
-</div>
-<div class="prices-per-psg" *ngIf="(this.details$ | async)?.price?.passengersPrices">
-    <div class="psg-price" *ngFor="let psgPrice of (this.details$ | async)?.price?.passengersPrices">
-        <span>
-            <span *ngIf="totalPassengers(psgPrice.ptc)">
-                {{ totalPassengers(psgPrice.ptc) + 1 }}
-            </span>
-            {{ passengerDefinition(psgPrice.ptc) }}:
-        </span>
-        {{ psgPrice.totalAmount }} {{psgPrice.preferredCurrency }}
-    </div>
-</div>
-<button class="button-large call-to-action" (click)="next()">PROCEED</button>
 
+
+<div *ngIf="(this.price$ | async); else detailsDisplay">
+
+    <div class="price">
+        <h6>Total price</h6>
+        <div class="total-price">
+            {{ (this.price$ | async)?.price?.amount }} {{ (this.price$ | async)?.price?.currency }}
+        </div>
+    </div>
+
+    <div class="payments">
+        <h6>Payment options</h6>
+        <ul>
+            <li *ngFor="let payment of (this.price$ | async)?.payments">
+                {{payment.creditCard?.cardType}} {{payment.creditCard?.number}}
+            </li>
+        </ul>
+    </div>
+    <!-- id!: string;
+    bookingRefs!: Map<string, BookingRefs>;
+            bookingCode!: string;
+            errors!: string[];
+            status!: string;
+            warnings!: string[];
+    passengers!: Traveller[];
+    contact!: Contact;
+    payments!: Payment[]; -->
+    <div class="prices-per-psg" *ngIf="(this.price$ | async)?.price?.passengersPrices">
+        <div class="psg-price" *ngFor="let psgPrice of (this.price$ | async)?.price?.passengersPrices">
+            <span>
+                <span *ngIf="totalPassengers(psgPrice.ptc)">
+                    {{ totalPassengers(psgPrice.ptc) + 1 }}
+                </span>
+                {{ passengerDefinition(psgPrice.ptc) }}:
+            </span>
+            {{ psgPrice.totalAmount }} {{psgPrice.preferredCurrency }}
+        </div>
+    </div>
+
+</div>
+
+<ng-template #detailsDisplay>
+    <div class="price" *ngIf="(this.details$ | async) && (this.details$ | async)!.price &&  (this.details$ | async)!.price.amount > 0">
+        <h6>Total price</h6>
+        <div class="total-price">
+            {{ (this.details$ | async)?.price?.amount }} {{ (this.details$ | async)?.price?.currency }}
+        </div>
+    </div>
+    <div class="prices-per-psg" *ngIf="(this.details$ | async)?.price?.passengersPrices">
+        <div class="psg-price" *ngFor="let psgPrice of (this.details$ | async)?.price?.passengersPrices">
+            <span>
+                <span *ngIf="totalPassengers(psgPrice.ptc)">
+                    {{ totalPassengers(psgPrice.ptc) }}
+                </span>
+                {{ passengerDefinition(psgPrice.ptc) }}:
+            </span>
+            {{ psgPrice.totalAmount }} {{psgPrice.preferredCurrency }}
+        </div>
+    </div>
+</ng-template>
+
+
+<button class="button-large call-to-action" (click)="next()">{{ this.buttonText }}</button>

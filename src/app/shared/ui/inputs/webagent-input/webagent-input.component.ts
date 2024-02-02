@@ -171,8 +171,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
             
             const regex: RegExp = new RegExp(this.pattern);
 
-            console.log(this.value);
-            console.log("regexp: ", regex.test(this.value));
             this.invalid = !regex.test(this.value);
 
             if(this.value == '') this.invalid = false;
