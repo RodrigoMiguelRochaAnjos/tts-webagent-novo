@@ -4,13 +4,13 @@
             <div class="booking-id">
                 <h4>Booking ID</h4>
                 <p>
-                    {{ booking.id }}
+                    {{ (booking$ | async)?.id }}
                 </p>
             </div>
             <div class="booking-status">
                 <h4>{{ "LAST_KNOWN_STATUS" | translate }}</h4>
                 <p>
-                    <b>{{ booking.status }}</b>
+                    <b>{{ (booking$ | async)?.status }}</b>
                 </p>
             </div>
         </div>
@@ -51,10 +51,10 @@
 
     </div>
     
-    <div class="card" *ngFor="let e of booking.errors">
+    <div class="card" *ngFor="let e of (booking$ | async)?.errors">
         {{ e }}
     </div>
-    <div class="card" *ngFor="let w of booking.warnings">
+    <div class="card" *ngFor="let w of (booking$ | async)?.warnings">
         {{ w }}
     </div>
     
@@ -115,5 +115,5 @@
             </div>
         </div>
     </div>
-    <app-flight-options-info [options]="booking.flights" [bookingRefs]="booking.bookingRefs" style="width: 84%;display: flex;flex-wrap: wrap;margin: 20px auto;" />
+    <app-flight-options-info [options]="(booking$ | async)!.flights" [bookingRefs]="(booking$ | async)!.bookingRefs" style="width: 84%;display: flex;flex-wrap: wrap;margin: 20px auto;" />
 </div>

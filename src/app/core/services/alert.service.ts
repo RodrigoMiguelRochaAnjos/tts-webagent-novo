@@ -37,6 +37,8 @@ export class AlertService {
                 if(id.toString() !== value.id.toString()) return value;
 
                 value.show = false;
+
+                document.getElementById(id.toString())?.remove();
                 value.response.next(action);
 
                 return value;
