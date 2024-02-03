@@ -609,7 +609,7 @@ export class CheckoutPageComponent implements OnInit {
                                 return;
                             }
 
-                            this.router.navigate([`neo/booking-info/${price.id}`]);
+                            this.router.navigate([`neo/booking-info`]);
                         });
                         break;
                     case AlertAction.CANCEL:
