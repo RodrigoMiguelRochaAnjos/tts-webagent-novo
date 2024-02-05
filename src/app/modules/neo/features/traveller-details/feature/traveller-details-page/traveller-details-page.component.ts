@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-traveller-details-page',
