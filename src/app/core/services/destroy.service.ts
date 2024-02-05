@@ -10,6 +10,11 @@ export class DestroyService implements OnDestroy{
     public getDestroyOrder(): Observable<void> {
         return this.destroy$;
     }
+
+    public signalDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
     
     ngOnDestroy(): void {
         this.destroy$.next();

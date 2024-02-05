@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { patterns } from 'src/app/shared/utils/validation-patterns';
 import { FlightOption } from '../../../../models/flight-option.model';
@@ -17,13 +17,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
 import { TranslateService } from '@ngx-translate/core';
+import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 
 @Component({
     selector: 'app-traveller-details-page',
     templateUrl: './traveller-details-page.component.html',
     styleUrls: ['./traveller-details-page.component.scss']
 })
-export class TravellerDetailsPageComponent {
+export class TravellerDetailsPageComponent implements OnInit{
     InputType = InputType;
     patterns = patterns;
 
@@ -39,6 +40,7 @@ export class TravellerDetailsPageComponent {
         private alertService: AlertService,
         private translate: TranslateService,
         private authService: AuthService,
+        private checkoutService: CheckoutService,
         private router: Router
     ) {
         this.option$ = this.reservationService.getSelectedFlights();
@@ -96,8 +98,12 @@ export class TravellerDetailsPageComponent {
         ) 
 
     }
+    ngOnInit(): void {
+        this.checkoutService.resetPrice();
+    }
 
     get travellers(): Travellers {
+        console.log(this.travellerService.getTravellers())
         return this.travellerService.getTravellers();
     }
 

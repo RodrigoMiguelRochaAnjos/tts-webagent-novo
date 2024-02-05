@@ -641,7 +641,7 @@ export class CheckoutService {
                         'Content-Type': 'application/json',
                         "Authorization": `Bearer ${user.token}`
                     }
-                }).subscribe({
+                }).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe({
                     next: (response: AirCheckoutDetailsResponse) => {
                         const details: any = response as AirCheckoutDetailsResponse;
 
@@ -720,5 +720,13 @@ export class CheckoutService {
                 }
             });
         });
+    }
+
+    resetPrice(): void {
+        this.price$.next(null);
+    }
+
+    resetDetails(): void {
+        this.details$.next(null);
     }
 }

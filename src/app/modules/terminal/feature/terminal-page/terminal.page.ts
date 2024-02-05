@@ -1,6 +1,6 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Observable, Subscription, forkJoin} from 'rxjs';
-import {SafeHtml, DomSanitizer} from '@angular/platform-browser';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Observable, Subscription, forkJoin } from 'rxjs';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { TerminalService } from '../../data-access/terminal.service';
 import { Command } from '../../models/command.module';
@@ -10,6 +10,7 @@ import { MenuService } from '../../data-access/menu.service';
 import { Menu } from '../../models/menu.model';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 import { TerminalHistoryService } from '../../data-access/terminal-history.service';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
 
 @Component({
     selector: 'app-main',
@@ -17,81 +18,104 @@ import { TerminalHistoryService } from '../../data-access/terminal-history.servi
     styleUrls: ['./terminal.page.scss'],
 })
 export class TerminalPage implements OnInit {
-	showTwoTerminals!: boolean;
-	isSecondTerminalSelected!: boolean;
-	terminalContent!: SafeHtml;
-	hasFilters!: boolean;
-	showBtnMu!: boolean;
-	showBtnMd!: boolean;
-	emailItems: any[] = [];
-	hasItemsToEmail!: boolean;
-	keepKeyboardVisible!: boolean;
-	menusSwipeEnabled = true;
-	areFilters: boolean = false;
-	canWriteCommands: boolean = true;
-	data: any;
-	isBrandAcc: boolean = false;
-	isEmail!: boolean;
-	isCalendar!: boolean;
-	selected!: Date;
+    showTwoTerminalsSubscription!: Subscription;
+    secondTerminalSelectedSubscription!: Subscription;
+    terminalContentSubscription!: Subscription;
+    filtersSubscription!: Subscription;
+    showBtnMdSubscription!: Subscription;
+    showBtnMuSubscription!: Subscription;
+    settingsSubscription!: Subscription;
+    showTwoTerminals!: boolean;
+    isSecondTerminalSelected!: boolean;
+    terminal1Content!: SafeHtml;
+    terminal2Content!: SafeHtml;
+    hasFilters!: boolean;
+    showBtnMu!: boolean;
+    showBtnMd!: boolean;
+    emailItems!: any[];
+    hasItemsToEmail!: boolean;
+    keepKeyboardVisible!: boolean;
+    menusSwipeEnabled = true;
+    areFilters: boolean = false;
+    canWriteCommands: boolean = true;
+    data: any;
+    isBrandAcc: boolean = false;
+    isEmail!: boolean;
+    isCalendar!: boolean;
+    selected!: Date;
+
+    @ViewChild("brandsAndAcillaries") brandsAndAcillaries!: TemplateRef<any>;
 
     selectedPkey: number = -1;
-
-    terminals$!: Observable<{ terminal: HTMLElement, selected: boolean }[]>;
-    history$!: Observable<CircularLinkedList<string>>;
-
-    terminalContent$!: Observable<string>;
 
     constructor(
         private domSanitizer: DomSanitizer,
         private terminalHistoryService: TerminalHistoryService,
         private terminalService: TerminalService,
         private menuService: MenuService,
+        private modalService: ModalControllerService,
         private authService: AuthService
     ) {
-        this.terminals$ = this.terminalService.getTerminals();
-        this.terminalContent$ = this.terminalService.getTerminalContent();
-        this.history$ = this.terminalHistoryService.getHistory();
     }
 
     ngOnInit(): void {
         const rightMenu = new Menu(document.getElementById('right-menu')!, 375, 'right');
         this.menuService.initializeSwipeGesture(document.getElementById('terminal-page')!, rightMenu);
 
-        this.terminalContent$.subscribe((val: string) => {
-            this.terminalContent = this.domSanitizer.bypassSecurityTrustHtml(val);
-            this.terminalService.fixTerminalContent(this.terminalService.currentTerminal?.getAttribute('id'));
+        this.showTwoTerminalsSubscription = this.terminalService.showTwoTerminals.subscribe((showTwoTerminals) => {
+            if (this.showTwoTerminals && !showTwoTerminals) {
+                this.terminal1Content = this.domSanitizer.bypassSecurityTrustHtml(this.terminalService.terminalContentSource.getValue());
+                this.terminalService.secondTerminalSelectedSource.next(false);
+            }
+            this.showTwoTerminals = showTwoTerminals;
+        });
 
+        this.secondTerminalSelectedSubscription = this.terminalService.secondTerminalSelected.subscribe((isSecondTerminalSelected) => {
+            this.isSecondTerminalSelected = isSecondTerminalSelected;
+        });
+
+        this.terminalContentSubscription = this.terminalService.terminalContent.subscribe((newTerminalContent) => {
+            const terminalContent = this.domSanitizer.bypassSecurityTrustHtml(newTerminalContent);
+            if (this.isSecondTerminalSelected) {
+                this.terminal2Content = terminalContent;
+                this.terminalService.fixTerminalContent('terminal1');
+            } else {
+                this.terminal1Content = terminalContent;
+                this.terminalService.fixTerminalContent('terminal2');
+            }
             this.processKeyboardVisibility();
         });
-
-        this.terminalService.getFilters().subscribe((newFilters: any[]) => {
+        this.filtersSubscription = this.terminalService.filters.subscribe((newFilters) => {
             this.hasFilters = newFilters.length > 0;
         });
-
-        this.terminalService.getShowButtons().subscribe((buttons: {up: boolean, down: boolean}) => {
-            this.showBtnMd = buttons.down;
-            this.showBtnMu = buttons.up;
+        this.showBtnMdSubscription = this.terminalService.showMoveDownBtn.subscribe((showBtnMd) => {
+            this.showBtnMd = showBtnMd;
+        });
+        this.showBtnMuSubscription = this.terminalService.showMoveUpBtn.subscribe((showBtnMu) => {
+            this.showBtnMu = showBtnMu;
         });
 
         this.authService.getUser().subscribe((user: User) => {
-            this.hasItemsToEmail = user.settings.sendByEmailItems ? user.settings.sendByEmailItems.length > 0 : false;
-            this.emailItems = user.settings ? user.settings.sendByEmailItems : [];
+            this.hasItemsToEmail = user.settings.sendByEmailItems.length > 0;
+            this.emailItems = user.settings.sendByEmailItems;
             this.keepKeyboardVisible = user.settings.keepKeyboardVisible;
-        });
+        })
 
+        console.log(this.terminalService.commandsHistorySource.getValue());
 
-        // forkJoin({ terminalContent: this.terminalContent$, history: this.history$}).subscribe({
-        //     next: (value: { terminalContent: string, history: Stack<string> }) => {
-        //         if (value.terminalContent !== '' || value.history.getSize() <= 0) return;
+        if (this.terminalService.terminalContentSource.getValue() === '' && this.terminalService.commandsHistorySource.getValue().length > 0) {
+            const commandsHistory = this.terminalService.commandsHistorySource.getValue();
+            this.terminalService.executeTerminalCommand(commandsHistory[commandsHistory.length - 1]);
+        }
+    }
 
-        //         const commandToExecute: string | undefined = value.history.pop();
-
-        //         if(commandToExecute == null) return;
-
-        //         this.terminalService.executeTerminalCommand(commandToExecute);
-        //     }
-        // })
+    ngOnDestroy(): void {
+        this.showTwoTerminalsSubscription.unsubscribe();
+        this.secondTerminalSelectedSubscription.unsubscribe();
+        this.terminalContentSubscription.unsubscribe();
+        this.filtersSubscription.unsubscribe();
+        this.showBtnMdSubscription.unsubscribe();
+        this.showBtnMuSubscription.unsubscribe();
     }
 
     /**
@@ -99,40 +123,35 @@ export class TerminalPage implements OnInit {
      * @param element : HTMLElement
      * @param isSecondTerminal : boolean
      */
-    async onTerminalClick(element: HTMLElement, index: number): Promise<void> {
-        // fazer o component para calendário ao meio e depois enviar a data para o terminal em si
-        this.terminalService.selectTerminal(index);
-
-        if (element.tagName !== 'SPAN') return;
-
-        const elementClasses = element.className.split(' ');
-
-        if (elementClasses[0] === 'terminal-calendar') { // handles the date picker calendar
-            this.selected = this.terminalService.executeCalendar(element);
-            this.openCalendar();
-            this.terminalService.currentTerminal.style.pointerEvents = 'none';
-            
-            return;
+    async onTerminalClick(element: HTMLElement, isSecondTerminal: boolean): Promise<void> {
+        //fazer o component para calendário ao meio e depois enviar a data para o terminal em si
+        this.terminalService.secondTerminalSelectedSource.next(isSecondTerminal);
+        this.isSecondTerminalSelected = isSecondTerminal;
+        if (element.tagName === 'SPAN') {
+            const elementClasses = element.className.split(' ');
+            if (elementClasses[0] === 'terminal-calendar') { // handles the date picker calendar
+                this.selected = this.terminalService.executeCalendar(element);
+                this.openCalendar();
+                document.getElementById('terminal1')!.style.pointerEvents = 'none';
+                if (isSecondTerminal) {
+                    document.getElementById('terminal2')!.style.pointerEvents = 'none';
+                }
+            } else if (elementClasses[0] === 'terminal-branded-fare') {  // handles the brand and ancillaries
+                this.data = await this.terminalService.executeBranded(element);
+                this.onBrandClick();
+            } else {
+                this.terminalService.executeClickAction(element);
+            }
         }
-        
-        if (elementClasses[0] === 'terminal-branded-fare') {  // handles the brand and ancillaries
-            this.data = await this.terminalService.executeBranded(element);
-            this.onBrandClick();
-            return;
-        }
-
-        this.terminalService.executeClickAction(element);
     }
 
     /**
-     * Method that handles the brand and ancillaries component appear while making the rest of the terminal unusable
-     */
+    * Method that handles the brand and ancillaries component appear while making the rest of the terminal unusable
+    */
     private onBrandClick(): void {
-        if (this.showTwoTerminals) {
-            document.getElementById('terminal2')!.style.pointerEvents = 'none';
-        }
         this.isBrandAcc = true;
-        document.getElementById('terminal1')!.style.pointerEvents = 'none';
+
+        this.modalService.showModal(this.brandsAndAcillaries, "brands-and-acillaries");
         this.allowCommands();
     }
 
@@ -169,10 +188,9 @@ export class TerminalPage implements OnInit {
     onExecuteCommandEvent(commandObj: Command): void {
         if (commandObj.autoExecute) {
             this.terminalService.executeTerminalCommand(commandObj.command, undefined, true);
-            return;
+        } else {
+            this.terminalService.selectedCommandSource.next(commandObj.command);
         }
-
-        this.terminalService.selectCommand(commandObj.command);
     }
 
     private openCalendar(): void {
@@ -189,9 +207,9 @@ export class TerminalPage implements OnInit {
         this.openCalendar();
     }
 
-	logout(): void {
-		this.authService.logout();
-	}
+    logout(): void {
+        this.authService.logout();
+    }
 
     executeMdMuCommands(command: 'MU' | 'MD'): void {
         this.terminalService.executeTerminalCommand(command);
@@ -207,15 +225,15 @@ export class TerminalPage implements OnInit {
         this.terminalService.processTerminalCommand(result);
     }
 
-	private processKeyboardVisibility(): void {
-		setTimeout(() => {
-				if (document.getElementById('terminal-command-input') != null)	{
-					const commandInput = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
+    private processKeyboardVisibility(): void {
+        setTimeout(() => {
+            if (document.getElementById('terminal-command-input') != null) {
+                const commandInput = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
 
-                    if(commandInput) commandInput.focus();
-				}
-		}, 1000);
-	}
+                if (commandInput) commandInput.focus();
+            }
+        }, 1000);
+    }
 
     setPkey(index: number) {
         this.selectedPkey = -1;
@@ -259,9 +277,5 @@ export class TerminalPage implements OnInit {
         this.isEmail = false;
         document.getElementById("terminal1")!.style.pointerEvents = "auto";
         this.allowCommands();
-    }
-
-    toggleMenu(side: 'right'): void {
-        this.menuService.toggleMenu(side);
     }
 }

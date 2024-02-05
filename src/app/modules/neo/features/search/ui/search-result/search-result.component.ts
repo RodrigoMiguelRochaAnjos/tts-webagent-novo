@@ -13,6 +13,8 @@ import { BalanceService } from "src/app/shared/services/balance.service";
 import { AirCheckoutDetailsRequest } from "../../models/air-checkout-details-request.model";
 import { ReservationService } from "src/app/modules/neo/data-access/reservation/reservation.service";
 import { AirSegment } from "src/app/modules/neo/models/air-segment.model";
+import { AlertService } from "src/app/core/services/alert.service";
+import { AlertType } from "src/app/shared/ui/alerts/alert-type.enum";
 
 
 @Component({
@@ -34,6 +36,7 @@ export class SearchResultComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private reservationService: ReservationService,
+        private alertService: AlertService,
         private router: Router
     ) { }
     
@@ -139,7 +142,7 @@ export class SearchResultComponent implements OnInit {
 
         this.reservationService.checkFunds().then( (checked: boolean) => {
             if (!checked) {
-                alert(`Not enough money in current account., You need to have enough money for the fee of 4.5 USD per LCC flight`);
+                this.alertService.show(AlertType.ERROR, `Not enough money in current account., You need to have enough money for the fee of 4.5 USD per LCC flight`)
                 return;
             }
             const outbound: FlightOption | null = this.reservationService.getSelectedFlightsValue().OUTBOUNDS;
@@ -155,7 +158,7 @@ export class SearchResultComponent implements OnInit {
 
             this.reservationService.getCheckoutDetails(body).then((success: boolean) => {
                 if(!success) {
-                    alert(`The flight you are trying to select is no longer available`);
+                    this.alertService.show(AlertType.ERROR, `The flight you are trying to select is no longer available`)
                     return;
                 }
 

@@ -1,0 +1,88 @@
+:host {
+    display: block;
+    position: relative;
+    ul {
+        list-style-type: none;
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            .top-section {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                flex-direction: row;
+                width: 100%;
+                padding: 20px;
+                border-bottom: 1px solid #333;
+                position: relative;
+                label {
+                    display: block;
+                    padding-left: 20px;
+                }
+                img {
+                    display: block;
+                    width: 30px;
+                }
+
+                &:hover + .expandable{
+                    grid-template-rows: 1fr;
+                }
+                b {
+                    display: block;
+                }
+                p {
+                    height: 1em;
+                    width: 100%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            .expandable {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows ease-in-out 1s;
+                width: 100%;
+                div{
+                    overflow: hidden;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-content: flex-start;
+                    img {
+                        max-width: 50%;
+                    }
+                }
+
+                &:hover {
+                    grid-template-rows: 1fr;
+                }
+            }
+        }
+    }
+}
+
+ion-list {
+  padding: 0;
+}
+
+ion-header{
+  ion-toolbar{
+    ion-title{
+      font-size: 0.9em;
+    }
+  }
+  
+}
+
+ion-content{
+  ion-item-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+}

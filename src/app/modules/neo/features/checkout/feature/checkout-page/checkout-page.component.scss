@@ -1,285 +1,300 @@
 :host {
-    display: block;
-    height: calc(100vh - 77.9px) ;
-    margin: 17.5px 16px 0px 17.5px;
-    //background-color: lightgrey;
-    color: #11214A;
-    display: flex;
-    justify-content: space-between;
+    .content {
 
-    .field.reusable {
+        display: block;
+        height: calc(100vh - 152px);
+        margin: 17.5px 16px 0px 17.5px;
+        //background-color: lightgrey;
+        color: #11214A;
         display: flex;
-        justify-content: flex-end;
-        margin-top: 15px;
-        button{
-            margin-left: 10px;
-        }
-    }
+        justify-content: space-between;
 
-    .page-container {
-        height: 100%;
-        width: 49%;
-
-        .top-section {
-            height: 150px;
-            width: 100%;
+        .field.reusable {
             display: flex;
-            justify-content: space-between;
-            border-radius: 11px;
-            margin: 10px 0px;
-            box-shadow: 0px 0px 7px rgba(51, 51, 51, 0.175);
+            justify-content: flex-end;
+            margin-top: 15px;
 
-            &:first-child{
-                margin-top: 0px;
+            button {
+                margin-left: 10px;
             }
-            .left-side {
-                width: 20%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
+        }
 
-                .logo{
-                    border-radius: 50%;
-                    background-color: aquamarine;
-                    height: 67.5px;
-                    width: 67.5px;
+        .page-container {
+            width: 49%;
+            height: calc(100vh - 152px);
+            padding-top: 10px;
+            &:first-child {
+                overflow: hidden;
+                overflow-y: auto;
+                direction: rtl;
+                padding-left: 10px;
+                padding-right: 5px;
+            }
+            .top-section {
+                height: 150px;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                border-radius: 11px;
+                margin: 10px 0px;
+                box-shadow: 0px 0px 7px rgba(51, 51, 51, 0.175);
+                direction: ltr;
+                &:first-child {
+                    margin-top: 0px;
+                    
                 }
-            }
 
-            .mid-side {
-                display: flex;
-                align-items: center;
-                width: 50%;
-            
-                .flight-info{
-                    width: 86%;
-
-                    .ticket-info{
-                        p{
-                            font-weight: 300;
-                            font-size: .75rem;
-                        }
-
-                        span{
-                            font-weight: 600;
-                            font-size: .75rem;
-                        }
-
-                        .first-row{
-                            display: flex;
-                            justify-content: space-between;
-                            padding-bottom: 7px ;
-
-                            .first-column{
-                                text-align: center;
-                            }
-                        }
-                        
-                        .class{
-                            display: flex;
-                            padding-bottom: 7px;
-                            p{
-                                padding-right: 5px;
-                                
-                            }
-                            span{
-                                padding-right: 5px;
-                            }
-
-
-                        }
-
-                        .destination{
-                            display: flex;
-                            padding-bottom: 7px;
-
-                            p{
-                                padding-right: 5px;
-                            }
-                            span{
-                                padding-right: 5px;
-                            }
-                        }
-
-                        .departure-time{
-                            display: flex;
-                            padding-bottom: 7px;
-
-                            p{
-                                padding-right: 5px;
-                            }
-                            span{
-                                padding-right: 5px;
-                            }
-                        }
-                    }
-
-                    .semi-bold{
-                        padding-bottom: 7px;
-                        color: #414D6E;
-                    }
-                }
-            }
-
-            .right-side{
-                width: 30%;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                color: #414D6E;
-                padding-right: 9.75px;
-                padding: 5px 9.75px 0px 0px;
-
-                .price{
+                .left-side {
+                    width: 20%;
                     display: flex;
-                    align-items: baseline;
+                    justify-content: center;
+                    align-items: center;
 
-                    h2{
-                        font-size: 2rem;
-                        font-weight:600;
-                        color:#414D6E;
-                    }
-
-                    .info-circle{
-                        height: 15px;
-                        width: 15px;
+                    .logo {
                         border-radius: 50%;
-                        background-color: #414D6E;
-                        color: #ffff;
+                        height: 67.5px;
+                        width: 67.5px;
+                    }
+                }
+
+                .mid-side {
+                    display: flex;
+                    align-items: center;
+                    width: 50%;
+
+                    .flight-info {
+                        width: 86%;
+
+                        .ticket-info {
+                            p {
+                                font-weight: 300;
+                                font-size: .75rem;
+                            }
+
+                            span {
+                                font-weight: 600;
+                                font-size: .75rem;
+                            }
+
+                            .first-row {
+                                display: flex;
+                                justify-content: space-between;
+                                padding-bottom: 7px;
+
+                                .first-column {
+                                    text-align: center;
+                                }
+                            }
+
+                            .class {
+                                display: flex;
+                                padding-bottom: 7px;
+
+                                p {
+                                    padding-right: 5px;
+
+                                }
+
+                                span {
+                                    padding-right: 5px;
+                                }
+
+
+                            }
+
+                            .destination {
+                                display: flex;
+                                padding-bottom: 7px;
+
+                                p {
+                                    padding-right: 5px;
+                                }
+
+                                span {
+                                    padding-right: 5px;
+                                }
+                            }
+
+                            .departure-time {
+                                display: flex;
+                                padding-bottom: 7px;
+
+                                p {
+                                    padding-right: 5px;
+                                }
+
+                                span {
+                                    padding-right: 5px;
+                                }
+                            }
+                        }
+
+                        .semi-bold {
+                            padding-bottom: 7px;
+                            color: #414D6E;
+                        }
+                    }
+                }
+
+                .right-side {
+                    width: 30%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    color: #414D6E;
+                    padding-right: 9.75px;
+                    padding: 5px 9.75px 0px 0px;
+
+                    .price {
+                        display: flex;
+                        align-items: baseline;
+
+                        h2 {
+                            font-size: 2rem;
+                            font-weight: 600;
+                            color: #414D6E;
+                        }
+
+                        .info-circle {
+                            height: 15px;
+                            width: 15px;
+                            border-radius: 50%;
+                            background-color: #414D6E;
+                            color: #ffff;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            bottom: 45%;
+                            right: 5%;
+                            cursor: pointer;
+
+                            span {
+                                font-size: 0.625rem;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .mid-section {
+                height: fit-content;
+                direction: ltr;
+                .half-section {
+                    width: 100%;
+                    box-shadow: 0px 0px 7px rgba(51, 51, 51, 0.175);
+                    border-radius: 11px;
+                    margin-top: 10px;
+                }
+
+                .left {
+                    padding: 9.75px 14.25px 13.5px 12.75px;
+
+                    .first-row {
                         display: flex;
                         align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        bottom: 45%;
-                        right: 5%;
-                        cursor: pointer;
+                        justify-content: space-between;
 
-                        span{
-                            font-size: 0.625rem;
+                        webagent-input {
+                            width: 33%;
+                            margin: 0;
+                        }
+
+                        h4 {
+                            padding-left: 5.25px;
                         }
                     }
-                }
-            }
-        }
 
-        .mid-section {
-            height: fit-content;
-            .half-section {
-                width: 100%;
-                box-shadow: 0px 0px 7px rgba(51, 51, 51, 0.175);
-                border-radius: 11px;
-                margin-top: 10px;
-            }
-
-            .left {
-                padding: 9.75px 14.25px 13.5px 12.75px;
-
-                .first-row{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    webagent-input{
-                        width: 33%;
-                        margin: 0;
-                    }
-
-                    h4{
-                        padding-left: 5.25px;
-                    }
-                }
-
-                .second-row{
-                    display: flex;
-
-                    webagent-input{
-                        width: 66%;
-
-                    }
-
-                    .half-inputs{
+                    .second-row {
                         display: flex;
 
-                        webagent-input{
-                            width: 49%;
-                            margin-left: 10px;
+                        webagent-input {
+                            width: 66%;
+
+                        }
+
+                        .half-inputs {
+                            display: flex;
+
+                            webagent-input {
+                                width: 49%;
+                                margin-left: 10px;
+                            }
                         }
                     }
-                }
-                
-                
 
-                .error-section {
-                    margin-top: 64.5px;
 
+
+                    .error-section {
+                        margin-top: 64.5px;
+
+                    }
                 }
+
+                .right {
+                    padding: 11.25px 46.5px 11.25px 24px;
+
+                    h4 {
+                        padding-left: 5.25px;
+                    }
+
+                    .first-section {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+
+                        #street {
+                            width: 50%;
+                        }
+
+                        #flat {
+                            width: 15%;
+                        }
+
+                        #post-code {
+                            width: 30%;
+                        }
+                    }
+
+                    .second-section {
+                        display: flex;
+                        justify-content: space-between;
+
+                        #locality {
+                            width: 35%;
+                        }
+
+                        #city {
+
+                            width: 35%;
+                        }
+
+                        #country-code {
+                            width: 25%;
+
+                        }
+
+                    }
+
+                    .error-section {
+                        margin-top: 15px;
+
+
+                    }
+                }
+
+
             }
 
-            .right {
-                padding: 11.25px 46.5px 11.25px 24px;
+            .error-section {
+                color: #E32C2C;
+                font-size: 0.75rem;
 
-                h4{
-                    padding-left: 5.25px;
-                }
-
-                .first-section{
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    #street{
-                        width: 50%;
-                    }
-
-                    #flat {
-                        width: 15%;
-                    }
-
-                    #post-code {
-                        width: 30%;
-                    }
-                }
-
-                .second-section{
-                    display: flex;
-                    justify-content: space-between; 
-
-                    #locality{
-                        width: 35%;
-                    }
-
-                    #city{
-
-                        width: 35%;
-                    }
-
-                    #country-code{
-                        width: 25%;
-
-                    }
+                ul {
+                    padding-left: 15px;
 
                 }
-
-                .error-section{
-                    margin-top: 15px;
-
-                
-                }
-            }
-
-
-        }
-
-        .error-section{
-            color: #E32C2C;
-            font-size: 0.75rem;
-
-            ul{
-                padding-left: 15px;
-                
             }
         }
     }
 }
-
-

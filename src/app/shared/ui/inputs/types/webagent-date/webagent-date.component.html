@@ -1,5 +1,6 @@
 <form [formGroup]="this.dateForm" >
-    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" [required]="this.required"/>
+    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder"
+    [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" (focus)="openCalendar()" [required]="this.required"/>
 </form>
 
 <ng-template #year>

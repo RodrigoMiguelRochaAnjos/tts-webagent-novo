@@ -55,7 +55,7 @@ export class WalletPageComponent implements OnInit{
 
     updateTransactions(): void {
         this.balanceService.resetTransactions();
-        this.balanceService.loadTransactions(this.numDays, this.dateRange.from?.format("YYYY-MM-DD"), this.dateRange.to?.format("YYYY-MM-DD"));
+        this.balanceService.loadTransactions(this.numDays, this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
     }
 
     updateDays(choice: DayInterval): void {

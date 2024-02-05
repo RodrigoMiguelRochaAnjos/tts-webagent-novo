@@ -84,6 +84,8 @@ export class ReservationService {
     }
 
     public async getCheckoutDetails(body: AirCheckoutDetailsRequest): Promise<boolean> {
+        this.checkoutService.resetDetails();
+        this.checkoutService.resetPrice();
         await this.checkoutService.loadDetails(body);
         
         this.checkoutDetails$.subscribe({
