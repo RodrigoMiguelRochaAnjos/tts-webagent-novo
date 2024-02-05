@@ -77,7 +77,7 @@ export class TravellerService {
         this._travellers[index] = traveller;
     }
 
-    private getType(travellerType: TravellerTypes): any {
+    public getType(travellerType: TravellerTypes): any {
         for (const flagName in this._flagMapping) {
             if ((travellerType & this._flagMapping[flagName].flag) != this._flagMapping[flagName].flag) continue;
 

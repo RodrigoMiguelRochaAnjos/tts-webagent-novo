@@ -42,19 +42,6 @@ export class DashboardPageComponent implements OnInit{
         this.forwardsIterator = this.doubleList.forwardsIterator();
         this.reverseIterator = this.doubleList.backwardIterator();
 
-        this.alertService.show(AlertType.CONFIRMATION, "Are you sure you want to book this flight?").subscribe((action: AlertAction) => {
-            if(action === AlertAction.WAITING) return;
-
-            switch(action) {
-                case AlertAction.EXECUTE:
-                    alert("I executed");
-                    break;
-                case AlertAction.CANCEL:
-                    alert("I canceled");
-                    break;
-            }
-        });
-
         this.testResult = JSON.parse(`
         {
     "show": true,

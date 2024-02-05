@@ -309,13 +309,21 @@
 	"WALLET": "Wallet",
     "INVALID_SETTINGS": "Your account settings are invalid",
 	"FREQUENT_FLYER_NUMBER": "Add frequent flyer number",
-	
+
 	"START_DATE": "Start Date",
 	"END_DATE": "End Date",
 	"CHOOSE_YEAR": "Choose a year",
 	"ADDRESS": "Address",
 	"APP_SETTINGS": "App Settings",
 	"SELECT_LANGUAGE": "Select a language",
-	"SELECT_CURRENCY": "Select a currency"
+	"SELECT_CURRENCY": "Select a currency",
+	"BOOKING_ID": "Booking ID",
+	"BILLING_ADDRESS": "Billing Address",
+	"BOARDING_TIME": "Boarding time",
+	"CLASS": "Class",
+	"TAXES_INCLUDED": "Taxes included",
+	"PAYMENT": "Payment",
+	"FLIGHT_PROCESSING_ERROR": "A problem occured processing this flight payment options",
+	"TRANSACTION": "Transaction"
 }
 

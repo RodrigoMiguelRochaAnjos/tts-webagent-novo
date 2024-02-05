@@ -38,10 +38,10 @@ export class MyBookingsPageComponent implements OnInit {
 
     this.bookingSummaryService.getBookingsSummary(
       Object.values(Status),
-      this.dateRangeCreation.from?.format("YYYY-MM-DD"),
-      this.dateRangeCreation.to?.format("YYYY-MM-DD"),
-      this.dateRangeStart.from?.format("YYYY-MM-DD"),
-      this.dateRangeStart.to?.format("YYYY-MM-DD")
+      this.dateRangeCreation.dateFrom?.format("YYYY-MM-DD"),
+      this.dateRangeCreation.dateTo?.format("YYYY-MM-DD"),
+      this.dateRangeStart.dateFrom?.format("YYYY-MM-DD"),
+      this.dateRangeStart.dateTo?.format("YYYY-MM-DD")
       );
   }
 }

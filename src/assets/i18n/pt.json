@@ -359,5 +359,15 @@
     "TRAVELLER": "Viajante",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "O TTS Web Agent está disponível apenas para usuários do Webagent.",
     "UNCONFIRMED": "Não Confirmado",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "As configurações da sua conta são inválidas",
+    "CHOOSE_YEAR": "Escolher um ano",
+    "ADDRESS": "Morada",
+    "APP_SETTINGS": "Configurações da Aplicação",
+    "SELECT_LANGUAGE": "Selecionar Idioma",
+    "SELECT_CURRENCY": "Selecionar Moeda",
+    "BILLING_ADDRESS": "Morada de Faturação",
+    "TAXES_INCLUDED": "Impostos Incluídos",
+    "PAYMENT": "Pagamento",
+    "FLIGHT_PROCESSING_ERROR": "Ocorreu um problema no processamento do pagamento deste voo",
+    "TRANSACTION": "Transação"
 }

@@ -8,6 +8,9 @@ import { DayInterval } from '../../models/day-interval.enum';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { DestroyService } from 'src/app/core/services/destroy.service';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
+import { Deposit } from 'src/app/shared/models/deposit.model';
+import { patterns } from 'src/app/shared/utils/validation-patterns';
 
 @Component({
   selector: 'app-wallet-page',
@@ -18,18 +21,18 @@ import { DestroyService } from 'src/app/core/services/destroy.service';
 export class WalletPageComponent implements OnInit{
     InputType = InputType;
     DayInterval = DayInterval;
+    patterns = patterns
 
     transactions$!: Observable<Transactions>;
 
-    // translatedDaysInterval: string[] = [];
+    public deposit: Deposit = new Deposit();
 
     numDays?: number = 30;
 
     dateRange: DateRange = new DateRange();
     constructor(
         private balanceService: BalanceService,
-        private translate: TranslateService,
-        private destroyService: DestroyService,
+        private modalService: ModalControllerService,
         private router: Router
     ) {
         this.transactions$ = balanceService.getTransactions();
@@ -55,7 +58,7 @@ export class WalletPageComponent implements OnInit{
 
     updateTransactions(): void {
         this.balanceService.resetTransactions();
-        this.balanceService.loadTransactions(this.numDays, this.dateRange.from?.format("YYYY-MM-DD"), this.dateRange.to?.format("YYYY-MM-DD"));
+        this.balanceService.loadTransactions(this.numDays, this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
     }
 
     updateDays(choice: DayInterval): void {
@@ -78,6 +81,18 @@ export class WalletPageComponent implements OnInit{
         }
 
         this.updateTransactions();
+    }
+
+    toggleModal(content: any, modalId: string) {
+        this.modalService.showModal(content, modalId);
+    }
+
+    addFunds(): void {
+        this.deposit.currency = "USD";
+        if(!this.deposit.isValid()) return;
+
+        this.balanceService.addFunds(this.deposit);
+
     }
 }
 

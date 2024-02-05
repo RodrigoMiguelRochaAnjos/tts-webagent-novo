@@ -1,0 +1,146 @@
+<div class="content" *ngFor="let info of displayInfo; index as displayInfoIndex">
+    <div class="card">
+        <div class="card-header">
+            <h4>{{ info.passengersNumber }} PAX {{ info.passengersType }}</h4>
+            <b>{{ info.passengersNumber }}x {{ info.price }} {{ info.currency }}</b>
+        </div>
+        <div class="card-content">
+            <ul>
+                <li *ngIf="togglePriceDetailDisplay(displayInfoIndex)">
+                    <i class="fa-solid">{{priceDetailsIcon(displayInfoIndex)}}</i>
+                    <!-- {{ priceDetailsLine(displayInfoIndex) }} -->
+                    
+                    <label for="">{{ 'PRICE_DETAILS' | translate }}</label>
+                </li>
+                <li>
+                    <table class="price-details">
+                        <tr *ngFor="let priceDetail of info.priceDetails">
+                            <td><b>{{ priceDetail.flight }}</b><br />{{ priceDetail.fareName }}</td>
+                            <td>{{ priceDetail.passengersNumber }}x {{ priceDetail.price }} {{ info.currency }}</td>
+                        </tr>
+                    </table>
+                </li>
+                <li>
+                    <!-- {{ baggageDetailsIcon(displayInfoIndex) }}
+                    {{ baggageDetailsLine(displayInfoIndex) }}
+                    {{ toggleBaggageDetailDisplay(displayInfoIndex) }} -->
+                    <label>{{ 'BAGGAGE_INFORMATION' | translate }}</label>
+                </li>
+                <li>
+                    <div class="allowances">
+                        <div class="title">Baggage Allowance</div>
+                        <div class="allowance" *ngFor="let allowance of info.baggageAllowance">
+                            <div class="info">
+                                {{ allowance.carrier }} {{ allowance.origin }}>{{ allowance.destination }} {{ allowance.passengers }}
+                            </div>
+                            <div class="bag" *ngFor="let bag of allowance.bags">
+                                <div *ngIf="bag.fee" class="bag-fee"><b>- Bag {{ bag.number }}:</b> {{ bag.fee }}</div>
+                                <div *ngIf="bag.description" class="bag-desc">{{ bag.description }}</div>
+                            </div>
+                            <a *ngIf="allowance.link" target="_system" [href]="allowance.link">More Information</a>
+                        </div>
+                        <div class="title">Carry On Allowance</div>
+                        <div class="allowance" *ngFor="let allowance of info.carryOnAllowance">
+                            <div class="info">
+                                {{ allowance.carrier }} {{ allowance.origin }}>{{ allowance.destination }} {{ allowance.passengers }}
+                            </div>
+                            <div class="bag" *ngFor="let bag of allowance.bags">
+                                <div *ngIf="bag.fee" class="bag-fee"><b>- Bag {{ bag.number }}:</b> {{ bag.fee }}</div>
+                                <div *ngIf="bag.description" class="bag-desc">{{ bag.description }}</div>
+                            </div>
+                            <a *ngIf="allowance.link" target="_system" [href]="allowance.link">More Information</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- <ion-content class="ion-padding" forceOverscroll="false">
+	<ion-card>
+		<ion-card-content>
+			<ion-list>
+				<ion-item
+					[detailIcon]="priceDetailsIcon(displayInfoIndex)"
+					[lines]="priceDetailsLine(displayInfoIndex)"
+					(click)="togglePriceDetailDisplay(displayInfoIndex)"
+					button
+					detail
+				>
+					<ion-label>{{ 'PRICE_DETAILS' | translate }}</ion-label>
+				</ion-item>
+				<ion-item-divider *ngIf="priceDetailsDisplay[displayInfoIndex]" class="ion-padding">
+					<table class="price-details">
+						<tr *ngFor="let priceDetail of info.priceDetails">
+							<td><b>{{ priceDetail.flight }}</b><br />{{ priceDetail.fareName }}</td>
+							<td>{{ priceDetail.passengersNumber }}x {{ priceDetail.price }} {{ info.currency }}</td>
+						</tr>
+					</table>
+				</ion-item-divider>
+				<ion-item
+					[detailIcon]="baggageDetailsIcon(displayInfoIndex)"
+					[lines]="baggageDetailsLine(displayInfoIndex)"
+					(click)="toggleBaggageDetailDisplay(displayInfoIndex)"
+					button
+					detail
+				>
+					<ion-label>{{ 'BAGGAGE_INFORMATION' | translate }}</ion-label>
+				</ion-item>
+				<ion-item-divider *ngIf="baggageDetailsDisplay[displayInfoIndex]" class="ion-padding">
+					<div class="allowances">
+						<div class="title">Baggage Allowance</div>
+						<div class="allowance" *ngFor="let allowance of info.baggageAllowance">
+							<div class="info">
+								{{ allowance.carrier }} {{ allowance.origin }}>{{ allowance.destination }} {{ allowance.passengers }}
+							</div>
+							<div class="bag" *ngFor="let bag of allowance.bags">
+								<div *ngIf="bag.fee" class="bag-fee"><b>- Bag {{ bag.number }}:</b> {{ bag.fee }}</div>
+								<div *ngIf="bag.description" class="bag-desc">{{ bag.description }}</div>
+							</div>
+							<a *ngIf="allowance.link" target="_system" [href]="allowance.link">More Information</a>
+						</div>
+						<div class="title">Carry On Allowance</div>
+						<div class="allowance" *ngFor="let allowance of info.carryOnAllowance">
+							<div class="info">
+								{{ allowance.carrier }} {{ allowance.origin }}>{{ allowance.destination }} {{ allowance.passengers }}
+							</div>
+							<div class="bag" *ngFor="let bag of allowance.bags">
+								<div *ngIf="bag.fee" class="bag-fee"><b>- Bag {{ bag.number }}:</b> {{ bag.fee }}</div>
+								<div *ngIf="bag.description" class="bag-desc">{{ bag.description }}</div>
+							</div>
+							<a *ngIf="allowance.link" target="_system" [href]="allowance.link">More Information</a>
+						</div>
+					</div>
+				</ion-item-divider>
+			</ion-list>
+		</ion-card-content>
+	</ion-card>
+</ion-content> -->
+
+<footer class="ion-padding">
+	<div class="price">
+		<div class="text">
+			<p>{{ 'TOTAL' | translate }}</p>
+			<p>{{ 'ALL_PRICES_APPROXIMATE_MESSAGE' | translate }}</p>
+			<p>* {{ 'ADDITIONAL_FEE_MAY_APPLY_MESSAGE' | translate }}</p>
+		</div>
+		<div class="number" (click)="submitFareQuote()">
+			<p>
+				{{ fareQuoteData.price.total }}&nbsp;{{ fareQuoteData.price.currency }}&nbsp;*<i class="fa-solid fa-chevron-right"></i>
+			</p>
+			<table>
+				<tr>
+					<td>{{ 'SUBTOTAL_UPPERCASE' | translate }}</td>
+					<td></td>
+					<td>{{ 'TAXES_UPPERCASE' | translate }}</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;">{{ fareQuoteData.price.base }}</td>
+					<td>&nbsp;+&nbsp;</td>
+					<td>{{ fareQuoteData.price.taxes }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+    <p>{{ 'PRICE_UPDATED_MESSAGE' | translate }}</p>
+</footer>

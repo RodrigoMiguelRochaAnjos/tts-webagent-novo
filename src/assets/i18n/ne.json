@@ -359,5 +359,15 @@
     "TRAVELLER": "यात्री",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS Web Agent मात्र वेब एजेन्ट प्रयोगकर्ताहरूको लागि उपलब्ध छ।",
     "UNCONFIRMED": "पुष्टि गरिएको छैन",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "तपाईंको खाता सेटिङहरू अमान्य छन्",
+    "CHOOSE_YEAR": "बर्ष छनौट गर्नुहोस्",
+    "ADDRESS": "ठेगाना",
+    "APP_SETTINGS": "अनुप्रयोग सेटिङ",
+    "SELECT_LANGUAGE": "भाषा छनौट गर्नुहोस्",
+    "SELECT_CURRENCY": "मुद्रा छनौट गर्नुहोस्",
+    "BILLING_ADDRESS": "बिलिङ ठेगाना",
+    "TAXES_INCLUDED": "कर समाहित",
+    "PAYMENT": "भुक्तानी",
+    "FLIGHT_PROCESSING_ERROR": "यो उडान भुक्तानी प्रक्रिया गर्दा समस्या देखा परेको छ",
+    "TRANSACTION": "लेनदेन"
 }

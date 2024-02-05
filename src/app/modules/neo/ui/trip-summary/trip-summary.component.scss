@@ -28,22 +28,15 @@
         }
         app-flight-option {
             border-bottom: 1px solid #3333;
-    
-            &:hover + .segments{
-                grid-template-rows: 1fr;
-            }
+
         }
     
         .segments{
             display: grid;
-            grid-template-rows: 0fr;
+            grid-template-rows: 1fr;
             transition: grid-template-rows ease-in-out 1s;
             div{
                 overflow: hidden;
-            }
-    
-            &:hover{
-                grid-template-rows: 1fr;
             }
     
             &.open {

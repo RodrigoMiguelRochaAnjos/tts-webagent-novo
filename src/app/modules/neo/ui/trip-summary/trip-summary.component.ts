@@ -10,6 +10,7 @@ import { PassengerType } from '../../features/search/utils/requests/air-search-r
 import { SearchService } from '../../features/search/data-access/search.service';
 import { AirCheckoutPriceResponse } from '../../features/search/models/air-checkout-price-response.model';
 import { Providers } from '../../models/providers.enum';
+import { DestroyService } from 'src/app/core/services/destroy.service';
 
 @Component({
     selector: 'trip-summary',
@@ -41,6 +42,7 @@ export class TripSummaryComponent {
         private reservationService: ReservationService,
         private travellerService: TravellerService,
         private checkoutService: CheckoutService,
+        private destroyService: DestroyService,
         private searchService: SearchService
     ) {
         this.selectedFlights$ = this.reservationService.getSelectedFlights();
@@ -83,6 +85,7 @@ export class TripSummaryComponent {
     }
 
     next() : void {
+        this.destroyService.signalDestroy();
         this.nextPressed.emit();
     }
 }

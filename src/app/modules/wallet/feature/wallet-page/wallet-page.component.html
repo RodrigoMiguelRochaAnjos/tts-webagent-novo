@@ -1,6 +1,6 @@
 <div class="wallet-container">
     <div class="top-bar">
-        <h4>Wallet</h4>
+        <h4>{{'WALLET' | translate}} <button class="button-small call-to-action" (click)="this.toggleModal(customContent1, 'modal1')">Add funds</button></h4>
         <div class="date-filter">
             <webagent-input [type]="InputType.DROPDOWN" [value]="DayInterval.LAST_30_DAYS" [options]="daysIntervalValues" (change)="updateDays($event)"/>
             <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRange" (change)="updateTransactions()" />
@@ -13,6 +13,12 @@
             <app-wallet-transaction [transaction]="transaction" />
         </ng-container>
     </div>
-
+    <ng-template #customContent1>
+        <h3>Add funds</h3>
+        <div class="payment-wrapper" style="display: flex; align-items: flex-end; justify-content: space-between;">
+            <webagent-input style="width: 300px; margin-right: 10px;" [type]="InputType.NUMBER" [label]="'Amount'" [(ngModel)]="this.deposit.amount"  [placeholder]="'Minimum of 50$'" [max]="10" [pattern]="patterns.amount.source"/>
+            <button class="button-medium" style="transform: translateY(-1px);" (click)="addFunds()">Add funds</button>
+        </div>
+    </ng-template>
 
 </div>

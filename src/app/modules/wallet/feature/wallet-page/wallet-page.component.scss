@@ -14,6 +14,10 @@
             padding: 0px 104.75px 20px 46.25px;
             h4 {
                 width: fit-content;
+                display: flex;
+                button {
+                    margin-left: 15px;
+                }
             }
             .date-filter{
                 display: flex;

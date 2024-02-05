@@ -359,5 +359,15 @@
     "TRAVELLER": "Yolcu",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS Web Agent yalnızca Webagent kullanıcıları için kullanılabilir.",
     "UNCONFIRMED": "Onaylanmamış",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "Hesap ayarlarınız geçersiz",
+    "CHOOSE_YEAR": "Bir yıl seçin",
+    "ADDRESS": "Adres",
+    "APP_SETTINGS": "Uygulama Ayarları",
+    "SELECT_LANGUAGE": "Dil Seçin",
+    "SELECT_CURRENCY": "Para Birimi Seçin",
+    "BILLING_ADDRESS": "Fatura Adresi",
+    "TAXES_INCLUDED": "Dahil Olan Vergiler",
+    "PAYMENT": "Ödeme",
+    "FLIGHT_PROCESSING_ERROR": "Bu uçuş ödeme seçeneklerini işleme koymada bir sorun oluştu",
+    "TRANSACTION": "İşlem"
 }

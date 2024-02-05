@@ -17,7 +17,8 @@
             width: 100%;
             height: calc(100vh - 152px);
             margin: 19px 16.5px 16.5px 26px;
-            overflow-y: scroll;
+            overflow: hidden;
+            overflow-y: auto;
             direction: rtl;
             padding: 10px;
             padding-right: 15px;

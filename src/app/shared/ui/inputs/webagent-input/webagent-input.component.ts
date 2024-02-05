@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostBinding, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostBinding, HostListener, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
