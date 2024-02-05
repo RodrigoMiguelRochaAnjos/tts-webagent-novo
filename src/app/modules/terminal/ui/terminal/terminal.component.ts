@@ -50,6 +50,11 @@ export class TerminalComponent implements OnInit {
         }
     }
 
+    private calcGestureDistance(touches: any): number {
+        const zw = touches[0].pageX - touches[1].pageX, zh = touches[0].pageY - touches[1].pageY;
+        return Math.sqrt(zw * zw + zh * zh);
+    }
+
     private applyZoom(scale: number): void {
         // smooth zoom to 5%
         const smoothedScale = scale < 1 ? 0.95 : 1.05;

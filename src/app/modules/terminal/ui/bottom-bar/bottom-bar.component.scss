@@ -16,11 +16,13 @@
     
         .buttons {
             width: 10%;
+            display: flex;
             button {
                 background-color: transparent;
-                color: #33333359;
+                color: #333;
                 padding: 10px;
                 font-size: 1.2rem;
+                width: 50%;
             }
         }
     }
@@ -43,7 +45,7 @@
                 input {
                     border: none;
                     outline: none;
-                    background-color: var(--tma-color-blue4);
+                    background-color: #1F75AE;
                     color: #ffffff;
                     width: 100%;
                     text-transform: uppercase;

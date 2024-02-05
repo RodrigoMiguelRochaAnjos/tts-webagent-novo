@@ -15,7 +15,7 @@
     }
 
     .calendar-container {
-        padding: 25px;
+        padding: 10px;
         box-shadow: 0px 0px 7px #00000025;
         margin-top: 10px;
         border-radius: 11px;
@@ -23,10 +23,10 @@
         z-index: 99;
         left: 0;
         background-color: #fff;
-        padding-top: 15px;
+        padding-top: 5px;
         text-align: center;
-        width: calc(calc(7 * 49px) + 70px);
-        min-width: calc(calc(7 * 49px) + 70px);
+        width: calc(calc(7 * 39px) + 55px);
+        min-width: calc(calc(7 * 39px) + 55px);
         display: none;
 
         &.show {
@@ -40,9 +40,9 @@
 
             .calendar-days-container {
                 .calendar-days {
-                    width: 39px;
-                    height: 39px;
-                    margin: 5px;
+                    width: 35px;
+                    height: 35px;
+                    margin: 2px;
                     background-color: #F2F7FA;
                     cursor: pointer;
                     border-radius: 11px;

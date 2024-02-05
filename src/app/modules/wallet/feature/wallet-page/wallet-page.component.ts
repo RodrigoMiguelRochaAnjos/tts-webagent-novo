@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { DateRange } from 'src/app/shared/models/date-range.model';
 import { Transactions } from 'src/app/shared/models/transaction.model';
 import { BalanceService } from 'src/app/shared/services/balance.service';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { DayInterval } from '../../models/day-interval.enum';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { DestroyService } from 'src/app/core/services/destroy.service';
 import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
 import { Deposit } from 'src/app/shared/models/deposit.model';
 import { patterns } from 'src/app/shared/utils/validation-patterns';
@@ -40,15 +42,23 @@ export class WalletPageComponent implements OnInit{
 
     ngOnInit(): void {
         this.balanceService.loadTransactions(this.numDays);
+
+        // this.translatedDaysInterval = []
+        // Object.values(DayInterval).forEach((value: string) => {
+        //     this.translate.stream(value).subscribe((val: string) => {
+        //         this.translatedDaysInterval.push(val)
+        //     });
+        // });
+
     }
 
-    get dayIntervals(): string[] {
+    get daysIntervalValues(): string[] {
         return Object.values(this.DayInterval);
     }
 
     updateTransactions(): void {
         this.balanceService.resetTransactions();
-        this.balanceService.loadTransactions(this.numDays, this.dateRange.from?.format("YYYY-MM-DD"), this.dateRange.to?.format("YYYY-MM-DD"));
+        this.balanceService.loadTransactions(this.numDays, this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
     }
 
     updateDays(choice: DayInterval): void {

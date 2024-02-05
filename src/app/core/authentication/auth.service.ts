@@ -128,7 +128,7 @@ export class AuthService implements OnDestroy {
 
         this.keepAliveService.start(user.id);
 
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['neo']);
     }
 
     logout(): void {

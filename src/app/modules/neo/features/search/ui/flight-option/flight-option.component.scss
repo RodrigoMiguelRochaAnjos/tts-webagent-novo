@@ -4,6 +4,12 @@
     justify-content: space-around;
     padding-top: 10px;
     position: relative;
+    cursor: pointer;
+    transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+
+    &:hover {
+        background-color: #f3f3f3;
+    }
 
     app-flight-selection-indicator {
         // width 15px

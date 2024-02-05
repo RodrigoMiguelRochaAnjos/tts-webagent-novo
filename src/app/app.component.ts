@@ -6,6 +6,7 @@ import { User } from './core/models/user/user.model';
 import { AuthenticatedUser } from './core/models/user/types/authenticated-user.model';
 import { IncompleteUser } from './core/models/user/types/incomplete-user.model';
 import { TranslateService } from '@ngx-translate/core';
+import { TerminalService } from './modules/terminal/data-access/terminal.service';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit{
     constructor(
         private authService: AuthService,
         private pkeyService: PkeysService,
-        private terminalHistoryService: TerminalHistoryService,
+        private terminalHistoryService: TerminalService,
         private translate: TranslateService
     ) {
         
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit{
 
         this.authService.loadUserFromStorage();
         this.pkeyService.loadPkeysFromStorage();
-        this.terminalHistoryService.loadCommandHistory();
+        this.terminalHistoryService.loadCommandsHistoryFromStorage();
     }
 
 }

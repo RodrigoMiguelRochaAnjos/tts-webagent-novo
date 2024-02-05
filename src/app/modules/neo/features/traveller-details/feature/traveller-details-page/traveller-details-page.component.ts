@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { patterns } from 'src/app/shared/utils/validation-patterns';
 import { FlightOption } from '../../../../models/flight-option.model';
@@ -16,6 +16,8 @@ import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
+import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
+import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -23,7 +25,7 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './traveller-details-page.component.html',
     styleUrls: ['./traveller-details-page.component.scss']
 })
-export class TravellerDetailsPageComponent {
+export class TravellerDetailsPageComponent implements OnInit{
     InputType = InputType;
     patterns = patterns;
 
@@ -39,6 +41,7 @@ export class TravellerDetailsPageComponent {
         private alertService: AlertService,
         private translate: TranslateService,
         private authService: AuthService,
+        private checkoutService: CheckoutService,
         private router: Router
     ) {
         this.option$ = this.reservationService.getSelectedFlights();
@@ -96,8 +99,12 @@ export class TravellerDetailsPageComponent {
         ) 
 
     }
+    ngOnInit(): void {
+        this.checkoutService.resetPrice();
+    }
 
     get travellers(): Travellers {
+        console.log(this.travellerService.getTravellers())
         return this.travellerService.getTravellers();
     }
 
@@ -156,7 +163,6 @@ export class TravellerDetailsPageComponent {
         
         this.reservationService.checkTravellers();
 
-        // this.statisticsService.addClientStat("traveller/details");
 
         this.authService.updateUserContact(this.contactRequestData);
 
@@ -183,4 +189,24 @@ export class TravellerDetailsPageComponent {
         }
         return str;
     }
+
+    // passangerTypeDateInput(): {minDate: string, maxDate: string} {
+    //     let minDate: string = "" ;
+    //     let maxDate: string = "" ;
+    //     const travellers = this.travellerService.getTravellers();
+
+    //     for (const traveller of travellers) {
+    //         if ((traveller instanceof this.travellerService.getType(TravellerTypes.CHILDREN))) {
+    //             minDate = moment().subtract(12, "year").format("DD/MM/YYYY");
+    //             break;
+    //         }
+
+    //         if ((traveller instanceof this.travellerService.getType(TravellerTypes.ADULTS))) {
+    //             maxDate = moment().subtract(2, "year").format("DD/MM/YYYY");
+    //             break;
+    //         }
+    //     }
+
+    //     return { minDate, maxDate };
+    // }
 }

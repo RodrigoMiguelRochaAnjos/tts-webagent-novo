@@ -44,6 +44,7 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         super();
 
         this.initDateForm();
+
     }
 
     ngOnInit(): void {
@@ -59,13 +60,13 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);
-        
+
     }
 
     public initDateForm(): FormGroup {
         return this.dateForm = this.formBuilder.group({
-            dateFrom: [null, Validators.required],
-            dateTo: [null, Validators.required]
+            dateFrom: [this.value?.dateFrom ? this.value?.dateFrom : null, Validators.required],
+            dateTo: [this.value?.dateTo ? this.value?.dateTo : null, Validators.required]
         })
     }
 
@@ -135,8 +136,8 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         this.value = new DateRange();
 
-        this.value.from = dateFrom;
-        this.value.to = dateTo;
+        this.value.dateFrom = dateFrom;
+        this.value.dateTo = dateTo;
 
         this.update();
 
@@ -238,5 +239,32 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
     showYearPopup(modalContent: any, id: string): void {
         this.modalService.showModal(modalContent, id);
+    }
+
+    get fromDate(): string {
+        if (!this.value.dateFrom.isValid() || this.value.dateFrom == null) return ''
+
+        return this.value.dateFrom.format('DD/MM/YYYY');
+    }
+
+    get toDate(): string {
+        if (!this.value.dateTo.isValid() || this.value.dateTo == null) return '';
+        return this.value.dateTo.format('DD/MM/YYYY');
+    }
+
+    set fromDate(date: string) {
+        if (date == '' || date == null) {
+            this.value.dateFrom = null;
+            return;
+        }
+        this.value.dateFrom = moment(date, 'DD/MM/YYYY');
+    }
+
+    set toDate(date: string) {
+        if (date == '' || date == null) {
+            this.value.dateTo = null;
+            return;
+        }
+        this.value.dateTo = moment(date, 'DD/MM/YYYY');
     }
 }

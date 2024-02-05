@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class NewsTemplateComponent {
     @Input() title!: string;
     @Input() text!: string;
+    @Input() ref!: string;
 }

@@ -1,136 +1,173 @@
 <ng-template #confirmPrice>
-    <trip-summary [hideDefault]="true" [buttonText]="('FINISH_BOOKING' | translate)" [summaryTitle]="'Final Summary'" (nextPressed)="book()" />
+    <trip-summary [hideDefault]="true" [buttonText]="('FINISH_BOOKING' | translate)" [summaryTitle]="'Final Summary'"
+        (nextPressed)="book()" />
 </ng-template>
 
-<div class="page-container">
-    <ng-container *ngFor="let flight of (this.details$ | async)?.flights; let pindex = index">
-        <div class="top-section" *ngFor="let segment of flight.segments">
-            <div class="left-side">
-                <div class="logo">
-    
+<reservation-state />
+<div class="content">
+
+    <div class="page-container">
+        <ng-container *ngFor="let flight of (this.details$ | async)?.flights; let pindex = index">
+            <div class="top-section" *ngFor="let segment of flight.segments">
+                <div class="left-side">
+                    <div class="logo" style="background-image: url('{{ segment.marketingCarrier.logo_url }}'); background-size: cover">
+
+                    </div>
                 </div>
-            </div>
-    
-            <div class="mid-side">
-                <div class="flight-info">
-                    <p class="semi-bold">Sun 27 December</p>
-                    <div class="ticket-info">
-                        <div class="first-row">
-                            <div class="first-column">
-                                <p>{{'FLIGHT' | translate}}</p>
-                                <h5>{{ segment.flightNumber }}</h5>
+
+                <div class="mid-side">
+                    <div class="flight-info">
+                        <p class="semi-bold">Sun 27 December</p>
+                        <div class="ticket-info">
+                            <div class="first-row">
+                                <div class="first-column">
+                                    <p>{{'FLIGHT' | translate}}</p>
+                                    <h5>{{ segment.flightNumber }}</h5>
+                                </div>
+                                <div class="first-column">
+                                    <p>{{'BOARDING_TIME' | translate}}</p>
+                                    <h5>{{ segment.departureDatetime | date: 'HH:mm' }}</h5>
+                                </div>
+                                <div class="first-column">
+                                    <p>{{'TERMINAL' | translate}}</p>
+                                    <h5>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</h5>
+                                </div>
+                                <div class="first-column">
+                                    <p>{{'DURATION' | translate}}</p>
+                                    <h5>24h</h5>
+                                </div>
+
                             </div>
-                            <div class="first-column">
-                                <p>{{'BOARDING_TIME' | translate}}</p>
-                                <h5>{{ segment.departureDatetime | date: 'HH:mm' }}</h5>
+
+                            <div class="class">
+                                <p>{{'CLASS' | translate}}:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
                             </div>
-                            <div class="first-column">
-                                <p>{{'TERMINAL' | translate}}</p>
-                                <h5>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</h5>
+
+                            <div class="destination">
+                                <p>{{'ORIGIN' | translate}}:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span>
+                                <p>{{'DEPARTURE' | translate}}: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
                             </div>
-                            <div class="first-column">
-                                <p>{{'DURATION' | translate}}</p>
-                                <h5>24h</h5>
+
+                            <div class="departure-time">
+                                <p>{{'DEPARTURE' | translate}}:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span>
+                                <p>{{'ARRIVAL' | translate}}: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
                             </div>
-    
-                        </div>
-    
-                        <div class="class">
-                            <p>{{'CLASS' | translate}}:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
-                        </div>
-    
-                        <div class="destination">
-                            <p>{{'ORIGIN' | translate}}:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span> <p>{{'TO' | translate}}: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
-                        </div>
-    
-                        <div class="departure-time">
-                            <p>{{'DEPARTURE' | translate}}:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span> <p>{{'ARRIVAL' | translate}}: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
                         </div>
                     </div>
                 </div>
+
+                <div class="right-side">
+
+                    <div class="price">
+                        <h2>{{ flight?.price?.amount }}</h2>
+                        <h5>{{ flight?.price?.currency }}</h5>
+                        <div class="info-circle"><span>i</span></div>
+                    </div>
+                    <div class="div">
+                        <label>{{'TAXES_INCLUDED' | translate}}</label>
+                    </div>
+
+                </div>
             </div>
-    
-            <div class="right-side">
-                
-                <div class="price">
-                    <h2>{{ flight?.price?.amount }}</h2><h5>{{ flight?.price?.currency }}</h5>
-                    <div class="info-circle"><span>i</span></div>
-                </div>
-                <div class="div">
-                    <label>{{'TAXES_INCLUDED' | translate}}</label>
-                </div>
-                
-            </div>
-        </div>
-    
-        <div class="mid-section" *ngIf="getPayment(flight.id)">
-            <div class="half-section left">
-                <div class="first-row" *ngIf="this.getPaymentOptionSupportedCards(flight.id).length > 0 || getPayment(flight.id)?.type != PaymentOption.CREDIT_CARD">
-                    <h4>{{'PAYMENT' | translate}}</h4>
-                    <webagent-input [type]="InputType.DROPDOWN" [value]="this.getPaymentOptionSupportedTypes(flight.id)[0]" [required]="true" [label]="'Card type'" [options]="this.getPaymentOptionSupportedTypes(flight.id)" [(ngModel)]="getPayment(flight.id)!.type"/>
-                    <webagent-input [type]="InputType.DROPDOWN" *ngIf="getPayment(flight.id)!.type == PaymentOption.CREDIT_CARD" [value]="this.getPaymentOptionSupportedCards(flight.id)[0]" [required]="true" [label]="'Card type'" [(ngModel)]="getPaymentCreditCard(flight.id).cardType" [options]="this.getPaymentOptionSupportedCards(flight.id)" />
-                </div>
-                <div class="first-row" *ngIf="getPayment(flight.id)?.type !== PaymentOption.NONE && getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0">
-                    <h4>{{'FLIGHT_PROCESSING_ERROR' | translate}}</h4>
-                </div>
-                <ng-container *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard && !(getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0)">
-                    <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card holder'"  [(ngModel)]="getPaymentCreditCard(flight.id).name" [placeholder]="'E.g. John'"/>
-                    
-                    <div class="second-row">
-                        <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card number'" [max]="20" [(ngModel)]="getPaymentCreditCard(flight.id).number" [placeholder]="'E.g. 0000 0000 0000 0000'"/>
-                        <div class="half-inputs">
-                            <webagent-input [type]="InputType.CVV" [required]="true" [label]="'CVV'" [placeholder]="'E.g. 00000'" [(ngModel)]="getPaymentCreditCard(flight.id).securityCode" />
-                            <webagent-input id="exp-date" [type]="InputType.TEXT_DATE_INPUT" [required]="true" [label]="'Expiry date'" [(ngModel)]="getPaymentCreditCard(flight.id).expiryDate" [placeholder]="'E.g. mm/yyyy'"/>
+
+            <div class="mid-section" *ngIf="getPayment(flight.id)">
+                <div class="half-section left">
+                    <div class="first-row"
+                        *ngIf="this.getPaymentOptionSupportedCards(flight.id).length > 0 || getPayment(flight.id)?.type != PaymentOption.CREDIT_CARD">
+                        <h4>{{'PAYMENT' | translate}}</h4>
+                        <webagent-input [type]="InputType.DROPDOWN"
+                            [value]="this.getPaymentOptionSupportedTypes(flight.id)[0]" [required]="true"
+                            [label]="'Card type'" [options]="this.getPaymentOptionSupportedTypes(flight.id)"
+                            [(ngModel)]="getPayment(flight.id)!.type" />
+                        <webagent-input [type]="InputType.DROPDOWN"
+                            *ngIf="getPayment(flight.id)!.type == PaymentOption.CREDIT_CARD"
+                            [value]="this.getPaymentOptionSupportedCards(flight.id)[0]" [required]="true"
+                            [label]="'Card type'" [(ngModel)]="getPaymentCreditCard(flight.id).cardType"
+                            [options]="this.getPaymentOptionSupportedCards(flight.id)" />
+                    </div>
+                    <div class="first-row"
+                        *ngIf="getPayment(flight.id)?.type !== PaymentOption.NONE && getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0">
+                        <h4>{{'FLIGHT_PROCESSING_ERROR' | translate}}</h4>
+                    </div>
+                    <ng-container
+                        *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard && !(getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0)">
+                        <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card holder'"
+                            [(ngModel)]="getPaymentCreditCard(flight.id).name" [placeholder]="'E.g. John'" />
+
+                        <div class="second-row">
+                            <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card number'" [max]="20"
+                                [(ngModel)]="getPaymentCreditCard(flight.id).number"
+                                [placeholder]="'E.g. 0000 0000 0000 0000'" />
+                            <div class="half-inputs">
+                                <webagent-input [type]="InputType.CVV" [required]="true" [label]="'CVV'"
+                                    [placeholder]="'E.g. 00000'"
+                                    [(ngModel)]="getPaymentCreditCard(flight.id).securityCode" />
+                                <webagent-input id="exp-date" [type]="InputType.TEXT_DATE_INPUT" [required]="true"
+                                    [label]="'Expiry date'" [(ngModel)]="getPaymentCreditCard(flight.id).expiryDate"
+                                    [placeholder]="'E.g. mm/yyyy'" />
+                            </div>
                         </div>
+                        <div class="field reusable"
+                            *ngIf="!getPayment(flight.id)?.isEmpty() && getPayment(flight.id)?.type != PaymentOption.CASH">
+                            <button (click)="clearForm(flight.id)">Clear card info</button>
+                            <ng-container class="payment-method" *ngFor="let obj of this.paymentsData">
+                                <button
+                                    (click)="useSameCardAs(obj.payment.creditCard, obj.payment.address, obj.payment.entityName, flight.id)"
+                                    *ngIf="obj.payment.type != PaymentOption.CASH && this.isSupportedPaymentType(flight.id, obj.payment.creditCard?.cardType) && !obj.payment.creditCard?.equals(getPayment(flight.id)?.creditCard) && obj.payment.creditCard?.isValid()">
+                                    {{ cardNumberDisplayFormatted(obj.payment.creditCard) }}
+                                </button>
+                            </ng-container>
+                        </div>
+                        <!-- <div class="error-section">
+                            <ul>
+                                <li>Invalid username should have atleast 5 characters</li>
+                                <li>Invalid password should have 5 characters</li>
+                            </ul> 
+                        </div> -->
+                    </ng-container>
+
+                </div>
+                <div class="half-section right"
+                    *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard">
+                    <h4>{{'BILLING_ADDRESS' | translate}}</h4>
+
+                    <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Entity name'"
+                        [(ngModel)]="getPayment(flight.id)!.entityName" [placeholder]="'E.g. TTS Lab'" />
+
+                    <div class="first-section">
+                        <webagent-input id="street" [type]="InputType.TEXT" [required]="true" [label]="'Street'"
+                            [(ngModel)]="getPayment(flight.id)!.address!.street"
+                            [placeholder]="'E.g. Rua da tecnologia 25'" />
+                        <webagent-input id="flat" [type]="InputType.TEXT" [required]="true" [label]="'Flat'"
+                            [(ngModel)]="getPayment(flight.id)!.address!.flat" [placeholder]="'E.g. R/S'" />
+                        <webagent-input id="post-code" [type]="InputType.TEXT" [required]="true" [label]="'Post code'"
+                            [(ngModel)]="getPayment(flight.id)!.address!.postCode" [pattern]="patterns.postCode.source"
+                            [placeholder]="'E.g. 9500-296'" />
                     </div>
-                    <div class="field reusable"
-                        *ngIf="!getPayment(flight.id)?.isEmpty() && getPayment(flight.id)?.type != PaymentOption.CASH">
-                        <button (click)="clearForm(flight.id)">+</button>
-                        <ng-container class="payment-method" *ngFor="let obj of this.paymentsData">
-                            <button (click)="useSameCardAs(obj.payment.creditCard, obj.payment.address, obj.payment.entityName, flight.id)"
-                                *ngIf="obj.payment.type != PaymentOption.CASH && this.isSupportedPaymentType(flight.id, obj.payment.creditCard?.cardType) && !obj.payment.creditCard?.equals(getPayment(flight.id)?.creditCard) && obj.payment.creditCard?.isValid()">
-                                {{ cardNumberDisplayFormatted(obj.payment.creditCard) }}
-                            </button>
-                        </ng-container>
+
+                    <div class="second-section">
+                        <webagent-input id="locality" [type]="InputType.TEXT" [required]="true" [label]="'Locality'"
+                            [(ngModel)]="getPayment(flight.id)!.address!.locality" [placeholder]="'E.g. Porto'" />
+                        <webagent-input id="city" [type]="InputType.TEXT" [required]="true" [label]="'City'"
+                            [(ngModel)]="getPayment(flight.id)!.address!.city" [placeholder]="'E.g. Dublin'" />
+                        <webagent-input id="country-code" [type]="InputType.TEXT" [required]="true"
+                            [label]="'Country code'" [(ngModel)]="getPayment(flight.id)!.address!.countryCode"
+                            [pattern]="patterns.countryCode.source" [placeholder]="'E.g. PT'" />
                     </div>
+
                     <!-- <div class="error-section">
                         <ul>
                             <li>Invalid username should have atleast 5 characters</li>
                             <li>Invalid password should have 5 characters</li>
                         </ul> 
                     </div> -->
-                </ng-container>
-    
+                </div>
             </div>
-            <div class="half-section right" *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard">
-                <h4>{{'BILLING_ADDRESS' | translate}}</h4>
-    
-                <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Entity name'" [(ngModel)]="getPayment(flight.id)!.entityName" [placeholder]="'E.g. TTS Lab'"/>
-                
-                <div class="first-section">
-                    <webagent-input id="street" [type]="InputType.TEXT" [required]="true" [label]="'Street'" [(ngModel)]="getPayment(flight.id)!.address!.street" [placeholder]="'E.g. Rua da tecnologia 25'"/>
-                    <webagent-input id="flat" [type]="InputType.TEXT" [required]="true" [label]="'Flat'" [(ngModel)]="getPayment(flight.id)!.address!.flat" [placeholder]="'E.g. R/S'"/>
-                    <webagent-input id="post-code" [type]="InputType.TEXT" [required]="true" [label]="'Post code'" [(ngModel)]="getPayment(flight.id)!.address!.postCode" [pattern]="patterns.postCode.source" [placeholder]="'E.g. 9500-296'"/>
-                </div>
-    
-                <div class="second-section">
-                    <webagent-input id="locality" [type]="InputType.TEXT" [required]="true" [label]="'Locality'" [(ngModel)]="getPayment(flight.id)!.address!.locality" [placeholder]="'E.g. Porto'"/>
-                    <webagent-input id="city" [type]="InputType.TEXT" [required]="true" [label]="'City'" [(ngModel)]="getPayment(flight.id)!.address!.city" [placeholder]="'E.g. Dublin'"/>
-                    <webagent-input id="country-code" [type]="InputType.TEXT" [required]="true" [label]="'Country code'" [(ngModel)]="getPayment(flight.id)!.address!.countryCode" [pattern]="patterns.countryCode.source" [placeholder]="'E.g. PT'"/>
-                </div>
-    
-                <!-- <div class="error-section">
-                    <ul>
-                        <li>Invalid username should have atleast 5 characters</li>
-                        <li>Invalid password should have 5 characters</li>
-                    </ul> 
-                </div> -->
-            </div>    
-        </div>
-    </ng-container>
+        </ng-container>
 
 
-</div>
-<div class="page-container" >
-    <trip-summary (nextPressed)="continue()" />
+    </div>
+    <div class="page-container">
+        <trip-summary (nextPressed)="continue()" />
+    </div>
 </div>
