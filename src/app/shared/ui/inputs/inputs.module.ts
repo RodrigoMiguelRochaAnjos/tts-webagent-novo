@@ -19,6 +19,7 @@ import { WebagentPasswordComponent } from './types/webagent-password/webagent-pa
 import { WebagentTextDateInputComponent } from './types/webagent-text-date-input/webagent-text-date-input.component';
 import { WebagentCheckboxInputComponent } from './types/webagent-checkbox-input/webagent-checkbox-input.component';
 import { WebagentNumberComponent } from './types/webagent-number/webagent-number.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { WebagentNumberComponent } from './types/webagent-number/webagent-number
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        DirectivesModule
+        DirectivesModule,
+        TranslateModule
     ],
     exports: [
         WebagentInputComponent,

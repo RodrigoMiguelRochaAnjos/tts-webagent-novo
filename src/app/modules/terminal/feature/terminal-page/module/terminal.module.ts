@@ -10,6 +10,8 @@ import { TerminalService } from '../../../data-access/terminal.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MenuService } from '../../../data-access/menu.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CalendarPickerComponent } from '../../../ui/calendar-picker/calendar-picker.component';
+import { BrandsAndAncillariesPageModule } from '../../../ui/brands-and-ancillaries/brands-and-ancillaries.module';
 
 @NgModule({
     declarations: [
@@ -17,7 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
         TerminalComponent,
         BottomBarComponent,
         RightMenuComponent,
-        // CalendarPickerComponent
+        CalendarPickerComponent
     ],
     providers: [
         TerminalService,
@@ -30,7 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
         // IonicModule,
         // HeaderModule,
         // FiltersPageModule,
-        // BrandsAndAncillariesPageModule,
+        BrandsAndAncillariesPageModule,
         // EmailItemsPageModule,
         // MatDatepickerModule,
         // MatFormFieldModule,

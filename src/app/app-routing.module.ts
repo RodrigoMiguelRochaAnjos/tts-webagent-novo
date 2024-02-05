@@ -15,12 +15,6 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
     },
     {
-        path: 'dashboard',
-        loadChildren: () => import('./modules/dashboard/feature/dashboard-shell/dashboard-shell.module').then((m) => m.DashBoardShellModule),
-        canActivateChild: [AuthGuardService],
-        title: 'Dashboard'
-    },
-    {
         path: 'neo',
         loadChildren: () => import('./modules/neo/features/neo-shell/neo-shell.module').then((m) => m.NeoShellModule),
         canActivateChild: [AuthGuardService],
@@ -52,7 +46,7 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'Wallet',
         data: {
-            icon: 'fa-solid fa-wallet'
+            icon: 'fa-solid fa-money-bill-wave'
         }
     },
     {
@@ -61,7 +55,7 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'My bookings',
         data: {
-            icon: 'fa-solid fa-wallet'
+            icon: 'fa-solid fa-book-open'
         }
     },
     

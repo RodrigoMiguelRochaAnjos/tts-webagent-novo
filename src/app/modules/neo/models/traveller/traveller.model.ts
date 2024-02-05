@@ -13,7 +13,7 @@ export abstract class Traveller {
     public contact!: Contact;
     public frequentFlyerNumbers: string[] = [];
     public refuseInfo: boolean = false;
-    private type: PassengerType = this.toString();
+    public type: PassengerType = this.toString();
 
     public constructor() {}
 

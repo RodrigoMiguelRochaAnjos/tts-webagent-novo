@@ -6,7 +6,7 @@
         <div class="container" *ngFor="let traveller of this.travellers; let index = index">
             <h4>{{ "TRAVELLERS_DETAILS" | translate }}</h4>
             <div class="traveller-type">
-                {{ traveller.toString() }}
+                {{ traveller.type }}
             </div>
             <div class="traveller-title">
                 <webagent-input [type]="InputType.DROPDOWN" [required]="false" [label]="('TITLE' | translate)" [(ngModel)]="traveller.title" [options]="['MR', 'MRS', 'MS']"></webagent-input>

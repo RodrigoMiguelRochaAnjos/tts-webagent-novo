@@ -6,8 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { BookingSummaryService } from '../../../my-bookings/data-access/booking-summary.service';
 import { Observable } from 'rxjs';
+import { BookingService } from '../../../checkout/data-access/booking.service';
 
 @Component({
 	selector: 'app-booking-info',
@@ -19,26 +19,19 @@ export class BookingInfoComponent {
 	private reservationCancelled = false;
 	private reservationIssued = false;
 
-	booking: AirBooking = new AirBooking();
-
-
 	booking$!: Observable<AirBooking>;
 	constructor(
 		private route: ActivatedRoute,
-		private bookingSummaryService: BookingSummaryService,
+		private bookingSummaryService: BookingService,
 
 	) {
 		const id: string | null = this.route.snapshot.paramMap.get("id");
 
-		if (id == null) return;
-
 		this.booking$ = this.bookingSummaryService.getBooking();
+		
+        if (id == null) return;
 
 		this.bookingSummaryService.getBookingSummaryById(id);
-
-		this.booking$.subscribe((booking: AirBooking) => {
-			this.booking = booking
-		});
 	}
 
 	getProviderByKey(key: string): string {
@@ -52,23 +45,31 @@ export class BookingInfoComponent {
 	}
 
 	getFlightBySearchId(searchId: string): FlightOption | undefined {
-		for (const flight of this.booking.flights) {
-			if (flight.searchId != searchId) continue;
+        let flightFound: FlightOption | undefined;
 
-			return flight;
-		}
+        this.booking$.subscribe((booking: AirBooking) => {
+            if(!booking.flights) return;
 
-		return undefined;
+            for (const flight of booking.flights) {
+                if (flight.searchId != searchId) continue;
+    
+                flightFound = flight;
+                break;
+            }
+
+        })
+
+        return flightFound;
 	}
 
 	get hasErrors(): boolean {
-		return this.booking.errors && this.booking.errors.length > 0;
+        return this.bookingSummaryService.getBookingValue().errors && this.bookingSummaryService.getBookingValue().errors.length > 0;
 	}
 
 	get showButtons(): boolean {
-		if(this.booking.flights == null) return false;
+        if (this.bookingSummaryService.getBookingValue().flights == null) return false;
 		
-		for (let flight of (this.booking.flights as FlightOption[])) {
+        for (let flight of (this.bookingSummaryService.getBookingValue().flights as FlightOption[])) {
 			if (flight.provider == Providers.TRAVELFUSION) return false;
 		}
 
@@ -76,11 +77,11 @@ export class BookingInfoComponent {
 	}
 
 	get startDate(): string {
-		if(!this.booking.flights || this.booking.flights.length <= 0) return '';
+        if (!this.bookingSummaryService.getBookingValue().flights || this.bookingSummaryService.getBookingValue().flights.length <= 0) return '';
 
-		if(!this.booking.flights[0].segments || this.booking.flights[0].segments.length <= 0) return '';
+        if (!this.bookingSummaryService.getBookingValue().flights[0].segments || this.bookingSummaryService.getBookingValue().flights[0].segments.length <= 0) return '';
 
-		return this.booking.flights[0].segments[0].departureDatetime;
+        return this.bookingSummaryService.getBookingValue().flights[0].segments[0].departureDatetime;
 	}
 
 	// async emitTicket(): Promise<void> {

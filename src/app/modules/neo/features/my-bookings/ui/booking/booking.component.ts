@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { BookingSummary, BookingSummaryResponse } from '../../models/booking-summary-response.model';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-import { BookingSummaryService } from '../../data-access/booking-summary.service';
+import { BookingService } from '../../../checkout/data-access/booking.service';
 
 @Component({
 	selector: 'app-booking',
@@ -17,7 +17,7 @@ export class BookingComponent {
 
 	constructor(
 		private router: Router,
-		private bookingSummaryService: BookingSummaryService
+		private bookingSummaryService: BookingService
 	) { }
 
 	goToBooking(): void {

@@ -15,7 +15,7 @@ import { Payment } from '../../../search/models/payment.model';
 import { PaymentOption } from '../../../search/models/payment-option.enum';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReservationService } from 'src/app/modules/neo/data-access/reservation/reservation.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AlertAction, AlertService } from 'src/app/core/services/alert.service';
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
@@ -29,13 +29,14 @@ import { TravellerService } from 'src/app/modules/neo/data-access/traveller.serv
 import { AirCheckoutPriceRequest } from '../../../search/models/air-checkout-price-request.model';
 import { AirCheckoutPriceResponse } from '../../../search/models/air-checkout-price-response.model';
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, takeUntil } from 'rxjs';
 import { AirCheckoutDetailsResponse } from '../../../search/models/air-checkout-details-response.model';
 import { SupportedCreditCard } from '../../../search/models/supported-credit-card.model';
 import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
 import { BookingService } from '../../data-access/booking.service';
 import { AirBooking } from 'src/app/shared/models/air-booking.model';
 import { AirBookingRequest } from 'src/app/shared/models/air-booking-request.model';
+import { DestroyService } from 'src/app/core/services/destroy.service';
 
 @Component({
     selector: 'app-checkout-page',
@@ -76,21 +77,25 @@ export class CheckoutPageComponent implements OnInit {
         private travellerService: TravellerService,
         private modalService: ModalControllerService,
         private bookingService: BookingService,
+        private destroyService: DestroyService,
         private router: Router
     ) {
+
         this.currency = this.authService.getUserValue().settings.currency;
+        
+        this.details$ = this.checkoutService.getDetails();
+        this.price$ = this.checkoutService.getPrice();
+
+        
     }
 
     ngOnInit() {
         const uniqueSearchIds: Set<string> = new Set();
 
-        this.details$ = this.checkoutService.getDetails();
-        this.price$ = this.checkoutService.getPrice();
-
-        this.details$.subscribe((details: AirCheckoutDetailsResponse | null) => {
+        this.details$.pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((details: AirCheckoutDetailsResponse | null) => {
             if (details == null) return;
 
-
+            console.log(details);
             details.flights.forEach((flight: FlightOption) => {
                 const searchId: string = flight.provider == Providers.TRAVELFUSION ? flight.searchId : flight.provider;
                 const supportedPayments: SupportedPayments | undefined = details.formOfPayments.get(searchId);
@@ -129,45 +134,8 @@ export class CheckoutPageComponent implements OnInit {
                         new Address()
                     )
                 });
-            });
-
+            })
         })
-
-        // this.checkoutService
-        //   .getDetailsValue()
-        //   ?.flights.forEach((flight: FlightOption, index: number) => {
-        //     const searchId: string =
-        //       flight.provider == Providers.TRAVELFUSION
-        //         ? flight.searchId
-        //         : flight.provider;
-        //     const supportedPayments: SupportedPayments | undefined =
-        //       this.checkoutService.getDetailsValue()!.formOfPayments.get(searchId);
-
-        //     if (!supportedPayments) return;
-
-        //     if (uniqueSearchIds.has(searchId)) {
-        //       for (let data of this.paymentsData) {
-        //         if (data.searchId === searchId) {
-        //           data.id = flight.id;
-        //           return;
-        //         }
-        //       }
-        //     }
-
-        //     uniqueSearchIds.add(searchId);
-
-        //     this.paymentsData.push({
-        //       id: flight.id,
-        //       searchId: searchId,
-        //       payment: new Payment(
-        //         searchId,
-        //         supportedPayments.supportedTypes[0],
-        //         '',
-        //         new CreditCard('', '', '', '', ''),
-        //         new Address()
-        //       ),
-        //     });
-        //   });
 
         const obj: any = {
             countryCodePaymentInfo: new FormControl(),
@@ -176,6 +144,7 @@ export class CheckoutPageComponent implements OnInit {
         };
 
         this.travellerinfo = new FormGroup(obj);
+        
     }
 
     getPaymentOptionSupportedTypes(id: string): string[] {
@@ -609,7 +578,7 @@ export class CheckoutPageComponent implements OnInit {
                                 return;
                             }
 
-                            this.router.navigate([`neo/booking-info/${price.id}`]);
+                            this.router.navigate([`neo/booking-info`]);
                         });
                         break;
                     case AlertAction.CANCEL:

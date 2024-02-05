@@ -8,19 +8,27 @@
 </div>
 
 	<div id="terminal-page">
-        <ng-container *ngFor="let terminalWindow of (this.terminals$ | async); let index = index">
-            <app-terminal
-                id="terminal{{ index }}"
-                [ngClass]="{selected: terminalWindow.selected}"
-                [content]="terminalContent"
-                (click)="onTerminalClick($event, index)"
-                (submit)="onTerminalSubmit($event)"
-            />
-        </ng-container>
-
-		<!-- <app-calendar-picker [selected]="selected" (submitEvent)="submitCalendar($event)" *ngIf="isCalendar"></app-calendar-picker> -->
+        <app-terminal
+			id="terminal1"
+			[ngClass]="{selected: !isSecondTerminalSelected}"
+			[content]="terminal1Content"
+			(click)="onTerminalClick($event, false)"
+			(submit)="onTerminalSubmit($event)"
+		>
+		</app-terminal>
+		<app-terminal
+			*ngIf="showTwoTerminals"
+			id="terminal2"
+			[ngClass]="{selected: isSecondTerminalSelected}"
+			[content]="terminal2Content"
+			(click)="onTerminalClick($event, true)"
+			(submit)="onTerminalSubmit($event)"
+		>
+		</app-terminal>
+		<app-calendar-picker [selected]="selected" (submitEvent)="submitCalendar($event)" *ngIf="isCalendar"></app-calendar-picker>
 
 		<button id="filters" *ngIf="hasFilters" class="fixed-btn btn-filters" size="small" shape="round" (click)="onFilterBtnClick()">
+                <i class="fa-solid fa-bars"></i>
 			<!-- <icon size="small" slot="icon-only" name="filter"></icon> -->
 		</button>
 
@@ -39,14 +47,14 @@
 	</div>
 <!-- 
 <app-filters *ngIf="areFilters" forceOverscroll="false" class="filters" (allowCommands)="allowCommands()" 
-(exitFilters)="exitFilters()"></app-filters>
+(exitFilters)="exitFilters()"></app-filters> -->
 
-<app-brands-and-ancillaries [data]="data" (closeEvent)="onBrandClose()" *ngIf="isBrandAcc" class="brands"></app-brands-and-ancillaries>
+<ng-template #brandsAndAcillaries>
+    <app-brands-and-ancillaries [data]="data" (closeEvent)="onBrandClose()" *ngIf="isBrandAcc" class="brands"></app-brands-and-ancillaries>
+</ng-template>
 
-<app-email-items (exitEmailItems)="exitEmailItems()" *ngIf="isEmail" 
+<!-- <app-email-items (exitEmailItems)="exitEmailItems()" *ngIf="isEmail" 
 	class="email-items"></app-email-items> -->
 
 <terminal-bottom-bar [pkeyIndex]="selectedPkey" (commandSubmit)="onCommandInputSubmit($event)" />
-
-<button (click)="toggleMenu('right')">I am random button</button>
 
