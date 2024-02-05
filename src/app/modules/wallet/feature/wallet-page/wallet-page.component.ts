@@ -6,6 +6,9 @@ import { BalanceService } from 'src/app/shared/services/balance.service';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { DayInterval } from '../../models/day-interval.enum';
 import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
+import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
+import { Deposit } from 'src/app/shared/models/deposit.model';
+import { patterns } from 'src/app/shared/utils/validation-patterns';
 
 @Component({
   selector: 'app-wallet-page',
@@ -16,14 +19,18 @@ import { ActivatedRoute, NavigationEnd, Route, Router } from '@angular/router';
 export class WalletPageComponent implements OnInit{
     InputType = InputType;
     DayInterval = DayInterval;
+    patterns = patterns
 
     transactions$!: Observable<Transactions>;
+
+    public deposit: Deposit = new Deposit();
 
     numDays?: number = 30;
 
     dateRange: DateRange = new DateRange();
     constructor(
         private balanceService: BalanceService,
+        private modalService: ModalControllerService,
         private router: Router
     ) {
         this.transactions$ = balanceService.getTransactions();
@@ -64,6 +71,18 @@ export class WalletPageComponent implements OnInit{
         }
 
         this.updateTransactions();
+    }
+
+    toggleModal(content: any, modalId: string) {
+        this.modalService.showModal(content, modalId);
+    }
+
+    addFunds(): void {
+        this.deposit.currency = "USD";
+        if(!this.deposit.isValid()) return;
+
+        this.balanceService.addFunds(this.deposit);
+
     }
 }
 

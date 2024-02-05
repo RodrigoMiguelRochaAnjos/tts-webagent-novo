@@ -359,5 +359,15 @@
     "TRAVELLER": "ভ্রমণকারী",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS Web Agent কেবলমাত্র Webagent ব্যবহারকারীদের জন্য উপলব্ধ।",
     "UNCONFIRMED": "নিশ্চিত হয়নি",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "আপনার অ্যাকাউন্ট সেটিংস অবৈধ",
+    "CHOOSE_YEAR": "একটি বছর চয়ন করুন",
+    "ADDRESS": "ঠিকানা",
+    "APP_SETTINGS": "অ্যাপ সেটিংস",
+    "SELECT_LANGUAGE": "একটি ভাষা নির্বাচন করুন",
+    "SELECT_CURRENCY": "একটি মুদ্রা নির্বাচন করুন",
+    "BILLING_ADDRESS": "বিলিং ঠিকানা",
+    "TAXES_INCLUDED": "কর অন্তর্ভুক্ত",
+    "PAYMENT": "পেমেন্ট",
+    "FLIGHT_PROCESSING_ERROR": "এই ফ্লাইট পেমেন্ট অপশন প্রক্রিয়া করার সময় একটি সমস্যা হয়েছে",
+    "TRANSACTION": "লেনদেন"
 }

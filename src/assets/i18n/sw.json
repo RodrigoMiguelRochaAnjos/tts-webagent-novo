@@ -359,5 +359,15 @@
     "TRAVELLER": "Msafiri",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS Web Agent inapatikana kwa watumiaji wa Webagent tu.",
     "UNCONFIRMED": "Haitathibitishwa",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "Mipangilio ya akaunti yako ni batili",
+    "CHOOSE_YEAR": "Chagua Mwaka",
+    "ADDRESS": "Anwani",
+    "APP_SETTINGS": "Mipangilio ya Programu",
+    "SELECT_LANGUAGE": "Chagua Lugha",
+    "SELECT_CURRENCY": "Chagua Sarafu",
+    "BILLING_ADDRESS": "Anwani ya Bili",
+    "TAXES_INCLUDED": "Kodi Imojumuishwa",
+    "PAYMENT": "Malipo",
+    "FLIGHT_PROCESSING_ERROR": "Kulikuwa na shida katika kusindika malipo ya safari hii",
+    "TRANSACTION": "Hesabu"
 }

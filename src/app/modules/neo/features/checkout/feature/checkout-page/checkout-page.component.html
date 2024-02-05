@@ -17,34 +17,34 @@
                     <div class="ticket-info">
                         <div class="first-row">
                             <div class="first-column">
-                                <p>Flight</p>
+                                <p>{{'FLIGHT' | translate}}</p>
                                 <h5>{{ segment.flightNumber }}</h5>
                             </div>
                             <div class="first-column">
-                                <p>Boarding time</p>
+                                <p>{{'BOARDING_TIME' | translate}}</p>
                                 <h5>{{ segment.departureDatetime | date: 'HH:mm' }}</h5>
                             </div>
                             <div class="first-column">
-                                <p>Terminal</p>
+                                <p>{{'TERMINAL' | translate}}</p>
                                 <h5>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</h5>
                             </div>
                             <div class="first-column">
-                                <p>Duration</p>
+                                <p>{{'DURATION' | translate}}</p>
                                 <h5>24h</h5>
                             </div>
     
                         </div>
     
                         <div class="class">
-                            <p>Class:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
+                            <p>{{'CLASS' | translate}}:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
                         </div>
     
                         <div class="destination">
-                            <p>From:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span> <p>To: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
+                            <p>{{'ORIGIN' | translate}}:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span> <p>{{'TO' | translate}}: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
                         </div>
     
                         <div class="departure-time">
-                            <p>Departure:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span> <p>Arrival: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
+                            <p>{{'DEPARTURE' | translate}}:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span> <p>{{'ARRIVAL' | translate}}: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                     <div class="info-circle"><span>i</span></div>
                 </div>
                 <div class="div">
-                    <label>Taxes included</label>
+                    <label>{{'TAXES_INCLUDED' | translate}}</label>
                 </div>
                 
             </div>
@@ -66,16 +66,16 @@
         <div class="mid-section" *ngIf="getPayment(flight.id)">
             <div class="half-section left">
                 <div class="first-row" *ngIf="this.getPaymentOptionSupportedCards(flight.id).length > 0 || getPayment(flight.id)?.type != PaymentOption.CREDIT_CARD">
-                    <h4>Payment</h4>
+                    <h4>{{'PAYMENT' | translate}}</h4>
                     <webagent-input [type]="InputType.DROPDOWN" [value]="this.getPaymentOptionSupportedTypes(flight.id)[0]" [required]="true" [label]="'Card type'" [options]="this.getPaymentOptionSupportedTypes(flight.id)" [(ngModel)]="getPayment(flight.id)!.type"/>
                     <webagent-input [type]="InputType.DROPDOWN" *ngIf="getPayment(flight.id)!.type == PaymentOption.CREDIT_CARD" [value]="this.getPaymentOptionSupportedCards(flight.id)[0]" [required]="true" [label]="'Card type'" [(ngModel)]="getPaymentCreditCard(flight.id).cardType" [options]="this.getPaymentOptionSupportedCards(flight.id)" />
                 </div>
                 <div class="first-row" *ngIf="getPayment(flight.id)?.type !== PaymentOption.NONE && getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0">
-                    <h4>A problem occured processing this flight payment options</h4>
+                    <h4>{{'FLIGHT_PROCESSING_ERROR' | translate}}</h4>
                 </div>
                 <ng-container *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard && !(getPayment(flight.id)?.type !== PaymentOption.CASH && this.getPaymentOptionSupportedCards(flight.id).length <= 0)">
                     <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card holder'"  [(ngModel)]="getPaymentCreditCard(flight.id).name" [placeholder]="'E.g. John'"/>
-                     
+                    
                     <div class="second-row">
                         <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Card number'" [max]="20" [(ngModel)]="getPaymentCreditCard(flight.id).number" [placeholder]="'E.g. 0000 0000 0000 0000'"/>
                         <div class="half-inputs">
@@ -103,7 +103,7 @@
     
             </div>
             <div class="half-section right" *ngIf="getPayment(flight.id)?.type == PaymentOption.CREDIT_CARD && getPayment(flight.id)?.creditCard">
-                <h4>Billing address</h4>
+                <h4>{{'BILLING_ADDRESS' | translate}}</h4>
     
                 <webagent-input [type]="InputType.TEXT" [required]="true" [label]="'Entity name'" [(ngModel)]="getPayment(flight.id)!.entityName" [placeholder]="'E.g. TTS Lab'"/>
                 
