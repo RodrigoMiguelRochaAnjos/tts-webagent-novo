@@ -221,7 +221,6 @@ export class TerminalService {
         if (result.success) {
             if (result.message) {
                 this.updateCommand = result.message.updateCmd ? result.message.updateCmd : null;
-                console.log(JSON.stringify(result))
                 this.processCommandResult(result.message);
                 this.processFilters(result.message.filters);
             }
@@ -409,8 +408,6 @@ export class TerminalService {
 
                 this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
                     next: (result: any) => {
-                        console.log("shitty ass response: ", result);
-
                         resolve(result.message);
                     },
                     error: (err: Error) => {
@@ -484,7 +481,6 @@ export class TerminalService {
     }
 
     async requestFareQuote(command: object): Promise<any> {
-        console.log("I've been requested")
         return new Promise<any>((resolve) => {
             this.authService.getUser().subscribe((user: User) => {
                 if (!(user instanceof AuthenticatedUser)) return;
@@ -494,7 +490,6 @@ export class TerminalService {
                     cmdObj: command
                 };
 
-                console.log(postData);
                 this.restService.post(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
                     next: (result: any) => resolve(result.message),
                     error: (err: any) => {

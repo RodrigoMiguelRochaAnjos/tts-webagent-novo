@@ -13,8 +13,6 @@ export class LoadingComponent {
     constructor(
         private loadingService: LoadingService
     ) {
-        // this.loadingService.getLoadingStatus().subscribe((status) => console.log(status));
-
         this.show$ = this.loadingService.getLoadingStatus();
     }
 }

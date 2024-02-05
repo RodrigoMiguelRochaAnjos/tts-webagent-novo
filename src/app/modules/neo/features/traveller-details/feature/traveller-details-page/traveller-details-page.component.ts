@@ -104,7 +104,6 @@ export class TravellerDetailsPageComponent implements OnInit{
     }
 
     get travellers(): Travellers {
-        console.log(this.travellerService.getTravellers())
         return this.travellerService.getTravellers();
     }
 
