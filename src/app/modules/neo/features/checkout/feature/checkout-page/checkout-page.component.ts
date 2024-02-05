@@ -95,7 +95,6 @@ export class CheckoutPageComponent implements OnInit {
         this.details$.pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((details: AirCheckoutDetailsResponse | null) => {
             if (details == null) return;
 
-            console.log(details);
             details.flights.forEach((flight: FlightOption) => {
                 const searchId: string = flight.provider == Providers.TRAVELFUSION ? flight.searchId : flight.provider;
                 const supportedPayments: SupportedPayments | undefined = details.formOfPayments.get(searchId);

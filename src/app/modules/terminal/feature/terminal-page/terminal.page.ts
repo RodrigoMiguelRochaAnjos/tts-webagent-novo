@@ -101,8 +101,6 @@ export class TerminalPage implements OnInit {
             this.keepKeyboardVisible = user.settings.keepKeyboardVisible;
         })
 
-        console.log(this.terminalService.commandsHistorySource.getValue());
-
         if (this.terminalService.terminalContentSource.getValue() === '' && this.terminalService.commandsHistorySource.getValue().length > 0) {
             const commandsHistory = this.terminalService.commandsHistorySource.getValue();
             this.terminalService.executeTerminalCommand(commandsHistory[commandsHistory.length - 1]);
