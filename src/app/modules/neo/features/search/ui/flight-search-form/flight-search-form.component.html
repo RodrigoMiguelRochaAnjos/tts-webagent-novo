@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <webagent-input *ngIf="this.isRoundTrip" class="dates" [min]="this.minDate" [max]="this.maxDate" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
-    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="'Departure Date'" />
+    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [min]="this.minDate" [max]="this.maxDate" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="'Departure Date'" />
 </div>
 
 <div class="row controls">

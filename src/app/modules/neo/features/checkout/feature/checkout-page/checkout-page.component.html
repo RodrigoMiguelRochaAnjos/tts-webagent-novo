@@ -85,7 +85,7 @@
                     </div>
                     <div class="field reusable"
                         *ngIf="!getPayment(flight.id)?.isEmpty() && getPayment(flight.id)?.type != PaymentOption.CASH">
-                        <button (click)="clearForm(flight.id)">+</button>
+                        <button (click)="clearForm(flight.id)">Clear card info</button>
                         <ng-container class="payment-method" *ngFor="let obj of this.paymentsData">
                             <button (click)="useSameCardAs(obj.payment.creditCard, obj.payment.address, obj.payment.entityName, flight.id)"
                                 *ngIf="obj.payment.type != PaymentOption.CASH && this.isSupportedPaymentType(flight.id, obj.payment.creditCard?.cardType) && !obj.payment.creditCard?.equals(getPayment(flight.id)?.creditCard) && obj.payment.creditCard?.isValid()">

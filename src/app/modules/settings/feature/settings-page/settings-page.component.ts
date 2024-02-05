@@ -15,6 +15,7 @@ import { Contact } from 'src/app/core/models/user/contact/contact.model';
 import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { AlertService } from 'src/app/core/services/alert.service';
+import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 
 @Component({
     selector: 'app-settings-page',
@@ -76,23 +77,61 @@ export class SettingsPageComponent implements OnInit{
         user.contact = new Contact();
         user.contact.email = this.tmpSettings.profileUserEmail;
         user.contact.phone = new Phone();
+
         user.contact.phone.dialCode = `+${this.tmpSettings.profileUserDialCode}`;
         user.contact.phone.number = this.tmpSettings.profileUserPhone;
 
 
 
         try {
-            user.save();
-            this.authService.updateUserSettings(this.tmpSettings);
-            this.changeLanguage();
+            if(this.validateInputs()) {
+                user.save();
+                this.authService.updateUserSettings(this.tmpSettings);
+                this.changeLanguage();
+            }
+        
         } catch (er) {
             er = er as Error;
             this.alertService.show(AlertType.ERROR, this.messages['INVALID_FIELDS_MESSAGE'])
         }
     }
 
+    private isValidInput(value: string, pattern: RegExp): boolean {
+        return pattern.test(value);
+    }
+
+    validateInputs(): boolean {
+
+        const errors: string[] = [];
+
+        if(!this.isValidInput(this.tmpSettings.profileUserName, patterns.name)) errors.push("The user's profile name is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.profileUserPhone, patterns.phone)) errors.push("The user's profile phone number is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.profileUserEmail, patterns.email)) errors.push("The user's profile email is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.city, patterns.city)) errors.push("The user's profile city address is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.agencyEntityName, patterns.text)) errors.push("The user's agency entity name is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.street, patterns.text)) errors.push("The user's agency street is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.postCode, patterns.postCode)) errors.push("The user's agency post code is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.countryCode, patterns.countryCode)) errors.push("The user's agency country code is invalid, please try again");
+
+        if (errors.length === 0) {
+            this.alertService.show(AlertType.SUCCESS, "All form information is valid!");
+            return true;
+
+          } else {
+            const errorMessage = errors.join('\n');
+            this.alertService.show(AlertType.ERROR, `Invalid input(s) detected:\n${errorMessage}`)
+            return false;
+        }
+    }
+
     changeLanguage(): void {
         this.translate.use(this.tmpSettings.languageCode);
     }
-
 }

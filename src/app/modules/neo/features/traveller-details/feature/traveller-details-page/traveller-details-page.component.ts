@@ -17,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { User } from 'src/app/core/models/user/user.model';
-import { TranslateService } from '@ngx-translate/core';
+import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -157,7 +157,6 @@ export class TravellerDetailsPageComponent {
         
         this.reservationService.checkTravellers();
 
-        // this.statisticsService.addClientStat("traveller/details");
 
         this.authService.updateUserContact(this.contactRequestData);
 
@@ -184,4 +183,24 @@ export class TravellerDetailsPageComponent {
         }
         return str;
     }
+
+    // passangerTypeDateInput(): {minDate: string, maxDate: string} {
+    //     let minDate: string = "" ;
+    //     let maxDate: string = "" ;
+    //     const travellers = this.travellerService.getTravellers();
+
+    //     for (const traveller of travellers) {
+    //         if ((traveller instanceof this.travellerService.getType(TravellerTypes.CHILDREN))) {
+    //             minDate = moment().subtract(12, "year").format("DD/MM/YYYY");
+    //             break;
+    //         }
+
+    //         if ((traveller instanceof this.travellerService.getType(TravellerTypes.ADULTS))) {
+    //             maxDate = moment().subtract(2, "year").format("DD/MM/YYYY");
+    //             break;
+    //         }
+    //     }
+
+    //     return { minDate, maxDate };
+    // }
 }
