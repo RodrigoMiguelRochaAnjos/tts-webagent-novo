@@ -46,6 +46,7 @@ export class AuthService implements OnDestroy {
         private keepAliveService: KeepAliveService,
         private destroyService: DestroyService,
         private alertService: AlertService,
+        private userMapper: UserMapper,
         translate: TranslateService
     ) {
 
@@ -90,7 +91,7 @@ export class AuthService implements OnDestroy {
 
                     switch (this.loginValidator.validateLogin(response)) {
                         case AuthValidators.VALID:
-                            this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as AuthenticatedUser));
+                            this.processLogin((this.userMapper.mapLoginToUser(loginRequest, response) as AuthenticatedUser));
                             break;
                         case AuthValidators.INVALID_LICENSE:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_LICENSE'])
@@ -103,7 +104,7 @@ export class AuthService implements OnDestroy {
                         case AuthValidators.INVALID_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
-                            this.processLogin((UserMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
+                            this.processLogin((this.userMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
                             break;
                         case AuthValidators.HAS_ALERT:
                             this.alertService.show(AlertType.ERROR, 'HAS ALERTS');

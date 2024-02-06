@@ -242,29 +242,13 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     }
 
     get fromDate(): string {
-        if (!this.value.dateFrom.isValid() || this.value.dateFrom == null) return ''
+        if (!this.value?.dateFrom?.isValid() || this.value?.dateFrom == null) return ''
 
-        return this.value.dateFrom.format('DD/MM/YYYY');
+        return this.value?.dateFrom.format('DD/MM/YYYY');
     }
 
     get toDate(): string {
-        if (!this.value.dateTo.isValid() || this.value.dateTo == null) return '';
-        return this.value.dateTo.format('DD/MM/YYYY');
-    }
-
-    set fromDate(date: string) {
-        if (date == '' || date == null) {
-            this.value.dateFrom = null;
-            return;
-        }
-        this.value.dateFrom = moment(date, 'DD/MM/YYYY');
-    }
-
-    set toDate(date: string) {
-        if (date == '' || date == null) {
-            this.value.dateTo = null;
-            return;
-        }
-        this.value.dateTo = moment(date, 'DD/MM/YYYY');
+        if (!this.value?.dateTo?.isValid() || this.value?.dateTo == null) return '';
+        return this.value?.dateTo.format('DD/MM/YYYY');
     }
 }

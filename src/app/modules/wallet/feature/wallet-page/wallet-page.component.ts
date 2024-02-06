@@ -42,14 +42,6 @@ export class WalletPageComponent implements OnInit{
 
     ngOnInit(): void {
         this.balanceService.loadTransactions(this.numDays);
-
-        // this.translatedDaysInterval = []
-        // Object.values(DayInterval).forEach((value: string) => {
-        //     this.translate.stream(value).subscribe((val: string) => {
-        //         this.translatedDaysInterval.push(val)
-        //     });
-        // });
-
     }
 
     get daysIntervalValues(): string[] {

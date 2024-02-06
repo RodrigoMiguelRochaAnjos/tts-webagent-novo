@@ -25,6 +25,7 @@ export class Settings {
     agencyEntityName!: string;
     portraitFontSize: number = 1;
     keepKeyboardVisible: boolean = false;
+    message: any;
 
     default: boolean = false;
 

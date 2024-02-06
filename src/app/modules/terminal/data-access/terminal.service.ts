@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ComponentRef, EnvironmentInjector, Injectable, createComponent } from '@angular/core';
+import { ComponentRef, EnvironmentInjector, Injectable, OnInit, createComponent } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subscription, takeUntil } from 'rxjs';
@@ -37,7 +37,7 @@ export const MONTHS: string[] = [
 @Injectable({
     providedIn: 'root',
 })
-export class TerminalService {
+export class TerminalService implements OnInit{
     private readonly ENDPOINT: string = environment.endpoints.TMA;
 
     filtersSource = new BehaviorSubject<[]>([]);
@@ -96,6 +96,9 @@ export class TerminalService {
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
+    }
+    ngOnInit(): void {
+        this.terminalContentSource.next(new TerminalContent(this.authService.getUserValue().settings.message).render())
     }
 
     private processFilters(filtersData: any): void {

@@ -12,9 +12,26 @@ import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { PKey } from "src/app/modules/terminal/models/pkey.model";
 import { Address } from "../models/user/contact/segments/address.model";
+import { EnvironmentInjector, Injectable, Injector } from "@angular/core";
+import { TerminalService } from "src/app/modules/terminal/data-access/terminal.service";
+import { TerminalContent } from "src/app/modules/terminal/models/terminal-content.model";
+import { SharedModule } from "src/app/shared/shared.module";
+import { TranslateLoader, TranslateModule, TranslateService, TranslateStore } from "@ngx-translate/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { MenuService } from "src/app/modules/terminal/data-access/menu.service";
+import { TerminalHistoryService } from "src/app/modules/terminal/data-access/terminal-history.service";
+import { AlertService } from "../services/alert.service";
+import { DestroyService } from "../services/destroy.service";
+import { AuthService } from "./auth.service";
 
+@Injectable({
+    providedIn: 'root'
+})
 export class UserMapper {
-    static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
+
+
+    mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
 
         let user: AuthenticatedUser = new AuthenticatedUser();
 
@@ -69,6 +86,7 @@ export class UserMapper {
         user.currency = 'EUR';
         user.languageCode = 'en';
         user.settings = response.syncData.settings;
+        user.settings.message = response.message;
 
         switch (loginRequest.gds) {
             case 'Galileo':
