@@ -8,69 +8,69 @@
 
     <div class="page-container">
         <ng-container *ngFor="let flight of (this.details$ | async)?.flights; let pindex = index">
-            <div class="top-section" *ngFor="let segment of flight.segments">
-                <div class="left-side">
-                    <div class="logo" style="background-image: url('{{ segment.marketingCarrier.logo_url }}'); background-size: cover">
-
+            <div class="mid-section" *ngIf="getPayment(flight.id)">
+                <div class="top-section" *ngFor="let segment of flight.segments">
+                    <div class="left-side">
+                        <div class="logo" style="background-image: url('{{ segment.marketingCarrier.logo_url }}'); background-size: contain">
+    
+                        </div>
                     </div>
-                </div>
-
-                <div class="mid-side">
-                    <div class="flight-info">
-                        <p class="semi-bold">Sun 27 December</p>
-                        <div class="ticket-info">
-                            <div class="first-row">
-                                <div class="first-column">
-                                    <p>{{'FLIGHT' | translate}}</p>
-                                    <h5>{{ segment.flightNumber }}</h5>
+    
+                    <div class="mid-side">
+                        <div class="flight-info">
+                            <p class="semi-bold"> {{ segment.departureDatetime | date: 'EEE, d MMMM' }}</p>
+                            <div class="ticket-info">
+                                <div class="first-row">
+                                    <div class="first-column">
+                                        <p>{{'FLIGHT' | translate}}</p>
+                                        <h5>{{ segment.flightNumber }}</h5>
+                                    </div>
+                                    <div class="first-column">
+                                        <p>{{'BOARDING_TIME' | translate}}</p>
+                                        <h5>{{ segment.departureDatetime | date: 'HH:mm' }}</h5>
+                                    </div>
+                                    <div class="first-column">
+                                        <p>{{'TERMINAL' | translate}}</p>
+                                        <h5>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</h5>
+                                    </div>
+                                    <div class="first-column">
+                                        <p>{{'DURATION' | translate}}</p>
+                                        <h5>24h</h5>
+                                    </div>
+    
                                 </div>
-                                <div class="first-column">
-                                    <p>{{'BOARDING_TIME' | translate}}</p>
-                                    <h5>{{ segment.departureDatetime | date: 'HH:mm' }}</h5>
+    
+                                <div class="class">
+                                    <p>{{'CLASS' | translate}}:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
                                 </div>
-                                <div class="first-column">
-                                    <p>{{'TERMINAL' | translate}}</p>
-                                    <h5>{{ segment.departureTerminal ? segment.departureTerminal : '-------' }}</h5>
+    
+                                <div class="destination">
+                                    <p>{{'ORIGIN' | translate}}:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span>
+                                    <p>{{'DEPARTURE' | translate}}: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
                                 </div>
-                                <div class="first-column">
-                                    <p>{{'DURATION' | translate}}</p>
-                                    <h5>24h</h5>
+    
+                                <div class="departure-time">
+                                    <p>{{'DEPARTURE' | translate}}:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span>
+                                    <p>{{'ARRIVAL' | translate}}: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
                                 </div>
-
-                            </div>
-
-                            <div class="class">
-                                <p>{{'CLASS' | translate}}:</p> <span> {{ segment.fareDetailsList[0].bookingClass }} </span>
-                            </div>
-
-                            <div class="destination">
-                                <p>{{'ORIGIN' | translate}}:</p> <span>{{ segment.origin.type }}/{{ segment.origin.code }}</span>
-                                <p>{{'DEPARTURE' | translate}}: </p> <span>{{ segment.destination.type }}/{{ segment.destination.code }}</span>
-                            </div>
-
-                            <div class="departure-time">
-                                <p>{{'DEPARTURE' | translate}}:</p> <span>{{ segment.departureDatetime | date: 'HH:mm' }}</span>
-                                <p>{{'ARRIVAL' | translate}}: </p> <span>{{ segment.arrivalDatetime | date: 'HH:mm' }}</span>
                             </div>
                         </div>
                     </div>
+    
+                    <div class="right-side">
+    
+                        <div class="price">
+                            <h2>{{ flight?.price?.amount }}</h2>
+                            <h5>{{ flight?.price?.currency }}</h5>
+                            <div class="info-circle"><span>i</span></div>
+                        </div>
+                        <div class="div">
+                            <label>{{'TAXES_INCLUDED' | translate}}</label>
+                        </div>
+    
+                    </div>
                 </div>
 
-                <div class="right-side">
-
-                    <div class="price">
-                        <h2>{{ flight?.price?.amount }}</h2>
-                        <h5>{{ flight?.price?.currency }}</h5>
-                        <div class="info-circle"><span>i</span></div>
-                    </div>
-                    <div class="div">
-                        <label>{{'TAXES_INCLUDED' | translate}}</label>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="mid-section" *ngIf="getPayment(flight.id)">
                 <div class="half-section left">
                     <div class="first-row"
                         *ngIf="this.getPaymentOptionSupportedCards(flight.id).length > 0 || getPayment(flight.id)?.type != PaymentOption.CREDIT_CARD">

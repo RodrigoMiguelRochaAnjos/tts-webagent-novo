@@ -127,6 +127,7 @@ export class TravellerDetailsPageComponent implements OnInit{
             let message = "Please fill in all required fields ";
 
             message += `Traveller ${index + 1}: `;
+
             for (const name in traveller.form.controls) {
                 let tmpTranslation: string = "";
 
@@ -137,6 +138,20 @@ export class TravellerDetailsPageComponent implements OnInit{
 
                 if (traveller.form.controls[name].invalid) message += `${tmpTranslation}, `;
             }
+
+            for (const name in traveller.contact.form().controls) {
+                let tmpTranslation: string = "";
+
+                this.translate.stream(name).subscribe((text: string) => {
+                    tmpTranslation = text;
+                });
+
+                if(traveller.contact.form().controls[name].invalid) message += `${tmpTranslation}, `;
+            }
+
+            message = this.removeLastOccurrence(message, ", ");
+            this.alertService.show(AlertType.ERROR, message);
+
         })
 
 
