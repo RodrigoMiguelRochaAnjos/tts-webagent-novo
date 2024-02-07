@@ -19,6 +19,7 @@ import { User } from 'src/app/core/models/user/user.model';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PassengerType } from '../../../search/utils/requests/air-search-request/passenger-type.enum';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -34,12 +35,12 @@ export class TravellerDetailsPageComponent implements OnInit{
 
     option$!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
 
-    getMaxDateLimit(type: 'CHILD'| 'ADULT'): string {
-        return moment().subtract(type === 'CHILD' ? 2 : 13, 'year').format('DD/MM/YYYY');
+    getMaxDateLimit(type: PassengerType): string {
+        return moment().subtract(type === PassengerType.Child ? 2 : 13, 'year').format('DD/MM/YYYY');
     }
 
-    getMinDateLimit(type: 'CHILD' | 'ADULT'): string {
-        if (type === 'ADULT') return moment().subtract(200, 'year').format('DD/MM/YYYY');
+    getMinDateLimit(type: PassengerType): string {
+        if (type === PassengerType.Adult) return moment().subtract(200, 'year').format('DD/MM/YYYY');
         return moment().subtract(12).format('DD/MM/YYYY');
     }
 

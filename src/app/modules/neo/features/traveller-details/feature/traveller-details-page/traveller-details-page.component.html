@@ -7,36 +7,36 @@
             <ng-container *ngFor="let traveller of this.travellers; let index = index">
                 <h4 *ngIf="index === 0">{{ "TRAVELLERS_DETAILS" | translate }}</h4>
                 <div class="traveller" [ngClass]="{'no-title': index !== 0}">
-                <div *ngIf="traveller.type" class="traveller-type">
-                    {{ traveller.type }}
-                </div>
-                <div class="traveller-title">
-                    <webagent-dropdown [label]="('TITLE' | translate)" [(ngModel)]="traveller.title">
-                        <webagent-option [value]="'MR'">MR</webagent-option>
-                        <webagent-option [value]="'MRS'">MRS</webagent-option>
-                        <webagent-option [value]="'MS'">MS</webagent-option>
-                    </webagent-dropdown>
-                </div>
+                    <div *ngIf="traveller.type" class="traveller-type">
+                        {{ traveller.type }}
+                    </div>
+                    <div class="traveller-title">
+                        <webagent-dropdown [label]="('TITLE' | translate)" [(ngModel)]="traveller.title">
+                            <webagent-option [value]="'MR'">MR</webagent-option>
+                            <webagent-option [value]="'MRS'">MRS</webagent-option>
+                            <webagent-option [value]="'MS'">MS</webagent-option>
+                        </webagent-dropdown>
+                    </div>
 
-                <div class="triple-fields">
-                    <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
-                        [label]="'First name'" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
-                    <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
-                        [label]="'Surname'" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
-                    <webagent-input [type]="InputType.TEXT" [required]="false"
-                        [(ngModel)]="traveller.contact.phone.dialCode" [label]="'Country Dial Code'"
-                        [placeholder]="'E.g. 351'" />
-                </div>
-                <div class="triple-fields">
-                    <webagent-input [type]="InputType.DATE" [required]="false" (change)="updateTravellerDOB($event, index)"
-                        [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" [min]="getMinDateLimit(traveller.type)" [max]="getMaxDateLimit(traveller.type)"/>
-                    <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email"
-                        [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-                    <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number"
-                        [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-                </div>
+                    <div class="triple-fields">
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                            [label]="'First name'" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                            [label]="'Surname'" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false"
+                            [(ngModel)]="traveller.contact.phone.dialCode" [label]="'Country Dial Code'"
+                            [placeholder]="'E.g. 351'" />
+                    </div>
+                    <div class="triple-fields">
+                        <webagent-input [type]="InputType.DATE" [required]="false" (change)="updateTravellerDOB($event, index)"
+                            [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" [min]="getMinDateLimit(traveller.type)" [max]="getMaxDateLimit(traveller.type)"/>
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email"
+                            [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number"
+                            [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
+                    </div>
 
-                <button class="button-small">{{ "FREQUENT_FLYER_NUMBER" | translate }}</button>
+                    <button class="button-small">{{ "FREQUENT_FLYER_NUMBER" | translate }}</button>
                 </div>
             </ng-container>
         </div>
