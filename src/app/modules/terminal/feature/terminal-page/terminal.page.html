@@ -53,8 +53,11 @@
     <app-brands-and-ancillaries [data]="data" (closeEvent)="onBrandClose()" *ngIf="isBrandAcc" class="brands"></app-brands-and-ancillaries>
 </ng-template>
 
-<!-- <app-email-items (exitEmailItems)="exitEmailItems()" *ngIf="isEmail" 
-	class="email-items"></app-email-items> -->
+<ng-template #emailTempaltes>
+    <app-email-items (exitEmailItems)="exitEmailItems()" *ngIf="isEmail" class="email-items"></app-email-items>
+</ng-template>
+
+
 
 <terminal-bottom-bar [pkeyIndex]="selectedPkey" (commandSubmit)="onCommandInputSubmit($event)" />
 

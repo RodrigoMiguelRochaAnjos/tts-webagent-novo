@@ -7,6 +7,8 @@ import { AuthenticatedUser } from './core/models/user/types/authenticated-user.m
 import { IncompleteUser } from './core/models/user/types/incomplete-user.model';
 import { TranslateService } from '@ngx-translate/core';
 import { TerminalService } from './modules/terminal/data-access/terminal.service';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -23,11 +25,16 @@ export class AppComponent implements OnInit{
         private authService: AuthService,
         private pkeyService: PkeysService,
         private terminalHistoryService: TerminalService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private titleService: Title,
+        private router: Router
     ) {
-        
     }
     ngOnInit(): void {
+        this.router.events.subscribe(() => {
+            this.titleService.setTitle("TTS Webagent");
+        })
+
         this.authService.getUser().subscribe((user: User) => {
             this.loggedIn = (user instanceof AuthenticatedUser || user instanceof IncompleteUser);
 

@@ -34,6 +34,14 @@ export class TravellerDetailsPageComponent implements OnInit{
 
     option$!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
 
+    getMaxDateLimit(type: 'CHILD'| 'ADULT'): string {
+        return moment().subtract(type === 'CHILD' ? 2 : 13, 'year').format('DD/MM/YYYY');
+    }
+
+    getMinDateLimit(type: 'CHILD' | 'ADULT'): string {
+        if (type === 'ADULT') return moment().subtract(200, 'year').format('DD/MM/YYYY');
+        return moment().subtract(12).format('DD/MM/YYYY');
+    }
 
     constructor(
         private reservationService: ReservationService,
@@ -152,6 +160,7 @@ export class TravellerDetailsPageComponent implements OnInit{
             message = this.removeLastOccurrence(message, ", ");
             this.alertService.show(AlertType.ERROR, message);
 
+
         })
 
 
@@ -173,7 +182,9 @@ export class TravellerDetailsPageComponent implements OnInit{
 
         }
 
-        if (!valid) return;
+        if (!valid) {
+            return;
+        }
         
         this.reservationService.checkTravellers();
 

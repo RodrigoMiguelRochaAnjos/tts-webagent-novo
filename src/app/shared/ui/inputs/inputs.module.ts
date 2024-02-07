@@ -20,6 +20,8 @@ import { WebagentTextDateInputComponent } from './types/webagent-text-date-input
 import { WebagentCheckboxInputComponent } from './types/webagent-checkbox-input/webagent-checkbox-input.component';
 import { WebagentNumberComponent } from './types/webagent-number/webagent-number.component';
 import { TranslateModule } from "@ngx-translate/core";
+import { WebagentCalendarInputComponent } from './types/webagent-calendar-input/webagent-calendar-input.component';
+import { WebagentOptionComponent } from './types/webagent-option/webagent-option.component';
 
 @NgModule({
     declarations: [
@@ -37,7 +39,9 @@ import { TranslateModule } from "@ngx-translate/core";
         WebagentPasswordComponent,
         WebagentTextDateInputComponent,
         WebagentCheckboxInputComponent,
-        WebagentNumberComponent
+        WebagentNumberComponent,
+        WebagentCalendarInputComponent,
+        WebagentOptionComponent
     ],
     imports: [
         CommonModule,
@@ -48,6 +52,8 @@ import { TranslateModule } from "@ngx-translate/core";
     ],
     exports: [
         WebagentInputComponent,
+        WebagentOptionComponent,
+        WebagentDropdownComponent
     ],
     providers: [
         DirectivesModule

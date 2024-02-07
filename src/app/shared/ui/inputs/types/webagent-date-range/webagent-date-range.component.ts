@@ -53,10 +53,14 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
         if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
 
-        if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
+        if (moment(this.max, "DD/MM/YYYY").isBefore(this.date)) {
+            this.date = moment(this.max, "DD/MM/YYYY");
+            this.dateNext = moment(this.max, "DD/MM/YYYY").add(1, 'M');
+        } else if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
             this.date = moment(this.min, "DD/MM/YYYY");
             this.dateNext = moment(this.min, "DD/MM/YYYY").add(1, 'M');
         }
+
 
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);
@@ -242,29 +246,13 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     }
 
     get fromDate(): string {
-        if (!this.value.dateFrom.isValid() || this.value.dateFrom == null) return ''
+        if (!this.value?.dateFrom?.isValid() || this.value?.dateFrom == null) return ''
 
-        return this.value.dateFrom.format('DD/MM/YYYY');
+        return this.value?.dateFrom.format('DD/MM/YYYY');
     }
 
     get toDate(): string {
-        if (!this.value.dateTo.isValid() || this.value.dateTo == null) return '';
-        return this.value.dateTo.format('DD/MM/YYYY');
-    }
-
-    set fromDate(date: string) {
-        if (date == '' || date == null) {
-            this.value.dateFrom = null;
-            return;
-        }
-        this.value.dateFrom = moment(date, 'DD/MM/YYYY');
-    }
-
-    set toDate(date: string) {
-        if (date == '' || date == null) {
-            this.value.dateTo = null;
-            return;
-        }
-        this.value.dateTo = moment(date, 'DD/MM/YYYY');
+        if (!this.value?.dateTo?.isValid() || this.value?.dateTo == null) return '';
+        return this.value?.dateTo.format('DD/MM/YYYY');
     }
 }

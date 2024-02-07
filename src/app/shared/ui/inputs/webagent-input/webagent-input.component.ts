@@ -118,8 +118,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 this.hideDefault = true;
 
                 return WebagentDateRangeComponent;
-            case InputType.DROPDOWN:
-                return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
             case InputType.INCREMENTAL_SELECTOR:
