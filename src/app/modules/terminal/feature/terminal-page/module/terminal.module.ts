@@ -12,6 +12,7 @@ import { MenuService } from '../../../data-access/menu.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { CalendarPickerComponent } from '../../../ui/calendar-picker/calendar-picker.component';
 import { BrandsAndAncillariesPageModule } from '../../../ui/brands-and-ancillaries/brands-and-ancillaries.module';
+import { EmailItemsPageModule } from '../../../../emails/feature/email-items/email-items.module';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,7 @@ import { BrandsAndAncillariesPageModule } from '../../../ui/brands-and-ancillari
         // HeaderModule,
         // FiltersPageModule,
         BrandsAndAncillariesPageModule,
-        // EmailItemsPageModule,
+        EmailItemsPageModule,
         // MatDatepickerModule,
         // MatFormFieldModule,
         // MatInputModule,

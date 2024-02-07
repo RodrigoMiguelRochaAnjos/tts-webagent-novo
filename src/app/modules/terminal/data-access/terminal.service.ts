@@ -37,12 +37,12 @@ export const MONTHS: string[] = [
 @Injectable({
     providedIn: 'root',
 })
-export class TerminalService implements OnInit{
+export class TerminalService {
     private readonly ENDPOINT: string = environment.endpoints.TMA;
 
     filtersSource = new BehaviorSubject<[]>([]);
     filters = this.filtersSource.asObservable();
-    
+
     showMoveUpBtnSource = new BehaviorSubject<boolean>(false);
     showMoveUpBtn = this.showMoveUpBtnSource.asObservable();
 
@@ -93,12 +93,13 @@ export class TerminalService implements OnInit{
         private terminalHistory: TerminalHistoryService,
         translate: TranslateService,
     ) {
+        this.authService.getUser().subscribe((user: User) => {
+            if (user.terminalMessage) this.terminalContentSource.next(new TerminalContent(user.terminalMessage).render())
+        })
+
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
-    }
-    ngOnInit(): void {
-        this.terminalContentSource.next(new TerminalContent(this.authService.getUserValue().settings.message).render())
     }
 
     private processFilters(filtersData: any): void {
@@ -151,9 +152,9 @@ export class TerminalService implements OnInit{
             this.authService.logout();
         } else if (serverData.msgAlert) {
             this.alertService.show(AlertType.WARNING, serverData.msgObj[serverData.msgObj.type].message).subscribe((action: AlertAction) => {
-                if(action === AlertAction.WAITING) return;
+                if (action === AlertAction.WAITING) return;
 
-                switch(action) {
+                switch (action) {
                     case AlertAction.EXECUTE:
                         location.href = serverData.msgObj[serverData.msgObj.type].buttonLinkTarget;
                         break;
@@ -168,7 +169,7 @@ export class TerminalService implements OnInit{
 
     private executeUpdateCommand(terminalContent: string): void {
         this.authService.getUser().subscribe((user: User) => {
-            if(!(user instanceof AuthenticatedUser)) return;
+            if (!(user instanceof AuthenticatedUser)) return;
 
             if (this.updateCommand && terminalContent.includes('terminal-update')) {
                 const postData = {
@@ -195,29 +196,28 @@ export class TerminalService implements OnInit{
                 });
             }
         });
-        
+
     }
 
     private processEmailData(emailElement: HTMLElement, emailInfo: any): void {
-        this.authService.getUser().subscribe((user: User) => {
-            if (!emailInfo || !emailElement) return;
+        const user: User = this.authService.getUserValue();
 
-            if (emailElement.className.includes('terminal-email-selected')) {
-                const indexToRemove = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-                user.settings.sendByEmailItems = user.settings.sendByEmailItems.splice(indexToRemove, 1);
+        if (!emailInfo || !emailElement) return;
 
-                this.authService.updateUserSettings(user.settings);
-                emailElement.classList.toggle('terminal-email-selected');
-                return;
-            }
-
-            const index = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-            if (index < 0) user.settings.sendByEmailItems.push(emailInfo);
+        if (emailElement.className.includes('terminal-email-selected')) {
+            const indexToRemove = user.settings?.sendByEmailItems?.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+            user.settings.sendByEmailItems = user.settings?.sendByEmailItems?.splice(indexToRemove, 1);
 
             this.authService.updateUserSettings(user.settings);
             emailElement.classList.toggle('terminal-email-selected');
+            return;
+        }
 
-        });
+        const index = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+        if (index < 0) user.settings.sendByEmailItems.push(emailInfo);
+
+        this.authService.updateUserSettings(user.settings);
+        emailElement.classList.toggle('terminal-email-selected');
     }
 
     processTerminalCommand(result: any, emailElement?: HTMLElement): void {
@@ -239,51 +239,50 @@ export class TerminalService implements OnInit{
             this.authService.logout();
             return;
         }
+        const user: User = this.authService.getUserValue();
+        
+        if (!(user instanceof AuthenticatedUser)) return;
 
-        this.authService.getUser().subscribe((user: User) => {
-            if (!(user instanceof AuthenticatedUser)) return;
+        // this.utilitiesService.showLoading();
+        const isCommandAString = typeof command === 'string';
+        const isCommandAArray = Array.isArray(command);
+        const postData: any = {};
+        postData['sessionId'] = user.id;
+        if (isCommandAString) {
+            postData['allowEnhanced'] = user.settings.enhancedResults;
+            postData['command'] = command;
+        } else if (isCommandAArray) {
+            postData['commandFields'] = command;
+        } else {
+            postData['cmdObj'] = command;
+        }
 
-            // this.utilitiesService.showLoading();
-            const isCommandAString = typeof command === 'string';
-            const isCommandAArray = Array.isArray(command);
-            const postData:any = {};
-            postData['sessionId'] = user.id;
-            if (isCommandAString) {
-                postData['allowEnhanced'] = user.settings.enhancedResults;
-                postData['command'] = command;
-            } else if (isCommandAArray) {
-                postData['commandFields'] = command;
-            } else {
-                postData['cmdObj'] = command;
-            }
-
-            this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
-                next: (result: any) => {
-                    this.lastExecutedCommand = command;
-                    if (isCommandAString) {
-                        this.addCommandToHistory(command as string);
-                    }
-
-                    this.processTerminalCommand(result, emailElement!);
-                    // this.utilitiesService.dismissLoading();
-
-                    
-                    setTimeout(() => {
-                        const commandInput = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
-                        if(commandInput) commandInput.focus();
-                    }, 300);
-
-                    if (history) this.menuService.toggleMenu('right');
-                },
-                
-                error: (err: Error) => {
-                    // this.utilitiesService.dismissLoading();
-                    this.alertService.show(AlertType.ERROR, err.message);
+        this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
+            next: (result: any) => {
+                this.lastExecutedCommand = command;
+                if (isCommandAString) {
+                    this.addCommandToHistory(command as string);
                 }
-            })
+
+                this.processTerminalCommand(result, emailElement!);
+                // this.utilitiesService.dismissLoading();
 
 
+                setTimeout(() => {
+                    const commandInput = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
+                    if (commandInput) commandInput.focus();
+                }, 300);
+
+                if (history) this.menuService.toggleMenu('right');
+            },
+
+            error: (err: Error) => {
+                // this.utilitiesService.dismissLoading();
+                this.alertService.show(AlertType.ERROR, err.message);
+            }
         })
+
+
     }
 
     private get currentTerminal() {

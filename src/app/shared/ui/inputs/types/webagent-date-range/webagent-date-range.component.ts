@@ -53,10 +53,14 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
         if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
 
-        if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
+        if (moment(this.max, "DD/MM/YYYY").isBefore(this.date)) {
+            this.date = moment(this.max, "DD/MM/YYYY");
+            this.dateNext = moment(this.max, "DD/MM/YYYY").add(1, 'M');
+        } else if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
             this.date = moment(this.min, "DD/MM/YYYY");
             this.dateNext = moment(this.min, "DD/MM/YYYY").add(1, 'M');
         }
+
 
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);

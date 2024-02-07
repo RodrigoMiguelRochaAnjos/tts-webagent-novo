@@ -4,8 +4,11 @@
 </form>
 
 <ng-template #year>
-    <h3>Choose a year</h3>
-    <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" />
+    <h3>{{ 'CHOOSE_YEAR' |translate }}</h3>
+    <webagent-dropdown (change)="changeYear($event)" [search]="true">
+        <webagent-option *ngFor="let year of this.getPreviousYears()" [value]="year">{{ year }}</webagent-option>
+    </webagent-dropdown>
+    <!-- <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" /> -->
 </ng-template>
 
 <div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">

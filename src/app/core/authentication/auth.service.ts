@@ -20,6 +20,8 @@ import { AlertType } from "src/app/shared/ui/alerts/alert-type.enum";
 import { TranslateService } from "@ngx-translate/core";
 import { deepClone } from "../utils/deep-clone.tool";
 import { Contact } from "../models/user/contact/contact.model";
+import { Email } from "src/app/modules/emails/models/email.model";
+import { SyncDataSettings } from "src/app/modules/terminal/models/sync-data-settings.model";
 
 @Injectable({
     providedIn: 'root'
@@ -86,7 +88,7 @@ export class AuthService implements OnDestroy {
 
                     if (response.syncData) {
                         Object.setPrototypeOf(response.syncData, SyncData.prototype)
-                        Object.setPrototypeOf(response.syncData.settings, Settings.prototype)
+                        Object.setPrototypeOf(response.syncData.settings, SyncDataSettings.prototype)
                     }
 
                     switch (this.loginValidator.validateLogin(response)) {
@@ -99,7 +101,7 @@ export class AuthService implements OnDestroy {
                         case AuthValidators.NO_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
 
-                            response.syncData.settings = Settings.default();
+                            response.syncData.settings = SyncDataSettings.default();
                             break;
                         case AuthValidators.INVALID_SETTINGS:
                             this.alertService.show(AlertType.ERROR, this.messages['INVALID_SETTINGS']);
@@ -200,12 +202,12 @@ export class AuthService implements OnDestroy {
 
         if(!newSettings.sendByEmailItems) newSettings.sendByEmailItems = [];
         newSettings.lastUpdate = new Date().getTime();
-        newSettings.profileUserName = newSettings.profileUserName.trim();
-        newSettings.profileUserEmail = newSettings.profileUserEmail.trim();
-        newSettings.profileUserPhone = newSettings.profileUserPhone.trim();
-        const postData: { sessionId: string, settings: Settings } = {
+        newSettings.profileName = newSettings.profileName.trim();
+        newSettings.profileEmail = newSettings.profileEmail.trim();
+        newSettings.profilePhone = newSettings.profilePhone.trim();
+        const postData: { sessionId: string, settings: any } = {
             sessionId: user.id,
-            settings: newSettings,
+            settings: newSettings.toPostData(),
         };
 
         this.userService.updateSettings(postData).subscribe({
@@ -222,6 +224,9 @@ export class AuthService implements OnDestroy {
 
                 this.alertService.show(AlertType.SUCCESS, result.message);
             },
+            error: (err) => {
+                this.alertService.show(AlertType.ERROR, "Failed to save settings");
+            }
         });
 
     }
@@ -230,6 +235,14 @@ export class AuthService implements OnDestroy {
         const user: User = this.user$.value;
 
         user.contact = contact;
+
+        this.user$.next(user);
+    }
+
+    updateUserEmailData(email: Email) {
+        const user: User = this.user$.value;
+
+        user.emailData = email;
 
         this.user$.next(user);
     }

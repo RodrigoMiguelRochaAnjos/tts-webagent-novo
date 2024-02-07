@@ -60,12 +60,8 @@
 
 
 app-email-items {
-    position: absolute;
     width: 90%;
     height: 70vh;
-    left: 50%;
-    right: 50%;
-    transform: translate(-50%, 120px);
 }
 
 
@@ -120,9 +116,6 @@ app-calendar-picker {
 
 @media (max-height: 650px) {
 
-    app-email-items {
-        height: 50vh;
-    }
 
     app-calendar-picker {
         transform: translate(-50%, 20px);

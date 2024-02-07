@@ -37,6 +37,7 @@ import { BookingService } from '../../data-access/booking.service';
 import { AirBooking } from 'src/app/shared/models/air-booking.model';
 import { AirBookingRequest } from 'src/app/shared/models/air-booking-request.model';
 import { DestroyService } from 'src/app/core/services/destroy.service';
+import { AirSegment } from 'src/app/modules/neo/models/air-segment.model';
 
 @Component({
     selector: 'app-checkout-page',
@@ -499,7 +500,6 @@ export class CheckoutPageComponent implements OnInit {
 
     getPayment(id: string): Payment | undefined {
         const payment: Payment | undefined = this.findPayment(id);
-
         return payment;
     }
 
@@ -591,5 +591,21 @@ export class CheckoutPageComponent implements OnInit {
         });
 
 
+    }
+
+    segmentDuration(segment: AirSegment): string {
+        let duration = '';
+
+        const hours: number = Math.floor(segment.duration / 60);
+        if (hours > 0) {
+            duration += hours + 'h';
+        }
+
+        const minutes: number = Math.floor(segment.duration % 60);
+        if (minutes > 0) {
+            duration += minutes + 'm';
+        }
+
+        return duration;
     }
 }

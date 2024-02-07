@@ -1,0 +1,18 @@
+:host{
+    display: none;
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px;
+    &:hover {
+        background-color: #f0f0f0;
+    }
+    border-bottom: 1px solid #3331;
+    &:last-child{
+        border-bottom: none;
+    }
+
+    &.show{
+        display: block;
+    }
+}

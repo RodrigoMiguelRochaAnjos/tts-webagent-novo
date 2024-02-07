@@ -28,6 +28,16 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
     }
 
     ngOnInit(): void {
+
+        if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
+        if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
+
+        if (moment(this.max, "DD/MM/YYYY").isBefore(this.date)) {
+            this.date = moment(this.max, "DD/MM/YYYY");
+        }else if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
+            this.date = moment(this.min, "DD/MM/YYYY");
+        }
+
         this.daysArray = this.createCalendar(this.date);
 
     }
