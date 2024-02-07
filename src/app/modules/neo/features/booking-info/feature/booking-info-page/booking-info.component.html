@@ -107,7 +107,7 @@
                 </div>
                 <div
                     *ngIf="this.passenger.contact.phone && this.passenger.contact.phone.dialCode != '' && this.passenger.contact.phone.number != '' ">
-                    <h4>Phone number:</h4>
+                    <h4>{{'PHONE_NUMBER' | translate}}:</h4>
                     <p>
                         {{ this.passenger.contact.phone.dialCode }} {{ this.passenger.contact.phone.number }}
                     </p>

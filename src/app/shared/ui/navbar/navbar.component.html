@@ -10,7 +10,7 @@
             </li>
             <div class="line"></div>
             <li (click)="logout()">
-                <a><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a>
+                <a><i class="fa-solid fa-arrow-right-from-bracket"></i>{{'SIGN_OFF' | translate}}</a>
             </li>
         </ul>
     </ng-container>
@@ -31,10 +31,10 @@
             </div>
 
             <ng-template #customContent1>
-                <h3>Add funds</h3>
+                <h3>{{'ADD_FUNDS' | translate}}</h3>
                 <div class="payment-wrapper" style="display: flex; align-items: flex-end; justify-content: space-between;">
-                    <webagent-input style="width: 300px; margin-right: 10px;" [type]="InputType.NUMBER" [label]="'Amount'" [(ngModel)]="this.deposit.amount"  [placeholder]="'Minimum of 50$'" [max]="10" [pattern]="patterns.amount.source"/>
-                    <button class="button-medium" style="transform: translateY(-1px);" (click)="addFunds()">Add funds</button>
+                    <webagent-input style="width: 300px; margin-right: 10px;" [type]="InputType.NUMBER" [label]="('AMOUNT' | translate)" [(ngModel)]="this.deposit.amount"  [placeholder]="('MINIMUM_AMOUNT' | translate) + ' 50 USD'" [max]="10" [pattern]="patterns.amount.source"/>
+                    <button class="button-medium" style="transform: translateY(-1px);" (click)="addFunds()">{{'ADD_FUNDS' | translate}}</button>
                 </div>
             </ng-template>
 
