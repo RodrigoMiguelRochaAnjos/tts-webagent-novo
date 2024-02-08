@@ -33,8 +33,6 @@ export class BookingService {
 
     page: number = 0;
     size: number = 20;
-    minPrice: number = 0;
-    maxPrice: number = 999999;
     defaultStartDateMin: string = moment().subtract(2, 'years').format('YYYY-MM-DD');
     defaultStartDateMax: string = moment().add(2, 'years').format('YYYY-MM-DD');
     defaultCreationDateMin: string = moment().subtract(2, 'years').format('YYYY-MM-DD');
@@ -77,22 +75,37 @@ export class BookingService {
 
             let success = false;
 
-            let remoteUrl: string = `${this.SUMMARY_ENDPOINT}?page=${this.page}&size=${this.size}&minprice=${this.minPrice}&maxprice=${this.maxPrice}`;
+            let remoteUrl: string = `${this.SUMMARY_ENDPOINT}?page=${this.page}&size=${this.size}`;
 
             if (status != null) remoteUrl += `&${this.arrayToQueryString('status', status)}`;
             else remoteUrl += `&${this.arrayToQueryString('status', Object.values(Status))}`;
 
-            if (creationDateStart != null) remoteUrl += `&creationdate=${creationDateStart}`;
-            else remoteUrl += `&creationdate=${this.defaultCreationDateMin}`;
+            if( creationDateStart == null || creationDateEnd == null) {
+                if((startDateStart || startDateEnd) != null ) {
+                    if (startDateStart != null) remoteUrl += `&startdate=${startDateStart}`;
+    
+                    if (startDateEnd != null) remoteUrl += `&startdate=${startDateEnd}`;
+                }
 
-            if (creationDateEnd != null) remoteUrl += `&creationdate=${creationDateEnd}`;
-            else remoteUrl += `&creationdate=${this.defaultCreationDateMax}`;
+                if (creationDateStart != null) remoteUrl += `&creationdate=${creationDateStart}`;
+                else remoteUrl += `&creationdate=${this.defaultCreationDateMin}`;
+    
+                if (creationDateEnd != null) remoteUrl += `&creationdate=${creationDateEnd}`;
+                else remoteUrl += `&creationdate=${this.defaultCreationDateMax}`;
 
-            if (startDateStart != null) remoteUrl += `&startdate=${startDateStart}`;
-            else remoteUrl += `&startdate=${this.defaultStartDateMin}`;
+               
+            } else {
+                
+                if (creationDateStart != null) remoteUrl += `&creationdate=${creationDateStart}`;
+    
+                if (creationDateEnd != null) remoteUrl += `&creationdate=${creationDateEnd}`;
 
-            if (startDateEnd != null) remoteUrl += `&startdate=${startDateEnd}`;
-            else remoteUrl += `&startdate=${this.defaultStartDateMax}`;
+                if (((creationDateStart && creationDateEnd) != null) && ((startDateStart && startDateEnd) != null )) {
+                    if (creationDateStart != null) remoteUrl += `&creationdate=${creationDateStart}`;
+    
+                    if (creationDateEnd != null) remoteUrl += `&creationdate=${creationDateEnd}`;
+                }
+            }
 
             this.httpClient.get<PageableWrapper<BookingSummaryResponse>>(remoteUrl, { headers: headers }).subscribe({
                 next: (data: PageableWrapper<BookingSummaryResponse>) => {
