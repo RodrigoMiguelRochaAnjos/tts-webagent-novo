@@ -369,5 +369,10 @@
     "TAXES_INCLUDED": "কর অন্তর্ভুক্ত",
     "PAYMENT": "পেমেন্ট",
     "FLIGHT_PROCESSING_ERROR": "এই ফ্লাইট পেমেন্ট অপশন প্রক্রিয়া করার সময় একটি সমস্যা হয়েছে",
-    "TRANSACTION": "লেনদেন"
+    "TRANSACTION": "লেনদেন",
+    "CHECKOUT": "পেমেন্ট",
+    "RESERVATION_SUMMARY": "মুলক সংক্ষিপ্তসার",
+    "TICKET": "টিকিট",
+    "TICKETS": "টিকিটগুলি",
+    "VIEW": "দেখুন"
 }

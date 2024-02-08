@@ -369,5 +369,10 @@
     "TAXES_INCLUDED": "Dahil Olan Vergiler",
     "PAYMENT": "Ödeme",
     "FLIGHT_PROCESSING_ERROR": "Bu uçuş ödeme seçeneklerini işleme koymada bir sorun oluştu",
-    "TRANSACTION": "İşlem"
+    "TRANSACTION": "İşlem",
+    "CHECKOUT": "Ödeme",
+    "RESERVATION_SUMMARY": "Rezervasyon Özeti",
+    "TICKET": "Bilet",
+    "TICKETS": "Biletler",
+    "VIEW": "Görüntüle"
 }

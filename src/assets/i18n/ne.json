@@ -369,5 +369,10 @@
     "TAXES_INCLUDED": "कर समाहित",
     "PAYMENT": "भुक्तानी",
     "FLIGHT_PROCESSING_ERROR": "यो उडान भुक्तानी प्रक्रिया गर्दा समस्या देखा परेको छ",
-    "TRANSACTION": "लेनदेन"
+    "TRANSACTION": "लेनदेन",
+    "CHECKOUT": "भुक्तानी",
+    "RESERVATION_SUMMARY": "आरक्षण संक्षिप्तीकरण",
+    "TICKET": "टिकट",
+    "TICKETS": "टिकटहरू",
+    "VIEW": "हेर्नुहोस्"
 }

@@ -1,9 +1,9 @@
 <div class="phase" [ngClass]="{'complete': this.travellerDetailsValid, 'current': !this.travellerDetailsValid && airCheckoutDetails}" data-content="Traveller Details">
-    Traveller Details 
+    {{'TRAVELLERS_DETAILS' | translate}} 
 </div>
 <div class="phase" [ngClass]="{'complete': this.airCheckoutPrice, 'current': !this.airCheckoutPrice && travellerDetailsValid}" data-content="Checkout">
-    Checkout
+    {{'CHECKOUT' | translate}}
 </div>
 <div class="phase" [ngClass]="{'complete': this.booking, 'current': !this.booking && airCheckoutPrice}" data-content="Reservation Summary">
-    Reservation Summary
+    {{'RESERVATION_SUMMARY' | translate}}
 </div>
