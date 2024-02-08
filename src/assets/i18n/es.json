@@ -369,5 +369,10 @@
     "TAXES_INCLUDED": "Impuestos incluidos",
     "PAYMENT": "Pago",
     "FLIGHT_PROCESSING_ERROR": "Se ha producido un problema al procesar el pago de este vuelo",
-    "TRANSACTION": "Transacción"
+    "TRANSACTION": "Transacción",
+    "CHECKOUT": "Pago",
+    "RESERVATION_SUMMARY": "Resumen de Reserva",
+    "TICKET": "Billete",
+    "TICKETS": "Billetes",
+    "VIEW": "Ver"
 }

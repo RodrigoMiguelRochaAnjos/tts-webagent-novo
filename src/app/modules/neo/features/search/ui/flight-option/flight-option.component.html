@@ -17,7 +17,6 @@
                         <span>+{{ airlinesLogos.length - 1 }}</span>
                     </div>
                 </ng-container>
-
             </div>
         </div>
         <div class="info-segment">
@@ -28,10 +27,10 @@
         <div class="info-segment">
             <div class="flight-progress">
                 <div class="title" *ngIf="numberOfStops == 0">
-                    {{ 'DIRECT_FLIGHT' }}
+                    {{ 'DIRECT_FLIGHT' | translate }}
                 </div>
                 <div class="title" *ngIf="numberOfStops > 0">
-                    {{ numberOfStops }} {{ 'STOPS' }}
+                    {{ numberOfStops }} {{ 'STOPS' | translate }}
                 </div>
                 <div class="stops">
                     <div class="stop" (mouseover)="onStopHover(numberOfStops)" (mouseout)="onStopHover(-1)" style="--index: -1"></div>

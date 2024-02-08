@@ -1,0 +1,26 @@
+<!-- <ion-header>
+	<ion-toolbar>
+		<div class="email-div">
+			<div class="email">
+				{{ 'PREVIEW' | translate }}
+			</div>
+			<ion-buttons slot="end">
+				<ion-button (click)="onCloseClick()">
+					<ion-icon slot="icon-only" name="close"></ion-icon>
+				</ion-button>
+			</ion-buttons>
+		</div>
+	</ion-toolbar>
+</ion-header> -->
+
+<div class="content">
+	<div [innerHTML]="emailContent"></div>	
+</div>
+
+<footer>
+	<div class="footer-button">
+		<button mat-raised-button (click)="sendEmail()"> <i class="fa-solid fa-send"></i>
+			{{ 'SEND' | translate }}
+		</button>
+	</div>
+</footer>

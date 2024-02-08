@@ -2,63 +2,101 @@
 
 <div class="details">
     <div class="left-section">
-    
-        <div class="container" *ngFor="let traveller of this.travellers; let index = index">
-            <h4>{{ "TRAVELLERS_DETAILS" | translate }}</h4>
-            <div class="traveller-type">
-                {{ traveller.type }}
-            </div>
-            <div class="traveller-title">
-                <webagent-input [type]="InputType.DROPDOWN" [required]="false" [label]="('TITLE' | translate)" [(ngModel)]="traveller.title" [options]="['MR', 'MRS', 'MS']"></webagent-input>
 
-            </div>
-        
-            <div class="triple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'First name'" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [label]="'Surname'" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.dialCode" [label]="'Country Dial Code'" [placeholder]="'E.g. 351'" />
-            </div>
-            <div class="triple-fields">
-                <webagent-input [type]="InputType.DATE" [required]="false" (change)="updateTravellerDOB($event, index)" [label]="'Date of Birth'" [placeholder]="'E.g. 01/01/1999'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email" [pattern]="patterns.email.source" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number" [pattern]="patterns.phone.source" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-            </div>
-        
-            <button class="button-small">{{ "FREQUENT_FLYER_NUMBER" | translate }}</button>
+        <div class="container">
+            <ng-container *ngFor="let traveller of this.travellers; let index = index">
+                <h4 *ngIf="index === 0">{{ "TRAVELLERS_DETAILS" | translate }}</h4>
+                <div class="traveller" [ngClass]="{'no-title': index !== 0}">
+                    <div *ngIf="traveller.type" class="traveller-type">
+                        {{ traveller.type }}
+                    </div>
+                    <div class="traveller-title">
+                        <webagent-dropdown [label]="('TITLE' | translate)" [(ngModel)]="traveller.title">
+                            <webagent-option [value]="'MR'">MR</webagent-option>
+                            <webagent-option [value]="'MRS'">MRS</webagent-option>
+                            <webagent-option [value]="'MS'">MS</webagent-option>
+                        </webagent-dropdown>
+                    </div>
+
+                    <div class="triple-fields">
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                            [label]="('FIRST_NAME' | translate)" [(ngModel)]="traveller.firstName" [placeholder]="'E.g. John'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                            [label]="('LAST_NAME' | translate)" [(ngModel)]="traveller.lastName" [placeholder]="'E.g. Doe'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false"
+                            [(ngModel)]="traveller.contact.phone.dialCode" [label]="('COUNTRY_DIAL_CODE' | translate)"
+                            [placeholder]="'E.g. 351'" />
+                    </div>
+                    <div class="triple-fields">
+                        <webagent-input [type]="InputType.DATE" [required]="false" (change)="updateTravellerDOB($event, index)"
+                            [label]="('DATE_OF_BIRTH' | translate)" [placeholder]="'E.g. 01/01/1999'" [min]="getMinDateLimit(traveller.type)" [max]="getMaxDateLimit(traveller.type)"/>
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.email"
+                            [pattern]="patterns.email.source" [label]="('EMAIL' | translate)" [placeholder]="'E.g. traveller@tts.com'" />
+                        <webagent-input [type]="InputType.TEXT" [required]="false" [(ngModel)]="traveller.contact.phone.number"
+                            [pattern]="patterns.phone.source" [label]="('PHONE_NUMBER' | translate)" [placeholder]="'E.g. 913502195'" />
+                    </div>
+
+                    <button class="button-small">{{ "FREQUENT_FLYER_NUMBER" | translate }}</button>
+                </div>
+            </ng-container>
         </div>
-        
+
         <div class="container">
             <h4>{{ "CONTACT_INFO" | translate }}</h4>
             <div class="triple-fields">
-                <webagent-input [type]="InputType.DROPDOWN" [required]="false" [label]="'Title'" [(ngModel)]="this.contactRequestData.title"
-                    [options]="['MR', 'MRS', 'MS']" />
+                <webagent-dropdown [label]="('TITLE' | translate)" [(ngModel)]="this.contactRequestData.title">
+                    <webagent-option [value]="'MR'">MR</webagent-option>
+                    <webagent-option [value]="'MRS'">MRS</webagent-option>
+                    <webagent-option [value]="'MS'">MS</webagent-option>
+                </webagent-dropdown>
 
             </div>
             <div class="triple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [(ngModel)]="this.contactRequestData.firstName" [label]="'First name'" [placeholder]="'E.g. John'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source" [(ngModel)]="this.contactRequestData.lastName" [label]="'Surname'" [placeholder]="'E.g. Doe'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source" [(ngModel)]="this.contactRequestData.email" [label]="'Email'" [placeholder]="'E.g. traveller@tts.com'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                    [(ngModel)]="this.contactRequestData.firstName" [label]="('FIRST_NAME' | translate)"
+                    [placeholder]="'E.g. John'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.name.source"
+                    [(ngModel)]="this.contactRequestData.lastName" [label]="('LAST_NAME' | translate)" [placeholder]="'E.g. Doe'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.email.source"
+                    [(ngModel)]="this.contactRequestData.email" [label]="('EMAIL' | translate)"
+                    [placeholder]="'E.g. traveller@tts.com'" />
             </div>
             <div class="triple-fields">
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="'Country Dial Code'" [(ngModel)]="this.contactRequestData.phone.dialCode" [placeholder]="'E.g. 351'" />
-                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source" [(ngModel)]="this.contactRequestData.phone.number" [label]="'Phone Number'" [placeholder]="'E.g. 913502195'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.contactRequestData.entityName" [label]="'Entity Name'" [placeholder]="'E.g. TTS'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [label]="('COUNTRY_DIAL_CODE' | translate)"
+                    [(ngModel)]="this.contactRequestData.phone.dialCode" [placeholder]="'E.g. 351'" />
+                <webagent-input [type]="InputType.NUMBER" [required]="false" [pattern]="patterns.phone.source"
+                    [(ngModel)]="this.contactRequestData.phone.number" [label]="('PHONE_NUMBER' | translate)"
+                    [placeholder]="'E.g. 913502195'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+                    [(ngModel)]="this.contactRequestData.entityName" [label]="('ENTITY_NAME' | translate)"
+                    [placeholder]="'E.g. TTS'" />
             </div>
             <div class="double-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.contactRequestData.address!.street" [label]="'Street'" [placeholder]="'E.g. Rua da tecnologia 21'"/>
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.contactRequestData.address!.city" [label]="'City'" [placeholder]="'E.g. Ponta Delgada'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+                    [(ngModel)]="this.contactRequestData.address!.street" [label]="('STREET' | translate)"
+                    [placeholder]="'E.g. Rua da tecnologia 21'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+                    [(ngModel)]="this.contactRequestData.address!.city" [label]="('CITY' | translate)"
+                    [placeholder]="'E.g. Ponta Delgada'" />
             </div>
             <div class="quadruple-fields">
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.contactRequestData.address!.locality" [label]="'Locality'" [placeholder]="'E.g. Rosário '" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source" [(ngModel)]="this.contactRequestData.address!.flat" [label]="'Flat'" [placeholder]="'E.g. R/S/'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.postCode.source" [(ngModel)]="this.contactRequestData.address!.postCode" [label]="'Post Code'" [placeholder]="'E.g. 9500-285'" />
-                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source" [(ngModel)]="this.contactRequestData.address!.countryCode" [label]="'Country Code'" [placeholder]="'E.g. PT'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+                    [(ngModel)]="this.contactRequestData.address!.locality" [label]="('LOCALITY' | translate)"
+                    [placeholder]="'E.g. Rosário '" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.text.source"
+                    [(ngModel)]="this.contactRequestData.address!.flat" [label]="('FLAT' | translate)" [placeholder]="'E.g. R/S/'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.postCode.source"
+                    [(ngModel)]="this.contactRequestData.address!.postCode" [label]="('POST_CODE' | translate)"
+                    [placeholder]="'E.g. 9500-285'" />
+                <webagent-input [type]="InputType.TEXT" [required]="false" [pattern]="patterns.countryCode.source"
+                    [(ngModel)]="this.contactRequestData.address!.countryCode" [label]="('COUNTRY_CODE' | translate)"
+                    [placeholder]="'E.g. PT'" />
             </div>
         </div>
     </div>
-    
+
     <div class="right-section">
-        <trip-summary (nextPressed)="advance()"/>
+        <trip-summary (nextPressed)="advance()" />
     </div>
 
 </div>

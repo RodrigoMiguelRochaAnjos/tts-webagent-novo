@@ -1,10 +1,10 @@
 <div class="search-result-info">
     <span class="exchange" *ngIf="!isOriginalCurrency">
-        {{ 'CURRENCY_EXCHANGE' }}
+        {{ 'CURRENCY_EXCHANGE' | translate }}
     </span>
     <div class="search-result-flight-group">
         <div class="split-ticketing" *ngIf="result.splitTicketing">
-            {{ 'SPLIT_TICK' }}
+            {{ 'SPLIT_TICK' | translate }}
         </div>
         <div class="search-result-left">
             <div class="outbound">
@@ -43,12 +43,12 @@
                         </span>
                     </div>
                     <div class="provider">
-                        {{ 'TOTAL_INCLUDES_TAXES' }}
+                        {{ 'TOTAL_INCLUDES_TAXES' | translate}}
                     </div>
                 </div>
                 <button class="button-medium search-result-info-select call-to-action" [ngClass]="{'disabled': !canBook}"
                     (click)="advance()">
-                    <span>{{ 'SELECT' }}&nbsp;</span>
+                    <span>{{ 'SELECT' | translate}}&nbsp;</span>
                     <!-- <ion-icon name="cart-outline" size="small"></ion-icon> -->
                 </button>
             </div>
@@ -59,15 +59,15 @@
             <div class="search-result-info-tabs">
                 <div class="search-result-info-tab" [ngClass]="{'selected': showFlightDetails}"
                     (click)="toggleTab('FLIGHT_DETAILS')">
-                    {{ 'FLIGHT_DETAILS' }}
+                    {{ 'FLIGHT_DETAILS' | translate}}
                 </div>
                 <div class="search-result-info-tab" [ngClass]="{'selected': showPriceDetails}"
                     (click)="toggleTab('PRICE_DETAILS')">
-                    {{ 'PRICE_DETAILS' }}
+                    {{ 'PRICING_DETAILS' | translate }}
                 </div>
                 <div class="search-result-info-tab" [ngClass]="{'selected': showDestInfo}"
                     (click)="toggleTab('DEST_INFO')">
-                    {{ 'DEST_INFO' }}
+                    {{ 'DEST_INFO' | translate}}
                 </div>
                 <div class="slider" style="--index: {{ getActiveIndex() }}" ></div>
             </div>

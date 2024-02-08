@@ -3,6 +3,7 @@ import { patterns } from "../../../shared/utils/validation-patterns";
 import { GDS } from "../gds/gds.model";
 import { Contact } from "./contact/contact.model";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Email } from "src/app/modules/emails/models/email.model";
 
 export abstract class User {
     public name!: string;
@@ -10,6 +11,9 @@ export abstract class User {
     public currency: string = 'EUR';
     public contact!: Contact;
     public settings!: Settings;
+    public terminalMessage: any;
+    public emailData?: Email;
+
     [key: string]: any;
 
     public gds!: GDS;
@@ -19,7 +23,7 @@ export abstract class User {
             this.name != null &&
             this.contact != null &&
             patterns.name.test(this.name.trim()) &&
-            this.contact.isValid()
+            this.contact?.isValid()
         );
     }
 

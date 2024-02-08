@@ -324,6 +324,11 @@
 	"TAXES_INCLUDED": "Taxes included",
 	"PAYMENT": "Payment",
 	"FLIGHT_PROCESSING_ERROR": "A problem occured processing this flight payment options",
-	"TRANSACTION": "Transaction"
+	"TRANSACTION": "Transaction",
+	"CHECKOUT": "Payment",
+	"RESERVATION_SUMMARY": "Reservation Summary",
+	"TICKET": "Ticket",
+	"TICKETS": "Tickets",
+	"VIEW": "View"
 }
 

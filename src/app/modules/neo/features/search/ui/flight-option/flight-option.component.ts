@@ -4,6 +4,7 @@ import { Carrier } from 'src/app/modules/neo/models/carrier.model';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
 
+
 @Component({
     selector: 'app-flight-option',
     templateUrl: './flight-option.component.html',

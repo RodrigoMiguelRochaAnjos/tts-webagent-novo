@@ -369,5 +369,10 @@
     "TAXES_INCLUDED": "Kodi Imojumuishwa",
     "PAYMENT": "Malipo",
     "FLIGHT_PROCESSING_ERROR": "Kulikuwa na shida katika kusindika malipo ya safari hii",
-    "TRANSACTION": "Hesabu"
+    "TRANSACTION": "Hesabu",
+    "CHECKOUT": "Malipo",
+    "RESERVATION_SUMMARY": "Muhtasari wa Hifadhi",
+    "TICKET": "Tiketi",
+    "TICKETS": "Tiketi",
+    "VIEW": "Tazama"
 }

@@ -9,7 +9,7 @@ export interface LoginResponse {
     enablePageDown: boolean;
     addOns: AddOns;
     sessionId: string;
-    message: Message;
+    message: any;
     syncData: SyncData;
     token: string;
     licenseAlert: string[];

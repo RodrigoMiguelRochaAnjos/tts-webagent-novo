@@ -19,6 +19,7 @@ import { User } from 'src/app/core/models/user/user.model';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PassengerType } from '../../../search/utils/requests/air-search-request/passenger-type.enum';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -34,6 +35,14 @@ export class TravellerDetailsPageComponent implements OnInit{
 
     option$!: Observable<{ [key in "INBOUNDS" | "OUTBOUNDS"]: FlightOption | null }>;
 
+    getMaxDateLimit(type: PassengerType): string {
+        return moment().subtract(type === PassengerType.Child ? 2 : 13, 'year').format('DD/MM/YYYY');
+    }
+
+    getMinDateLimit(type: PassengerType): string {
+        if (type === PassengerType.Adult) return moment().subtract(200, 'year').format('DD/MM/YYYY');
+        return moment().subtract(12).format('DD/MM/YYYY');
+    }
 
     constructor(
         private reservationService: ReservationService,
@@ -120,13 +129,14 @@ export class TravellerDetailsPageComponent implements OnInit{
         let valid = true;
 
         this.travellerService.getTravellers().forEach((traveller: Traveller, index: number) => {
-            if(traveller.isValid()) return;
+            if(traveller?.isValid()) return;
 
             valid = false;
 
             let message = "Please fill in all required fields ";
 
             message += `Traveller ${index + 1}: `;
+
             for (const name in traveller.form.controls) {
                 let tmpTranslation: string = "";
 
@@ -137,6 +147,21 @@ export class TravellerDetailsPageComponent implements OnInit{
 
                 if (traveller.form.controls[name].invalid) message += `${tmpTranslation}, `;
             }
+
+            for (const name in traveller.contact.form().controls) {
+                let tmpTranslation: string = "";
+
+                this.translate.stream(name).subscribe((text: string) => {
+                    tmpTranslation = text;
+                });
+
+                if(traveller.contact.form().controls[name].invalid) message += `${tmpTranslation}, `;
+            }
+
+            message = this.removeLastOccurrence(message, ", ");
+            this.alertService.show(AlertType.ERROR, message);
+
+
         })
 
 
@@ -158,7 +183,9 @@ export class TravellerDetailsPageComponent implements OnInit{
 
         }
 
-        if (!valid) return;
+        if (!valid) {
+            return;
+        }
         
         this.reservationService.checkTravellers();
 

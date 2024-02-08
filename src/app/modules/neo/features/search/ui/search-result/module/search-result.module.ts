@@ -7,6 +7,7 @@ import { TabDestInfoModule } from "../../tab-dest-info/module/tab-dest-info.modu
 import { TabFlightDetailsModule } from "../../tab-flight-details/module/tab-flight-details.module";
 import { TabPriceDetailsModule } from "../../tab-price-details/module/tab-price-details.module";
 import { FlightOptionModule } from "../../flight-option/module/flight-option.module";
+import { SharedModule } from "src/app/shared/shared.module";
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { FlightOptionModule } from "../../flight-option/module/flight-option.mod
         TabPriceDetailsModule,
         TabDestInfoModule,
         FlightSelectionIndicatorModule,
+        SharedModule
     ],
 })
 export class SearchResultModule {}

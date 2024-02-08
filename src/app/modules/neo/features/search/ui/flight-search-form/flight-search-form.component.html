@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <webagent-input *ngIf="this.isRoundTrip" class="dates" [(ngModel)]="this.roudTripDate" [min]="this.minDate" [max]="this.maxDate" [type]="InputType.DATE_RANGE" [hideDefault]="true" (change)="datesChanged($event)" />
-    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [min]="this.minDate" [max]="this.maxDate" [value]="getMomentDate((this.searchResume$ | async)!.departureDate)" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="'Departure Date'" />
+    <webagent-input *ngIf="!this.isRoundTrip" class="dates" [min]="this.minDate" [max]="this.maxDate" [value]="getMomentDate((this.searchResume$ | async)!.departureDate)" [type]="InputType.DATE" [hideDefault]="false" [(ngModel)]="oneWayDate" [label]="('DEPARTURE_DATE' | translate)" />
 </div>
 
 <div class="row controls">
@@ -24,7 +24,7 @@
                     <span>+</span>
                 </button>
             </div>
-            <span>Adults (+12 yo)</span>
+            <span>{{'ADULTS_SEARCH' | translate}}</span>
         </div>
         <div class="traveller">
             <div class="counter">
@@ -36,7 +36,7 @@
                     <span>+</span>
                 </button>
             </div>
-            <span>Children (2-12 yo)</span>
+            <span>{{'CHILDREN_SEARCH' | translate}}</span>
         </div>
     </div>
     <button (click)="search()" class="button-medium call-to-action">{{'SEARCH' | translate}}</button>

@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { FlightOptionPlaceModule } from "../../flight-option-place/module/flight-option-place.module";
 import { FlightOptionTimeModule } from "../../flight-option-time/module/flight-option-time.module";
 import { FlightSelectionIndicatorModule } from "../../flight-selection-indicator/module/flight-selection-indicator.module";
+import { SharedModule } from "src/app/shared/shared.module";
 
 @NgModule({
     declarations: [FlightOptionComponent],
@@ -14,7 +15,8 @@ import { FlightSelectionIndicatorModule } from "../../flight-selection-indicator
         CommonModule,
         FlightOptionTimeModule,
         FlightOptionPlaceModule,
-        FlightSelectionIndicatorModule
+        FlightSelectionIndicatorModule,
+        SharedModule
     ]
 })
 export class FlightOptionModule {}

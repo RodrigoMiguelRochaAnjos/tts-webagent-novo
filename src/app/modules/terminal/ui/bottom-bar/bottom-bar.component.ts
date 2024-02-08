@@ -62,7 +62,7 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges, OnD
 
     ngOnInit(): void {
         this.inputMode = 'text';
-        this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.qks[0]);
+        this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.quickKeys);
         
         this.commandsHistorySubscription = this.terminalService.commandsHistory.subscribe((newCommandsHistory) => {
             // hack angular to display the commands array in the correct order

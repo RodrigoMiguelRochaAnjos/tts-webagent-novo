@@ -40,7 +40,15 @@
             border-bottom: 1px solid #DFDFDF;
         }
 
-        &:hover .fares {
+        .fare-paragraph {
+            &:hover{
+                background-color: #f3f3f3;
+                transition: background-color cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
+                cursor: pointer;
+            }
+        }
+
+        &.active .fares {
             grid-template-rows: 1fr;
         }
 
@@ -49,7 +57,7 @@
             grid-template-rows: 0fr;
             transition: grid-template-rows ease-in-out .3s;
 
-            &:hover {
+            &.active {
                 grid-template-rows: 1fr;
             }
 
