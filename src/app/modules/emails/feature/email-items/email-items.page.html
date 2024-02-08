@@ -1,0 +1,178 @@
+<!-- <ion-header *ngIf="!isEmailPreview">
+	<ion-toolbar>
+		<div class="email-div">
+			<div class="emails">
+				{{'SEND_BY_EMAIL' | translate}}
+			</div>
+			<ion-buttons slot="end">
+				<ion-button (click)="clearEmailItems()">
+					<ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+				</ion-button>
+				<ion-button (click)="onCloseClick()">
+					<ion-icon slot="icon-only" name="close"></ion-icon>
+				</ion-button>
+			</ion-buttons>
+		</div>
+	</ion-toolbar>
+</ion-header> -->
+
+<div class="content" *ngIf="!isEmailPreview">
+    <ul>
+        <li>
+            <webagent-input [type]="InputType.TEXT" [label]="('TO' | translate)" [placeholder]="'example1@example.com, example2@example.com'" [(ngModel)]="emailTo" [required]="true" />
+        </li>
+        <li>
+            <webagent-input [type]="InputType.TEXT" [placeholder]="'Example'" [label]="('SUBJECT' | translate)"
+                [(ngModel)]="emailTo" [required]="true" [(ngModel)]="emailSubject" [required]="true" />
+        </li>
+        <li>
+            <label>{{'EMAIL_TYPE' | translate}}</label>
+            <webagent-input [type]="InputType.TEXT" [placeholder]="'Example'" [(ngModel)]="emailTo" [required]="true" [(ngModel)]="emailSubject" [required]="true" />
+            <select name="" id="" [(ngModel)]="emailType">
+                <option value="short">Short</option>
+                <option value="long">Long</option>
+            </select>
+        </li>
+        <li>
+            <label>{{'EMAIL_TEMPLATE' | translate}}</label>
+            <webagent-input [type]="InputType.TEXT" [placeholder]="'Example'" [(ngModel)]="emailTo" [required]="true"
+                [(ngModel)]="selectedTemplateIndex" [required]="true" />
+            <select name="" id="" [(ngModel)]="emailType">
+                <option *ngFor="let template of emailTemplates; index as templateIndex" [value]="templateIndex">{{ template.name }}</option>
+            </select>
+        </li>
+    </ul>
+    <h2>{{'EMAIL_DATA' | translate}}</h2>
+    <ul>
+        <li *ngFor="let item of emailItems; index as i">
+            <label>
+                <h4>{{ item.segments.bcPathAllTitle }}</h4>
+                <h5>{{ item.totalPrice }}</h5>
+                <p>{{ item.totalFlightDuration }}</p>
+            </label>
+            <div class="icon">
+                <i class="fa-solid fa-trash"></i>
+            </div>
+            <div class="expandable">
+                <div *ngFor="let segment of item.segments.reqSegments">
+                    <div *ngFor="let subSegment of segment.subSegments">
+                        <p>{{ subSegment.bcShortPathAllTitle }}</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    <p>{{ subSegment.segmentLine.info.company.code }} {{ subSegment.segmentLine.info.flightNumber }}</p>
+                                    <p>{{ subSegment.segmentLine.info.airplane.code }}</p>
+                                </td>
+                                <td>
+                                    <p>{{ subSegment.segmentLine.departure.shortDate }}</p>
+                                    <p>{{ subSegment.segmentLine.departure.airport.code }}</p>
+                                </td>
+                                <td>
+                                    <p>{{ subSegment.segmentLine.departure.time }} - {{ subSegment.segmentLine.arrival.time }}</p>
+                                    <p>({{ subSegment.segmentLine.info.flightDuration }})</p>
+                                </td>
+                                <td>
+                                    <p>{{ subSegment.segmentLine.arrival.shortDate }}</p>
+                                    <p>{{ subSegment.segmentLine.arrival.airport.code }}</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<!-- <ion-content forceOverscroll="false" >
+	<ion-list lines="full">
+		<ion-item>
+			<ion-label> </ion-label>
+			<ion-input type="text" placeholder="example1@example.com, example2@example.com" [(ngModel)]="emailTo" required> </ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label> </ion-label>
+			<ion-input type="text" placeholder="Example" [(ngModel)]="emailSubject" required> </ion-input>
+		</ion-item>
+		<ion-item>
+			<mat-form-field appearance="fill">
+				<mat-label>{{'EMAIL_TYPE' | translate}}</mat-label>
+				<mat-select [(ngModel)]="emailType">
+				  <mat-option value="short">Short</mat-option>
+				  <mat-option value="long">Long</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</ion-item>
+		<ion-item>
+			<mat-form-field appearance="fill">
+				<mat-label>{{'EMAIL_TEMPLATE' | translate}}</mat-label>
+				<mat-select [(ngModel)]="selectedTemplateIndex" (ionChange)="updateSubject()">
+				  <mat-option *ngFor="let template of emailTemplates; index as templateIndex" [value]="templateIndex"
+				  	>{{ template.name }}</mat-option>  
+				</mat-select>
+			</mat-form-field>
+		</ion-item>
+	</ion-list>
+	<ion-list>
+		<ion-list-header>
+			<h1>{{'EMAIL_DATA' | translate}}</h1>
+		</ion-list-header>
+		<ion-reorder-group disabled="false" (ionItemReorder)="reorder($event)">
+			<ng-container *ngFor="let item of emailItems; index as i">
+				<ion-item-sliding (click)="toggleMoreInfo(i)">
+					<ion-item [lines]="getLineType(i)" [detailIcon]="getDetailIcon(i)" button detail>
+						<ion-reorder slot="start"></ion-reorder>
+						<ion-label>
+							<h2>{{ item.segments.bcPathAllTitle }}</h2>
+							<h3>{{ item.totalPrice }}</h3>
+							<p>{{ item.totalFlightDuration }}</p>
+						</ion-label>
+					</ion-item>
+					<ion-item-options side="end">
+						<ion-item-option color="danger" (click)="deleteEmailItem(i)" appStopClickPropagation>
+							<ion-icon slot="icon-only" name="trash"></ion-icon>
+						</ion-item-option>
+					</ion-item-options>
+				</ion-item-sliding>
+				<ion-item-divider class="ion-padding option-more-info" *ngIf="itemsShowingMoreInfo[i]">
+					<div *ngFor="let segment of item.segments.reqSegments">
+						<div *ngFor="let subSegment of segment.subSegments">
+							<p>{{ subSegment.bcShortPathAllTitle }}</p>
+							<table>
+								<tr>
+									<td>
+										<p>{{ subSegment.segmentLine.info.company.code }} {{ subSegment.segmentLine.info.flightNumber }}</p>
+										<p>{{ subSegment.segmentLine.info.airplane.code }}</p>
+									</td>
+									<td>
+										<p>{{ subSegment.segmentLine.departure.shortDate }}</p>
+										<p>{{ subSegment.segmentLine.departure.airport.code }}</p>
+									</td>
+									<td>
+										<p>{{ subSegment.segmentLine.departure.time }} - {{ subSegment.segmentLine.arrival.time }}</p>
+										<p>({{ subSegment.segmentLine.info.flightDuration }})</p>
+									</td>
+									<td>
+										<p>{{ subSegment.segmentLine.arrival.shortDate }}</p>
+										<p>{{ subSegment.segmentLine.arrival.airport.code }}</p>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</ion-item-divider>
+			</ng-container>
+		</ion-reorder-group>
+	</ion-list>	
+</ion-content>
+
+<ion-footer *ngIf="!isEmailPreview">
+	<ion-list lines="none">
+		<div class="button-preview">
+			<button mat-raised-button (click)="previewEmail()">
+				{{'PREVIEW' | translate}}
+			</button>
+		</div>
+	</ion-list>
+</ion-footer>
+
+<app-email-preview (closeEmailPreview)="closeEmailPreview()" *ngIf="isEmailPreview"></app-email-preview> -->

@@ -1,5 +1,5 @@
 :host{
-    padding: 12px 19px;
+    padding: 30px 19px 12px 19px;
     display: block;
     background-color: #fff;
     box-shadow: 0px 0px 5px #3333;
@@ -28,6 +28,10 @@
         }
         app-flight-option {
             border-bottom: 1px solid #3333;
+            &:hover {
+                background-color: #ffff;
+                cursor: default;
+            }
 
         }
     

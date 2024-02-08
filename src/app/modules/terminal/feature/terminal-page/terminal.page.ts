@@ -46,6 +46,8 @@ export class TerminalPage implements OnInit {
 
     @ViewChild("brandsAndAcillaries") brandsAndAcillaries!: TemplateRef<any>;
 
+    @ViewChild("emailTempaltes") emailTempaltes!: TemplateRef<any>;
+
     selectedPkey: number = -1;
 
     constructor(
@@ -100,8 +102,6 @@ export class TerminalPage implements OnInit {
             this.emailItems = user.settings.sendByEmailItems;
             this.keepKeyboardVisible = user.settings.keepKeyboardVisible;
         })
-
-        console.log(this.terminalService.commandsHistorySource.getValue());
 
         if (this.terminalService.terminalContentSource.getValue() === '' && this.terminalService.commandsHistorySource.getValue().length > 0) {
             const commandsHistory = this.terminalService.commandsHistorySource.getValue();
@@ -217,8 +217,10 @@ export class TerminalPage implements OnInit {
 
     onEmailItemsClick(): void {
         this.isEmail = true;
-        document.getElementById('terminal1')!.style.pointerEvents = 'none';
+
+        this.modalService.showModal(this.emailTempaltes, "email-items-modal");
         this.allowCommands();
+        
     }
 
     onCommandResult(result: any): void {

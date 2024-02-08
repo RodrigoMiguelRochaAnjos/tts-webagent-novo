@@ -12,9 +12,17 @@ import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { PKey } from "src/app/modules/terminal/models/pkey.model";
 import { Address } from "../models/user/contact/segments/address.model";
+import { Injectable } from "@angular/core";
+import { SettingsMapper } from "./settings.mapper";
+import { deepClone } from "../utils/deep-clone.tool";
 
+@Injectable({
+    providedIn: 'root'
+})
 export class UserMapper {
-    static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
+
+
+    mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
 
         let user: AuthenticatedUser = new AuthenticatedUser();
 
@@ -60,15 +68,16 @@ export class UserMapper {
 
         UserMapper.loadPKeysFromServer(response.syncData.pkeys);
 
-        
-
         user.id = response.sessionId;
         user.token = response.token;
         user.name = response.syncData.settings.profileUserName;
         user.contact = contact;
+
+
         user.currency = 'EUR';
         user.languageCode = 'en';
-        user.settings = response.syncData.settings;
+        user.settings = SettingsMapper.mapSyncDataSettingsToSettings(response.syncData.settings, deepClone(user.settings));
+        user.terminalMessage = response.message;
 
         switch (loginRequest.gds) {
             case 'Galileo':

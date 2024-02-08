@@ -5,7 +5,7 @@ import { Observable, elementAt } from 'rxjs';
 import { AirSearchResponse, AirSearchResults } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
 import { ActivatedRoute, ParamMap, Route, Router } from '@angular/router';
 import { AirSearchIdResponse } from '../../utils/responses/air-search-id-response.model';
-import { LoadingService } from 'src/app/core/interceptors/loading.service';
+import { LoadingService } from 'src/app/core/services/loading.service';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { trigger, transition, query, stagger, animate, style } from '@angular/animations';

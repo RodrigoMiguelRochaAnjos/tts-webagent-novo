@@ -24,7 +24,7 @@ import { CreditCard } from '../../../search/models/credit-card.model';
 import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
-import { LoadingService } from 'src/app/core/interceptors/loading.service';
+import { LoadingService } from 'src/app/core/services/loading.service';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 import { AirCheckoutPriceRequest } from '../../../search/models/air-checkout-price-request.model';
 import { AirCheckoutPriceResponse } from '../../../search/models/air-checkout-price-response.model';
@@ -37,6 +37,7 @@ import { BookingService } from '../../data-access/booking.service';
 import { AirBooking } from 'src/app/shared/models/air-booking.model';
 import { AirBookingRequest } from 'src/app/shared/models/air-booking-request.model';
 import { DestroyService } from 'src/app/core/services/destroy.service';
+import { AirSegment } from 'src/app/modules/neo/models/air-segment.model';
 
 @Component({
     selector: 'app-checkout-page',
@@ -95,7 +96,6 @@ export class CheckoutPageComponent implements OnInit {
         this.details$.pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((details: AirCheckoutDetailsResponse | null) => {
             if (details == null) return;
 
-            console.log(details);
             details.flights.forEach((flight: FlightOption) => {
                 const searchId: string = flight.provider == Providers.TRAVELFUSION ? flight.searchId : flight.provider;
                 const supportedPayments: SupportedPayments | undefined = details.formOfPayments.get(searchId);
@@ -313,7 +313,6 @@ export class CheckoutPageComponent implements OnInit {
             return;
         }
 
-        this.loadingService.show();
         this.travellersRequestData = deepClone(
             this.travellerService.getTravellers()
         );
@@ -500,7 +499,6 @@ export class CheckoutPageComponent implements OnInit {
 
     getPayment(id: string): Payment | undefined {
         const payment: Payment | undefined = this.findPayment(id);
-
         return payment;
     }
 
@@ -592,5 +590,21 @@ export class CheckoutPageComponent implements OnInit {
         });
 
 
+    }
+
+    segmentDuration(segment: AirSegment): string {
+        let duration = '';
+
+        const hours: number = Math.floor(segment.duration / 60);
+        if (hours > 0) {
+            duration += hours + 'h';
+        }
+
+        const minutes: number = Math.floor(segment.duration % 60);
+        if (minutes > 0) {
+            duration += minutes + 'm';
+        }
+
+        return duration;
     }
 }

@@ -21,9 +21,9 @@
 <p>Departure: <b>{{ this.segment.departureDatetime | date: 'HH:mm' }}</b> Arrival: <b>{{ this.segment.arrivalDatetime | date: 'HH:mm' }}</b></p>
 <p>Equipment: <b>{{ this.segment.equipment?.name }}</b> Code: <b>{{ this.segment.equipment?.code }}</b></p>
 
-<div class="fare-details">
-    <p>Fare details</p>
-    <div class="fares">
+<div class="fare-details" (click)="toggleActive()">
+    <p class="fare-paragraph">Fare details</p>
+    <div class="fares" [ngClass]="{'active': this.isOpen === true}">
         <div>
             <div class="fare" *ngFor="let fare of segment.fareDetailsList">
                 <p *ngIf="fare.ptc != null" class="passenger-type"><b>{{ fare.ptc }}</b></p>

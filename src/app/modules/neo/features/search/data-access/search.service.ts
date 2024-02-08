@@ -71,7 +71,6 @@ export class SearchService {
     }
 
     public updateSearchResume(searchResume: Journey) {
-        console.log("UPDATED: ",searchResume);
         this.searchResume$.next(searchResume);
     }
 
