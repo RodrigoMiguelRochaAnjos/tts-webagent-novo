@@ -22,6 +22,7 @@ import { WebagentNumberComponent } from './types/webagent-number/webagent-number
 import { TranslateModule } from "@ngx-translate/core";
 import { WebagentCalendarInputComponent } from './types/webagent-calendar-input/webagent-calendar-input.component';
 import { WebagentOptionComponent } from './types/webagent-option/webagent-option.component';
+import { WebagentDateFilterComponent } from './types/webagent-date-filter/webagent-date-filter.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import { WebagentOptionComponent } from './types/webagent-option/webagent-option
         WebagentCheckboxInputComponent,
         WebagentNumberComponent,
         WebagentCalendarInputComponent,
-        WebagentOptionComponent
+        WebagentOptionComponent,
+        WebagentDateFilterComponent
     ],
     imports: [
         CommonModule,

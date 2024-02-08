@@ -65,6 +65,8 @@
             <!-- <webagent-input [label]="('SELECT_LANGUAGE' | translate)" [type]="InputType.DROPDOWN" [(ngModel)]="this.tmpSettings.languageCode" [options]="['en', 'pt']" /> -->
             <!-- <webagent-input [label]="('SELECT_CURRENCY' | translate)" [type]="InputType.DROPDOWN" [options]="['USD', 'EUR']" [(ngModel)]="this.tmpSettings.currency" /> -->
         </div>
+
+        <webagent-input [type]="InputType.CHECKBOX" [value]="'Click here'"/>
     
         <button class="button-medium" (click)="update()">{{'SAVE' | translate}}</button>
     </div>

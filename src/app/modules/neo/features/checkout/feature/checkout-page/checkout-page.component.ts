@@ -24,7 +24,7 @@ import { CreditCard } from '../../../search/models/credit-card.model';
 import { Address } from 'src/app/core/models/user/contact/segments/address.model';
 import { AuthService } from 'src/app/core/authentication/auth.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
-import { LoadingService } from 'src/app/core/interceptors/loading.service';
+import { LoadingService } from 'src/app/core/services/loading.service';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 import { AirCheckoutPriceRequest } from '../../../search/models/air-checkout-price-request.model';
 import { AirCheckoutPriceResponse } from '../../../search/models/air-checkout-price-response.model';
@@ -313,7 +313,6 @@ export class CheckoutPageComponent implements OnInit {
             return;
         }
 
-        this.loadingService.show();
         this.travellersRequestData = deepClone(
             this.travellerService.getTravellers()
         );

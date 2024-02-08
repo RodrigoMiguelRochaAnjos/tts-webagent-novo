@@ -129,7 +129,7 @@ export class TravellerDetailsPageComponent implements OnInit{
         let valid = true;
 
         this.travellerService.getTravellers().forEach((traveller: Traveller, index: number) => {
-            if(traveller.isValid()) return;
+            if(traveller?.isValid()) return;
 
             valid = false;
 

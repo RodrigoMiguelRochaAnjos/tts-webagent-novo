@@ -136,7 +136,9 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentPasswordComponent;
             case InputType.TEXT_DATE_INPUT:
                 return WebagentTextDateInputComponent;
-                case InputType.CHECKBOX:
+            case InputType.CHECKBOX:
+                this.hideDefault = true;
+
                 return WebagentCheckboxInputComponent;
             default:
                 throw new Error("Invalid input type");

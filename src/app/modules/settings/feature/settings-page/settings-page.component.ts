@@ -19,6 +19,7 @@ import { Address } from 'src/app/core/models/user/contact/segments/address.model
 import { AuthenticatedUser } from 'src/app/core/models/user/types/authenticated-user.model';
 import { IncompleteUser } from 'src/app/core/models/user/types/incomplete-user.model';
 import { currencies } from '../../utils/currencies.tools';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
     selector: 'app-settings-page',
@@ -51,8 +52,10 @@ export class SettingsPageComponent implements OnInit{
         private authService: AuthService,
         private destroyService: DestroyService,
         private alertService: AlertService,
-        private translate: TranslateService
+        private translate: TranslateService,
     ) {
+
+
         this.authService.getUser().subscribe((user: User) => {
             if(!(user instanceof AuthenticatedUser || user instanceof IncompleteUser)) return;
             this.settingsLoaded = true;

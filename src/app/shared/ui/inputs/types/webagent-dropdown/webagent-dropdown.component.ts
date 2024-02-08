@@ -39,11 +39,10 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
     ngAfterContentInit(): void {
         this.selectedOption = this.options.first;
         setTimeout(() => {
-            if (this.options.first){
-                this.selectedOption = this.options.first;
-                this.onChangeCallback(this.options.first?.value);
-            }
-        })
+            if (this.options.first) this.selectedOption = this.options.first;
+            this.onChangeCallback(this.options.first?.value);
+
+        });
         
     }
 
@@ -55,8 +54,11 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
         // Find the option with the specified value and set it as selected
         const selectedOption = this.options.find(option => option.value === value);
         if (selectedOption) {
-            this.selectedOption = selectedOption;
+            setTimeout(() => {
+                this.selectedOption = selectedOption;
+            })
         }
+
     }
 
     registerOnChange(callback: (value: any) => void): void {

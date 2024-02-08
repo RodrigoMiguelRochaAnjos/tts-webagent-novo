@@ -3,7 +3,7 @@ import { Component, OnInit, Input, HostListener, NgZone, ElementRef, OnDestroy }
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/core/authentication/auth.service";
 import { UserService } from "src/app/core/authentication/user/user.service";
-import { LoadingService } from "src/app/core/interceptors/loading.service";
+import { LoadingService } from "src/app/core/services/loading.service";
 import { FlightOption } from "src/app/modules/neo/models/flight-option.model";
 import { Providers } from "src/app/modules/neo/models/providers.enum";
 import { AirSearchResponse } from "src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model";
@@ -37,7 +37,8 @@ export class SearchResultComponent implements OnInit {
         private authService: AuthService,
         private reservationService: ReservationService,
         private alertService: AlertService,
-        private router: Router
+        private router: Router,
+        private loadingService: LoadingService
     ) { }
     
     ngOnInit() {
@@ -140,6 +141,7 @@ export class SearchResultComponent implements OnInit {
     async advance(): Promise<void> {
         if (!this.canBook) return;
 
+        this.loadingService.load();
         this.reservationService.checkFunds().then( (checked: boolean) => {
             if (!checked) {
                 this.alertService.show(AlertType.ERROR, `Not enough money in current account., You need to have enough money for the fee of 4.5 USD per LCC flight`)
@@ -156,12 +158,13 @@ export class SearchResultComponent implements OnInit {
 
             const body: AirCheckoutDetailsRequest = new AirCheckoutDetailsRequest(this.result.price, selectionFlights, this.currency);
 
+
             this.reservationService.getCheckoutDetails(body).then((success: boolean) => {
                 if(!success) {
                     this.alertService.show(AlertType.ERROR, `The flight you are trying to select is no longer available`)
                     return;
                 }
-
+                this.loadingService.dismiss();
                 this.router.navigate(['neo/travellers']);
             })
         });

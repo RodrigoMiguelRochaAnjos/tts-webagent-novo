@@ -87,7 +87,7 @@ export class TravellerService {
 
     public areTravellersValid(): boolean {
         for (const traveller of this._travellers) {
-            if (!traveller.isValid()) return false;
+            if (!traveller?.isValid()) return false;
         }
         return true;
     }
