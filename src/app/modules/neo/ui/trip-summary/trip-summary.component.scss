@@ -60,6 +60,12 @@
         padding: 15px 38px;
     }
 
+    .fee-price {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 5%;
+    }
+
     .prices-per-psg{
         .psg-price {
             padding: 0px 66px;
