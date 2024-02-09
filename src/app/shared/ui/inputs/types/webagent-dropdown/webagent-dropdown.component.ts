@@ -84,9 +84,10 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
         // Filter options based on the input text
         const filterValue = element.value.toLowerCase();
         this.options.forEach(option => {
-            const optionValue: string = option.getContent().toLowerCase();
+            const optionContent: string = option.getContent().toLowerCase();
+            const optionValue: string | undefined = option.value?.toLowerCase();
             
-            option.visible = optionValue.toLowerCase().includes(filterValue);
+            option.visible = optionValue?.includes(filterValue) || optionContent.includes(filterValue);
         });
 
         this.isDropdownOpen = true;
