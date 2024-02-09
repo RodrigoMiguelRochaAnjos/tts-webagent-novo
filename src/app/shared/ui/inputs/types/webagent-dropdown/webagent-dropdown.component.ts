@@ -103,4 +103,14 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
     keepOpen(): void {
         this.isDropdownOpen = true;
     }
+
+    selectFirstResult(event: KeyboardEvent) {
+        if (event.key !== "Enter") return;
+
+        const firstOption: WebagentOptionComponent | undefined = Array.from(this.options).filter((value) => value.visible)[0];
+
+        if(firstOption == null) return;
+
+        this.selectOption(firstOption);
+    }
 }

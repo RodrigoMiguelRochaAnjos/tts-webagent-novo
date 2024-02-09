@@ -1,4 +1,4 @@
-<input type="text" [(ngModel)]="this.value.text" (input)="searchLocation($event)" [pattern]="this.pattern" [required]="this.required" placeholder="{{ this.placeholder }}">
+<input type="text" [(ngModel)]="this.value.text" (input)="searchLocation($event)" [pattern]="this.pattern" [required]="this.required" placeholder="{{ this.placeholder }}" (keyup)="this.selectFirstResult($event)">
 <div class="search-area" *ngIf="this.focused">
     <div class="group" *ngFor="let city of (this.results$ | async)" (click)="locationSelected($event, city)">
         {{ city.name }}, {{ city.country.name }}
