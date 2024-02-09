@@ -20,6 +20,7 @@ import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-t
 import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PassengerType } from '../../../search/utils/requests/air-search-request/passenger-type.enum';
+import { countriesDialCodes } from 'src/app/shared/utils/countries-dial-codes.data';
 
 @Component({
     selector: 'app-traveller-details-page',
@@ -29,6 +30,7 @@ import { PassengerType } from '../../../search/utils/requests/air-search-request
 export class TravellerDetailsPageComponent implements OnInit{
     InputType = InputType;
     patterns = patterns;
+    countriesDialCodes = countriesDialCodes;
 
     public date: moment.Moment = moment();
     contactRequestData: Contact;

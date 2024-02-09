@@ -56,7 +56,29 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
 
     @HostListener('focusout', ['$event'])
     onBlur(event: FocusEvent): void {
-        setTimeout(() => this.focused = false, 300);
+        setTimeout(() => {
+            this.focused = false;
+
+            if (this.locationSearchService.getResultsValue().length <= 0) return;
+
+            const first: LocationSearch | undefined = this.locationSearchService.getResultsValue()[0];
+
+            if (!first) return;
+
+            this.locationSelected(event, first);
+        }, 100);
     }
 
+    selectFirstResult(event: KeyboardEvent) {
+        if (!(event.key === "Enter")) return;
+
+        if (this.locationSearchService.getResultsValue().length <= 0) return;
+
+        const first: LocationSearch | undefined = this.locationSearchService.getResultsValue()[0];
+
+        if(!first) return;
+
+        this.locationSelected(event, first);
+        this.focused = false;
+    }
 }
