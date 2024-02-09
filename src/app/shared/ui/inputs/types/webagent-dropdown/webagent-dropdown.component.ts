@@ -17,6 +17,7 @@ const CUSTOM_INPUT_VALUE_ACCESSOR: any = {
 })
 export class WebagentDropdownComponent implements ControlValueAccessor, AfterContentInit {
     isDropdownOpen: boolean = false;
+    private value: any;
 
     @Input() label?: string;
     
@@ -38,18 +39,15 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
 
     ngAfterContentInit(): void {
         this.selectedOption = this.options.first;
-        setTimeout(() => {
-            if (this.options.first) this.selectedOption = this.options.first;
-            this.onChangeCallback(this.options.first?.value);
 
-        });
-        
+        if (this.options.first) this.selectedOption = this.options.first;
     }
 
     private onChangeCallback: (value: any) => void = () => { };
     private onTouchedCallback: () => void = () => { };
 
     writeValue(value: any): void {
+        this.value = value;
         if(value == null) return;
         // Find the option with the specified value and set it as selected
         const selectedOption = this.options.find(option => option.value === value);
