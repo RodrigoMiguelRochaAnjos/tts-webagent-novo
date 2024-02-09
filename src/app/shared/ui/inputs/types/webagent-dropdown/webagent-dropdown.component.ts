@@ -40,7 +40,12 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
     ngAfterContentInit(): void {
         this.selectedOption = this.options.first;
 
-        if (this.options.first) this.selectedOption = this.options.first;
+        if (this.options.first) {
+            this.selectedOption = this.options.first;
+
+            this.writeValue(this.options.first.value)
+
+        }
     }
 
     private onChangeCallback: (value: any) => void = () => { };
@@ -94,7 +99,7 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
     selectOption(option: WebagentOptionComponent): void {
         this.isDropdownOpen = false;
         this.selectedOption = option;
-        this.onChangeCallback(option?.value);
+        this.writeValue(option.value);
         this.change.emit(option?.value);
     }
 
