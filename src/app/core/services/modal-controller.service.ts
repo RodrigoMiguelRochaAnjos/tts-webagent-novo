@@ -40,6 +40,10 @@ export class ModalControllerService {
     public hideModal(modalId: string): void {
         this.modalHistory = this.modalHistory.filter((value: string) => value !== `modal-${modalId}`)
         document.getElementById(`modal-${this.modalId}`)?.remove();
+
+        setTimeout(() => {
+            this.modal$.next(false);
+        })
     }
 
     createModalComponent(): void {
