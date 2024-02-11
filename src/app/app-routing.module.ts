@@ -18,7 +18,7 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren: () => import('./modules/dashboard/feature/dashboard-shell/dashboard-shell.module').then((m) => m.DashBoardShellModule),
         canActivateChild: [AuthGuardService],
-        title: 'Dashboard'
+        title: 'DASHBOARD'
     },
     {
         path: 'neo',
@@ -33,7 +33,7 @@ const routes: Routes = [
         path: 'terminal',
         loadChildren: () => import('./modules/terminal/feature/terminal-shell/terminal-shell.module').then((m) => m.TerminalShellModule),
         canActivateChild: [AuthGuardService],
-        title: 'Terminal',
+        title: 'TERMINAL',
         data: {
             icon: 'fa-solid fa-terminal'
         }
@@ -41,7 +41,7 @@ const routes: Routes = [
     {
         path: 'settings',
         loadChildren: () => import('./modules/settings/feature/settings-shell/settings-shell.module').then((m) => m.SettingsShellModule),
-        title: 'Settings',
+        title: 'SETTINGS',
         data: {
             icon: 'fa-solid fa-cog'
         }
@@ -50,7 +50,7 @@ const routes: Routes = [
         path: 'wallet',
         loadChildren: () => import('./modules/wallet/feature/wallet-shell/wallet-shell.module').then((m) => m.WalletShellModule),
         canActivateChild: [AuthGuardService],
-        title: 'Wallet',
+        title: 'WALLET',
         data: {
             icon: 'fa-solid fa-wallet'
         }
@@ -59,7 +59,7 @@ const routes: Routes = [
         path: 'my-bookings',
         loadChildren: () => import('./modules/neo/features/my-bookings/feature/my-bookings-shell/my-bookings-shell.module').then((m) => m.MyBookingsShellModule),
         canActivateChild: [AuthGuardService],
-        title: 'My bookings',
+        title: 'MY_BOOKINGS',
         data: {
             icon: 'fa-solid fa-wallet'
         }

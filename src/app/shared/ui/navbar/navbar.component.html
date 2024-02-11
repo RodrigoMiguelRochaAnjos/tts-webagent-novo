@@ -5,7 +5,7 @@
                 
                 <a [routerLink]="item.route" routerLinkActive="active">
                     <i class="{{ item.data?.icon }}"></i>
-                    {{item.label}}
+                    {{item.label | translate}}
                 </a>
             </li>
             <div class="line"></div>
