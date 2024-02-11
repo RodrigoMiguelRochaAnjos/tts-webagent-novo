@@ -127,4 +127,14 @@ export class FlightSearchFormComponent {
 
         return dateMax;
     }
+
+    getMomentDate(date: string): moment.Moment {
+        return moment(date, 'YYYY-MM-DD')
+    }
+
+    switchDestinations(): void {
+        const tmpDeparture = this.journey.origin;
+        this.journey.origin = this.journey.destination;
+        this.journey.destination = tmpDeparture;
+    }
 }

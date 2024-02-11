@@ -5,6 +5,13 @@
 </div>
 <div class="row">
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.origin" [label]="('ORIGIN' | translate )" />
+
+    <div class="reverse-search">
+        <button id="switchDestination" (click)="switchDestinations()">
+            <i class="fa-solid fa-rotate"></i>
+        </button>
+    </div>
+
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.destination" [label]="('DESTINATION' | translate )"/>
 </div>
 <div class="row">
