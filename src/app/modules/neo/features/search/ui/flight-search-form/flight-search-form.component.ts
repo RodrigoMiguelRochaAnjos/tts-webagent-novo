@@ -17,6 +17,8 @@ import { DateRange } from 'src/app/shared/models/date-range.model';
 import { RoundTrip } from 'src/app/modules/neo/models/journey/types/round-trip.model';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 
 @Component({
   selector: 'flight-search-form',
@@ -40,6 +42,7 @@ export class FlightSearchFormComponent {
         private searchService: SearchService,
         private router: Router,
         private travellerService: TravellerService,
+        private alertService: AlertService
     ) {
 
         this.journey.origin = new SelectedLocation();
@@ -60,6 +63,16 @@ export class FlightSearchFormComponent {
         this.saveTravellers();
 
         if (this.oneWayDate != null) this.journey.departureDate = this.oneWayDate.format('YYYY-MM-DD')
+
+        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || !this.journey.returnDate) {
+            this.alertService.show(AlertType.ERROR, "Please fill in all the fields before proceeding");
+            return;
+        }
+
+        if(this.journey.origin.code === this.journey.destination.code) {
+            this.alertService.show(AlertType.ERROR, "The flight origin and destination cannot be the same!");
+            return;
+        }
 
         const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
 
