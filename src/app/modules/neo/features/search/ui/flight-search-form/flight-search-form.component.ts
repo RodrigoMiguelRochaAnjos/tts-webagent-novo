@@ -32,8 +32,8 @@ export class FlightSearchFormComponent {
 
     public journey: Journey = new RoundTrip();
     public typeSwitch: { [key: string]: boolean } = {
-        'ROUNDTRIP': true,
-        'ONEWAY': false
+        'ROUND_TRIP': true,
+        'ONE_WAY': false
     };
 
     oneWayDate?: moment.Moment;
@@ -64,7 +64,7 @@ export class FlightSearchFormComponent {
 
         if (this.oneWayDate != null) this.journey.departureDate = this.oneWayDate.format('YYYY-MM-DD')
 
-        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || !this.journey.returnDate) {
+        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || (!this.journey.returnDate && this.journey instanceof RoundTrip)) {
             this.alertService.show(AlertType.ERROR, "Please fill in all the fields before proceeding");
             return;
         }
@@ -101,10 +101,10 @@ export class FlightSearchFormComponent {
         if(selected == null) return;
 
         switch(selected) {
-            case JourneyType.ONE_WAY:
+            case 'ONE_WAY':
                 this.journey = new OneWay();
                 break;
-            case JourneyType.ROUND_TRIP:
+            case 'ROUND_TRIP':
                 this.journey = new RoundTrip();
                 break;
             default:
