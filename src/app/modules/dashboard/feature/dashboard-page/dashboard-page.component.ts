@@ -22,17 +22,11 @@ export class DashboardPageComponent implements OnInit{
 
     InputType = InputType;
 
-    user$!: Observable<User>;
-
-    testResult!: AirSearchResponse;
-
     constructor(
-        private authService: AuthService,
-        private alertService: AlertService
+        
     ) {
     }
 
     ngOnInit(): void {
-        this.user$ = this.authService.getUser();
     }
 }

@@ -9,7 +9,7 @@
     <div class="page-container">
         <ng-container *ngFor="let flight of (this.details$ | async)?.flights; let pindex = index">
             <div class="mid-section" *ngIf="getPayment(flight.id)">
-                <div class="top-section" *ngFor="let segment of flight.segments">
+                <div class="top-section" *ngFor="let segment of flight.segments; let segment_index = index">
                     <div class="left-side">
                         <div class="logo" style="background-image: url('{{ segment.marketingCarrier.logo_url }}'); background-size: contain">
     
@@ -57,7 +57,7 @@
                         </div>
                     </div>
     
-                    <div class="right-side">
+                    <div class="right-side" *ngIf="segment_index === 0">
     
                         <div class="price">
                             <h2>{{ flight?.price?.amount }}</h2>
@@ -76,9 +76,11 @@
                         *ngIf="this.getPaymentOptionSupportedCards(flight.id).length > 0 || getPayment(flight.id)?.type != PaymentOption.CREDIT_CARD">
                         <h4>{{'PAYMENT' | translate}}</h4>
                         <webagent-dropdown [label]="'Card type'" [(ngModel)]="getPayment(flight.id)!.type">
+                            <webagent-option [value]="''">Select an option</webagent-option>
                             <webagent-option *ngFor="let paymentOption of this.getPaymentOptionSupportedTypes(flight.id)" [value]="paymentOption">{{ paymentOption | translate}}</webagent-option>
                         </webagent-dropdown>
                         <webagent-dropdown [label]="'Card type'" [(ngModel)]="getPaymentCreditCard(flight.id).cardType" *ngIf="getPayment(flight.id)!.type == PaymentOption.CREDIT_CARD" [search]="true">
+                            <webagent-option [value]="''">Select an option</webagent-option>
                             <webagent-option *ngFor="let paymentCard of this.getPaymentOptionSupportedCards(flight.id)"
                                 [value]="paymentCard.toString()">{{ paymentCard.toString() }}</webagent-option>
                         </webagent-dropdown>

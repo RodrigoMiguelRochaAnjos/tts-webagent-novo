@@ -211,7 +211,7 @@ export class CheckoutPageComponent implements OnInit {
         this.paymentsData.forEach(
             (value: { id: string; searchId: string; payment: Payment }) => {
                 if (
-                    !value.payment.creditCard!.isValid() &&
+                    !value.payment.creditCard?.isValid() &&
                     value.payment.type !== PaymentOption.CASH
                 ) {
                     valid = false;

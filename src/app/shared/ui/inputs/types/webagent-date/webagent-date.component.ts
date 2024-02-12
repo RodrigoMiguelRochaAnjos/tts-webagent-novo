@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
@@ -21,7 +21,8 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
 
     constructor(
         private formBuilder: FormBuilder,
-        private modalService: ModalControllerService
+        private modalService: ModalControllerService,
+        private elementRef: ElementRef
     ) {
         super();
         this.initDateForm();
@@ -144,5 +145,27 @@ export class WebagentDateComponent extends WebagentBaseComponent implements OnIn
 
     showYearPopup(modalContent: any, id: string): void{
         this.modalService.showModal(modalContent, id);
+    }
+
+    @HostListener('document:click', ['$event.target'])
+    onClick(target: any) {
+        let clickedInside: boolean = this.elementRef.nativeElement.contains(target);
+
+        if (!this.calendarOpen) return;
+
+        if (!clickedInside) {
+            if (this.modalService.getModalValue()) {
+                this.calendarOpen = true;
+                return;
+            }
+            this.calendarOpen = false;
+        } else {
+            this.calendarOpen = true
+        }
+
+        if (this.modalService.getModalValue()) {
+            this.calendarOpen = true;
+            return;
+        }
     }
 }

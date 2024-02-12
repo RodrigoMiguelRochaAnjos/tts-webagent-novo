@@ -17,6 +17,7 @@ const CUSTOM_INPUT_VALUE_ACCESSOR: any = {
 })
 export class WebagentDropdownComponent implements ControlValueAccessor, AfterContentInit {
     isDropdownOpen: boolean = false;
+    private value: any;
 
     @Input() label?: string;
     
@@ -38,26 +39,37 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
 
     ngAfterContentInit(): void {
         this.selectedOption = this.options.first;
-        setTimeout(() => {
-            if (this.options.first) this.selectedOption = this.options.first;
-            this.onChangeCallback(this.options.first?.value);
 
+        this.options?.changes?.subscribe(() => {
+            this.selectedOption = this.options.first;
+
+            if (this.value != null) {
+                const selectedOption = this.options.find(option => option.value === this.value);
+
+                if (selectedOption) {
+                    this.selectedOption = selectedOption;
+                }
+            }
+            this.onChangeCallback(this.selectedOption.value)
         });
-        
     }
 
     private onChangeCallback: (value: any) => void = () => { };
     private onTouchedCallback: () => void = () => { };
 
     writeValue(value: any): void {
+        this.value = value;
         if(value == null) return;
         // Find the option with the specified value and set it as selected
         const selectedOption = this.options.find(option => option.value === value);
         if (selectedOption) {
             setTimeout(() => {
                 this.selectedOption = selectedOption;
-            })
+                this.onChangeCallback(value);
+
+            }, 200)
         }
+
 
     }
 
@@ -84,9 +96,10 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
         // Filter options based on the input text
         const filterValue = element.value.toLowerCase();
         this.options.forEach(option => {
-            const optionValue: string = option.getContent().toLowerCase();
+            const optionContent: string = option.getContent().toLowerCase();
+            const optionValue: string | undefined = option.value?.toLowerCase();
             
-            option.visible = optionValue.toLowerCase().includes(filterValue);
+            option.visible = optionValue?.includes(filterValue) || optionContent.includes(filterValue);
         });
 
         this.isDropdownOpen = true;
@@ -95,11 +108,22 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
     selectOption(option: WebagentOptionComponent): void {
         this.isDropdownOpen = false;
         this.selectedOption = option;
-        this.onChangeCallback(option?.value);
+        this.writeValue(option.value);
         this.change.emit(option?.value);
+        this.onChangeCallback(option?.value)
     }
 
     keepOpen(): void {
         this.isDropdownOpen = true;
+    }
+
+    selectFirstResult(event: KeyboardEvent) {
+        if (event.key !== "Enter") return;
+
+        const firstOption: WebagentOptionComponent | undefined = Array.from(this.options).filter((value) => value.visible)[0];
+
+        if(firstOption == null) return;
+
+        this.selectOption(firstOption);
     }
 }
