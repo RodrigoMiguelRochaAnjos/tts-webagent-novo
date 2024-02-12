@@ -1,0 +1,162 @@
+:host {
+
+    &.align-left {
+        .calendar-container {
+            right: 0px;
+            left: auto;
+        }
+    }
+
+    &.align-top {
+        .calendar-container {
+            top: 0;
+            transform: translateY(-100%);
+        }
+    }
+
+    .calendar-container {
+        padding: 10px;
+        box-shadow: 0px 0px 7px #00000025;
+        margin-top: 10px;
+        border-radius: 11px;
+        position: absolute;
+        z-index: 99;
+        left: 0;
+        background-color: #fff;
+        padding-top: 5px;
+        text-align: center;
+        display: flex;
+
+        &.show {
+            display: flex;
+        }
+
+        .date-range-container {
+            width: calc(7 * calc(35px + 4px));
+            background-color: #fff;
+            margin: 10px;
+
+            .date-range-display{
+                display: flex;
+                justify-content: space-between;
+                .start-date, .end-date {
+                    text-align: left;
+                    b{
+                        font-size: .85rem;
+                        font-weight: 500;
+                    }
+                    p{
+                        font-size: .65rem;
+                    }
+                    h4{
+                        font-size: 1.1rem;
+                    }
+                }
+                .to{
+                    text-transform: uppercase;
+                }
+            }
+            .week-days {
+                border-bottom: 1px solid #3333;
+            }
+            .calendar-days-container {
+                .calendar-days {
+                    width: 35px;
+                    height: 35px;
+                    margin: 2px;
+                    background-color: #F2F7FA;
+                    cursor: pointer;
+                    border-radius: 11px;
+                    color: #000;
+                    transition: background ease-in-out .1s;
+                    font-size: .85rem;
+
+
+
+                    &.today {
+                        color: #D75A5A;
+                    }
+
+                    &.selected {
+                        background-color: #597A9D;
+                        color: #f0f0f0;
+                    }
+
+                    &.hovered {
+                        background-color: #F2F7FA;
+                        color: #597A9D;
+                        position: relative;
+
+                        &::after {
+                            content: '';
+                            width: 33px;
+                            height: 33px;
+                            position: absolute;
+                            top: 2px;
+                            left: 2px;
+                            border: 1px solid #597A9D;
+                            display: block;
+                            border-radius: 9px;
+                        }
+                    }
+
+                    &.inactive {
+                        opacity: .6;
+                        color: #000;
+                        background-color: #F2F7FA;
+
+                        &:hover {
+                            background-color: #F2F7FA;
+                            color: #000;
+                        }
+
+                        &::after {
+                            content: '';
+                            display: none;
+                        }
+                    }
+
+                    &:hover {
+                        background-color: #C8D8E9;
+                        color: #597A9D
+                    }
+
+                    &.week-day {
+                        background-color: transparent;
+                        border-radius: 0px;
+
+                        &:hover {
+                            background-color: transparent;
+                            color: #000;
+                            cursor: default;
+                        }
+
+                    }
+
+                }
+
+            }
+
+            .month-control {
+                height: 40px;
+                justify-content: space-between;
+
+                .left-control,
+                .right-control {
+                    width: 20px;
+                    cursor: pointer;
+                    user-select: none;
+                }
+            }
+        }
+    }
+
+    .date-input {
+        display: flex;
+        justify-content: space-between;
+
+        webagent-input {
+            width: calc(50% - 10px);
+        }
+    }
+}

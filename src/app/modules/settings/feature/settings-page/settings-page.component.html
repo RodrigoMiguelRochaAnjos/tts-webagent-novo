@@ -7,7 +7,7 @@
         <div class="double-fields">
             <webagent-input id="email" [type]="InputType.TEXT" [required]="true" [(ngModel)]="this.tmpSettings.profileEmail" [pattern]="patterns.email.source" [label]="('EMAIL' | translate)" />
             <div class="double-fields">
-                <webagent-dropdown id="countryDial" [(ngModel)]="this.tmpSettings.profileCountryDialCode" [label]="('COUNTRY_DIAL_CODE' | translate)" [search]="true">
+                <webagent-dropdown id="countryDial" [(ngModel)]="this.tmpSettings.profileCountryDialCode" [label]="('COUNTRY' | translate)" [search]="true">
                     <webagent-option *ngFor="let country of countriesDialCodes | keyvalue" [value]="country.value">{{ country.key }} ({{ country.value }})</webagent-option>
                 </webagent-dropdown>
                 <webagent-input id="phone" [type]="InputType.TEXT" [required]="true" [pattern]="patterns.phone.source" [(ngModel)]="this.tmpSettings.profilePhone"
