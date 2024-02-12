@@ -1,6 +1,7 @@
 :host{
     position: relative;
     justify-content: flex-end;
+        position: relative;
     nav{
         display: flex;
         align-items: center;
@@ -68,9 +69,12 @@
 
         .logo{
             height: 100%;
-
+            width: auto;
             img{
-                max-width: 31%;
+                width: auto;
+                height: 100%;
+                position: absolute;
+                top:0;
             }
         }
 
