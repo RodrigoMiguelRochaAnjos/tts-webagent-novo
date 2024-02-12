@@ -7,7 +7,7 @@
     <webagent-input [type]="InputType.LOCATION_SEARCH" [(ngModel)]="this.journey.origin" [label]="('ORIGIN' | translate )" />
 
     <div class="reverse-search">
-        <button id="switchDestination" (click)="switchDestinations()">
+        <button id="switchDestination" (click)="switchDestinations()" tabindex="-1">
             <i class="fa-solid fa-rotate"></i>
         </button>
     </div>
