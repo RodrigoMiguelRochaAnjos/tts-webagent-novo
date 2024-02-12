@@ -1,5 +1,5 @@
 :host{
-    padding: 12px 19px;
+    padding: 30px 19px 12px 19px;
     display: block;
     background-color: #fff;
     box-shadow: 0px 0px 5px #3333;
@@ -28,22 +28,19 @@
         }
         app-flight-option {
             border-bottom: 1px solid #3333;
-    
-            &:hover + .segments{
-                grid-template-rows: 1fr;
+            &:hover {
+                background-color: #ffff;
+                cursor: default;
             }
+
         }
     
         .segments{
             display: grid;
-            grid-template-rows: 0fr;
+            grid-template-rows: 1fr;
             transition: grid-template-rows ease-in-out 1s;
             div{
                 overflow: hidden;
-            }
-    
-            &:hover{
-                grid-template-rows: 1fr;
             }
     
             &.open {

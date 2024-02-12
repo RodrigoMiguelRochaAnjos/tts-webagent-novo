@@ -60,23 +60,10 @@
 
 
 app-email-items {
-    position: absolute;
     width: 90%;
     height: 70vh;
-    left: 50%;
-    right: 50%;
-    transform: translate(-50%, 120px);
 }
 
-.filters,
-app-brands-and-ancillaries {
-    position: absolute;
-    width: 90%;
-    height: 55vh;
-    left: 50%;
-    right: 50%;
-    transform: translate(-50%, 120px);
-}
 
 
 app-bottom-bar {
@@ -110,12 +97,6 @@ app-calendar-picker {
 
 @media (max-width: 1366px) {
 
-    .filters,
-    .brands,
-    .email-items {
-        transform: translate(-50%, 180px);
-    }
-
     app-calendar-picker {
         transform: translate(-50%, 80px);
     }
@@ -128,12 +109,6 @@ app-calendar-picker {
         }
     }
 
-    .filters,
-    .brands,
-    .email-items {
-        transform: translate(-50%, 100px);
-    }
-
     app-calendar-picker {
         transform: translate(-50%, 70px);
     }
@@ -141,14 +116,6 @@ app-calendar-picker {
 
 @media (max-height: 650px) {
 
-    .filters,
-    app-brands-and-ancillaries {
-        height: 40vh;
-    }
-
-    app-email-items {
-        height: 50vh;
-    }
 
     app-calendar-picker {
         transform: translate(-50%, 20px);

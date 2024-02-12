@@ -1,13 +1,16 @@
 <form [formGroup]="this.dateForm" class="date-input">
-    <webagent-input [type]="InputType.TEXT" [label]="('START_DATE' | translate )" [placeholder]="('START_DATE' | translate )"
-        [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="openCalendar()"></webagent-input>
-    <webagent-input [type]="InputType.TEXT" [label]="('END_DATE' | translate )" [placeholder]="('END_DATE' | translate )"
-        [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="openCalendar()"></webagent-input>
+    <webagent-input [type]="InputType.TEXT" [label]="('START_DATE' | translate )" [placeholder]="('START_DATE' | translate )" (focus)="openCalendar()"
+        [pattern]="DATE_PATTERN.source" formControlName="dateFrom" (click)="openCalendar()" [value]="this.fromDate"/>
+    <webagent-input [type]="InputType.TEXT" [label]="('END_DATE' | translate )" [placeholder]="('END_DATE' | translate )" (focus)="openCalendar()"
+        [pattern]="DATE_PATTERN.source" formControlName="dateTo" (click)="openCalendar()" [value]="this.toDate"/>
 </form>
 
 <ng-template #year>
     <h3>{{ 'CHOOSE_YEAR' | translate }}</h3>
-    <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" />
+    <webagent-dropdown (change)="changeYear($event)" [search]="true">
+        <webagent-option *ngFor="let year of this.getPreviousYears()" [value]="year">{{ year }}</webagent-option>
+    </webagent-dropdown>
+    <!-- <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" /> -->
 </ng-template>
 
 <div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">

@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostBinding, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostBinding, HostListener, Inject, InjectionToken, Input, OnInit, Output, ViewChild, ViewContainerRef, forwardRef } from '@angular/core';
 import { InputType } from '../input-type.enum';
 import { WebagentDropdownComponent } from '../types/webagent-dropdown/webagent-dropdown.component';
 import { WebagentTextComponent } from '../types/webagent-text/webagent-text.component';
@@ -16,6 +16,7 @@ import { Theme } from '../theme.enum';
 import { WebagentTextDateInputComponent } from '../types/webagent-text-date-input/webagent-text-date-input.component';
 import { WebagentCheckboxInputComponent } from '../types/webagent-checkbox-input/webagent-checkbox-input.component';
 import { WebagentNumberComponent } from '../types/webagent-number/webagent-number.component';
+import { WebagentDateFilterComponent } from '../types/webagent-date-filter/webagent-date-filter.component';
 
 const WRAPPER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -66,6 +67,10 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
     
 
     @Output() change: EventEmitter<any> = new EventEmitter<any>();
+    @Output() focus: EventEmitter<HTMLElement> = new EventEmitter<HTMLElement>();
+
+    private focusedElement: HTMLElement | null = null;
+
     constructor(
         private cdr: ChangeDetectorRef,
         private elementRef: ElementRef
@@ -118,8 +123,6 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 this.hideDefault = true;
 
                 return WebagentDateRangeComponent;
-            case InputType.DROPDOWN:
-                return WebagentDropdownComponent;
             case InputType.LOCATION_SEARCH:
                 return WebagentLocationSearchComponent;
             case InputType.INCREMENTAL_SELECTOR:
@@ -138,8 +141,13 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
                 return WebagentPasswordComponent;
             case InputType.TEXT_DATE_INPUT:
                 return WebagentTextDateInputComponent;
-                case InputType.CHECKBOX:
+            case InputType.CHECKBOX:
+                this.hideDefault = true;
+
                 return WebagentCheckboxInputComponent;
+            case InputType.DATE_FILTER:
+                this.hideDefault = true;
+                return WebagentDateFilterComponent;
             default:
                 throw new Error("Invalid input type");
         }
@@ -185,5 +193,28 @@ export class WebagentInputComponent implements ControlValueAccessor, AfterViewIn
         });
 
         return componentRef;
+    }
+
+    @HostListener('focusin', ['$event.target'])
+    onFocusIn(target: any) {
+
+        this.focusedElement = target;
+
+        this.focus.emit(target);
+
+    }
+
+
+    @HostListener('focusout', ['$event.target'])
+    onFocusOut(target: any) {
+
+        if (this.focusedElement === target) {
+
+            this.focusedElement = null;
+
+            this.onTouched();
+
+        }
+
     }
 }

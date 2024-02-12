@@ -1,12 +1,46 @@
 :host {
     position: relative;
     display: block;
-    font-size: inherit;
+    width: 100%;
+    box-shadow: 0px 0px 2px #11214a;
+    border-radius: 6px;
+    margin-top: 19px;
+
+    label {
+        position: absolute;
+        transform: translateY(-50%);
+        margin-left: 23px;
+        left: 0;
+        background-color: #fff;
+        padding: 0px 5px;
+        color: #11214A;
+        font-weight: 500;
+        opacity: .8;
+    }
+
     .selected-option {
         padding: 8px;
+        width: 100%;
         cursor: pointer;
         font-size: .85rem;
+        border: none;
+        background-color: #fff;
+        color: #333;
+        display: block;
+        width: 98%;
+        margin-left: 1%;
+
+        button, input {
+            display: block;
+            width: 100%;
+            background-color: #fff;
+            color: #333;
+            text-align: left;
+            border: none;
+            outline: none;
+        }
     }
+
     .dropdown-list {
         list-style: none;
         padding: 0;
@@ -15,12 +49,22 @@
         top: calc(100% - 5px);
         left: 0;
         width: 100%;
-        display: none;
         z-index: 999;
         background-color: #fff;
-        &.active {
-            display: block;
+        display: grid;
+        grid-template-rows: 0fr;
+        box-shadow: 0px 0px 2px #11214a3d;
+
+        transition: grid-template-rows ease-in-out .3s;
+
+        div {
+            overflow: hidden;
         }
+
+        &.active {
+            grid-template-rows: 1fr;
+        }
+
         li {
             padding: 8px;
             cursor: pointer;
@@ -29,11 +73,12 @@
         }
 
     }
+
     .selected-option {
         display: flex;
         align-items: center;
     }
-    
+
     .arrow-icon {
         display: inline-block;
         width: 0;
@@ -43,21 +88,18 @@
         border-color: #555 transparent transparent transparent;
         margin-left: auto;
     }
-    
+
     .arrow-icon.up {
         border-width: 0 5px 5px;
         border-color: transparent transparent #555 transparent;
     }
 
-    .dropdown-list {
-        margin-top:6px;
-        max-height: 230px;
-        overflow-y: auto;
-        padding-left: 2px;
-        padding-right: 1px;
-        padding-bottom: 1px;
+    &.search {
+        .dropdown-list{
+            max-height: 300px;
+            div{
+                overflow-y: auto;
+            }
+        }
     }
 }
-
-
-

@@ -2,8 +2,8 @@
     <h5>{{ this.booking.passengersNames[0] }} <sup *ngIf="this.booking.passengersNames.length > 1">{{ this.booking.passengersNames.length - 1 }}</sup></h5>
     
     <div class="dates">
-        <p> Data de criação:</p> <b>{{ moment(this.booking.createdAt).format('DD-MM-YYYY') }}</b>
-        <p> Data de inicio:</p> <b>{{ moment(this.booking.startDate).format('DD-MM-YYYY') }}</b>
+        <p>{{'BOOKING_CREATION_DATE' | translate}}:</p> <b>{{ moment(this.booking.createdAt).format('DD-MM-YYYY') }}</b>
+        <p>{{'START_DATE' | translate}}:</p> <b>{{ moment(this.booking.startDate).format('DD-MM-YYYY') }}</b>
     </div>
 </div>
 
@@ -14,7 +14,7 @@
 </div>
 
 <div class="right-side">
-    <button class="button-medium" (click)="goToBooking()">View</button>
+    <button class="button-medium" (click)="goToBooking()">{{'VIEW' | translate}}</button>
 </div>
 
 

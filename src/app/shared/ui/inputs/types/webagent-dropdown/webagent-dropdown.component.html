@@ -1,9 +1,15 @@
-<div class="selected-option" (click)="toggleDropdown()">
-    {{ value ? value: 'Select an option' }} <span class="arrow-icon" [class.up]="isDropdownOpen"></span>
+<label for="" *ngIf="this.label">{{label}}</label>
+<div class="dropdown">
+    <div class="selected-option" (click)="toggleDropdown()">
+        <button class="dropdown-toggle" type="button" data-toggle="dropdown" *ngIf="!this.search">
+            {{ selectedOption.getContent() || 'Select an option' }}
+        </button>
+        <input type="text" *ngIf="this.search" (input)="filterOptions($event)" [value]="selectedOption.getContent()" (keyup)="this.selectFirstResult($event)">
+        <span class="arrow-icon" [class.up]="isDropdownOpen"></span>
+    </div>
+    <div class="dropdown-list" [class.active]="isDropdownOpen">
+        <div>
+            <ng-content></ng-content>
+        </div>
+    </div>
 </div>
-<ul class="dropdown-list" [class.active]="isDropdownOpen">
-    <li (click)="selectOption('')">Select an option</li>
-    <li *ngFor="let option of options" (click)="selectOption(option)">
-        {{ option }}
-    </li>
-</ul>

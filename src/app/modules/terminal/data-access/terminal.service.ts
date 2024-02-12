@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ComponentRef, EnvironmentInjector, Injectable, createComponent } from '@angular/core';
+import { ComponentRef, EnvironmentInjector, Injectable, OnInit, createComponent } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, Subscription, takeUntil } from 'rxjs';
@@ -40,25 +40,34 @@ export const MONTHS: string[] = [
 export class TerminalService {
     private readonly ENDPOINT: string = environment.endpoints.TMA;
 
-    private terminalContent$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-    private terminals$: BehaviorSubject<{ terminal: HTMLElement, selected: boolean }[]> = new BehaviorSubject<{ terminal: HTMLElement, selected: boolean }[]>([{
-        terminal: document.getElementById('terminal')!,
-        selected: true
-    }]);
+    filtersSource = new BehaviorSubject<[]>([]);
+    filters = this.filtersSource.asObservable();
 
-    private filters$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+    showMoveUpBtnSource = new BehaviorSubject<boolean>(false);
+    showMoveUpBtn = this.showMoveUpBtnSource.asObservable();
 
-    private updateCommand!: object;
-    private lastExecutedCommand: { command: object | string | null, type: string } = {
-        command: null,
-        type: ''
-    };
+    showMoveDownBtnSource = new BehaviorSubject<boolean>(false);
+    showMoveDownBtn = this.showMoveDownBtnSource.asObservable();
 
-    private showButtons$: BehaviorSubject<{ up: boolean, down: boolean }> = new BehaviorSubject<{ up: boolean, down: boolean }>({
-        up: true,
-        down: true
-    });
-    private dateElement!: HTMLElement;
+    commandsHistorySource = new BehaviorSubject<string[]>([]);
+    commandsHistory = this.commandsHistorySource.asObservable();
+
+    terminalContentSource = new BehaviorSubject<string>('');
+    terminalContent = this.terminalContentSource.asObservable();
+
+    secondTerminalSelectedSource = new BehaviorSubject<boolean>(false);
+    secondTerminalSelected = this.secondTerminalSelectedSource.asObservable();
+
+    showTwoTerminalsSource = new BehaviorSubject<boolean>(false);
+    showTwoTerminals = this.showTwoTerminalsSource.asObservable();
+
+    selectedCommandSource = new BehaviorSubject<string>('');
+    selectedCommand = this.selectedCommandSource.asObservable();
+
+    devicePlatform!: string;
+    maxCommandsInHistory: number = 50;
+
+    mdLevel = 0;
 
     private messages: { [key: string]: string } = {
         EXPIRED_SESSION_MESSAGE: '',
@@ -67,9 +76,10 @@ export class TerminalService {
         NO_PLUGIN_SUPPORT_MESSAGE: '',
     }
 
-    private mdLevel: number = 0;
-
-    private selectedCommand$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    private updateCommand!: object;
+    lastExecutedCommandType = '';
+    private lastExecutedCommand!: object | string;
+    private dateElement!: HTMLElement;
 
 
     constructor(
@@ -83,193 +93,145 @@ export class TerminalService {
         private terminalHistory: TerminalHistoryService,
         translate: TranslateService,
     ) {
-        
+        this.authService.getUser().subscribe((user: User) => {
+            if (user.terminalMessage) this.terminalContentSource.next(new TerminalContent(user.terminalMessage).render())
+        })
 
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
     }
 
-    public getTerminals(): Observable<{ terminal: HTMLElement, selected: boolean }[]> {
-        return this.terminals$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
-
-    public getTerminalContent(): Observable<string> {
-        return this.terminalContent$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
-
-    public getFilters(): Observable<any[]> {
-        return this.filters$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
-
-    public getShowButtons(): Observable<{ up: boolean, down: boolean }> {
-        return this.showButtons$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
-
-    
-
-    public getSelectedCommand(): Observable<string> {
-        return this.selectedCommand$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
-    }
-
-    public selectTerminal(index: number) {
-        this.terminals$.next(
-            this.terminals$.value.map((terminalWindow: { terminal: HTMLElement, selected: boolean }, terminalIndex: number) => {
-                terminalWindow.selected = false;
-                if (index === terminalIndex) terminalWindow.selected = true;
-
-                return terminalWindow;
-            })
-        )
-    }
-
-    public selectCommand(command: string): void {
-        this.selectedCommand$.next(command);
-    }
-
-    public createTerminal(content: SafeHtml): void {
-        const componentRef: ComponentRef<TerminalComponent> = createComponent(TerminalComponent, {
-            environmentInjector: this.environmentInjector
-        });
-
-        componentRef.instance.content = content;
-
-        const terminals: { terminal: HTMLElement, selected: boolean }[] = this.terminals$.value;
-        terminals.push({ terminal: componentRef.location.nativeElement, selected: false });
-
-
-        this.terminals$.next(terminals);
-    }
-
     private processFilters(filtersData: any): void {
-        if (filtersData && filtersData.filters?.length > 0) {
-            this.filters$.next(filtersData.filters)
-            this.lastExecutedCommand.type = filtersData.type;
-
-            return;
+        if (filtersData && filtersData.filters.length > 0) {
+            this.filtersSource.next(filtersData.filters);
+            this.lastExecutedCommandType = filtersData.type;
+        } else {
+            this.filtersSource.next([]);
         }
-
-        this.filters$.next([]);
     }
 
     private processMoveUpAndDown(moveDown: boolean): void {
-        this.mdLevel = 0;
-
-        if (this.lastExecutedCommand.command === 'MD') this.mdLevel++;
-
-        if (this.lastExecutedCommand.command === 'MU' && this.mdLevel > 0) this.mdLevel--;
-
-        this.showButtons$.next({
-            up: this.mdLevel > 0,
-            down: moveDown ? moveDown : false
-        });
+        if (this.lastExecutedCommand === 'MD') {
+            this.mdLevel += 1;
+        } else if (this.lastExecutedCommand === 'MU' && this.mdLevel > 0) {
+            this.mdLevel -= 1;
+        } else {
+            this.mdLevel = 0;
+        }
+        this.showMoveUpBtnSource.next(this.mdLevel > 0);
+        this.showMoveDownBtnSource.next(moveDown ? moveDown : false);
     }
 
     private processCommandResult(serverData: any): void {
         const terminalContent = new TerminalContent(serverData);
+
         const terminalContentRedered = terminalContent.render();
 
-        this.terminalContent$.next(terminalContentRedered);
+        this.terminalContentSource.next(terminalContentRedered);
+
         this.executeUpdateCommand(terminalContentRedered);
     }
 
-    
+    private addCommandToHistory(command: string): void {
+        const commands = this.commandsHistorySource.getValue();
+        if (command !== commands[commands.length - 1]) {
+            commands.push(command);
+            if (commands.length > this.maxCommandsInHistory) {
+                commands.shift();
+            }
+            this.commandsHistorySource.next(commands);
+            localStorage.setItem('commands', JSON.stringify(commands));
+        }
+    }
+
 
     private processCommandErrors(serverData: any): void {
         if (serverData.message.text && serverData.message.text.includes('Session does not exist')) {
             this.alertService.show(AlertType.ERROR, this.messages['EXPIRED_SESSION_MESSAGE']);
-            
             this.authService.logout();
-            return;
-        }
+        } else if (serverData.msgAlert) {
+            this.alertService.show(AlertType.WARNING, serverData.msgObj[serverData.msgObj.type].message).subscribe((action: AlertAction) => {
+                if (action === AlertAction.WAITING) return;
 
-        if (serverData.msgAlert) {
-            this.alertService.show(AlertType.WARNING, serverData.msgObj[serverData.msgObj.type].message).subscribe((value: AlertAction) => {
-                switch(value){
+                switch (action) {
                     case AlertAction.EXECUTE:
-                        window.location.href = serverData.msgObj[serverData.msgObj.type].buttonLinkTarget;
+                        location.href = serverData.msgObj[serverData.msgObj.type].buttonLinkTarget;
                         break;
-                    case AlertAction.WAITING:
-                        return;
                     case AlertAction.CANCEL:
-                        return;
+                        break;
                 }
             });
-            // this.utilitiesService.showPopupFromServer(serverData.msgObj);
-            return;
+        } else {
+            this.alertService.show(AlertType.ERROR, serverData.message.text);
         }
-
-        this.alertService.show(AlertType.WARNING, serverData.message.text);
-
     }
 
     private executeUpdateCommand(terminalContent: string): void {
         this.authService.getUser().subscribe((user: User) => {
             if (!(user instanceof AuthenticatedUser)) return;
-            if (!this.updateCommand || !terminalContent.includes('terminal-update')) return;
 
-            const postData = {
-                sessionId: user.id,
-                cmdObj: this.updateCommand,
-            };
+            if (this.updateCommand && terminalContent.includes('terminal-update')) {
+                const postData = {
+                    sessionId: user.id,
+                    cmdObj: this.updateCommand,
+                };
+                this.restService.post(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
+                    next: (result: any) => {
+                        if (result.success) {
+                            const newElementsData = result.message as [];
+                            const elementsToReplace = [].slice.call(this.currentTerminal ? this.currentTerminal.getElementsByClassName('terminal-update') : []);
+                            newElementsData.forEach((newElementData: any) => {
+                                const elementToReplace = elementsToReplace[newElementData.i] as HTMLElement;
+                                const newElement = TerminalSpecialRender.renderSpecialBrandedFareElement(elementToReplace, newElementData);
+                                elementToReplace.parentNode?.replaceChild(newElement, elementToReplace);
+                            });
+                        } else {
+                            this.processCommandErrors(result);
+                        }
+                    },
+                    error: (err: Error) => {
+                        this.alertService.show(AlertType.ERROR, this.messages['ERROR']);
+                    }
+                });
+            }
+        });
 
-            this.restService.post(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
-                next: (result: any) => {
-                    if (!result.success) this.processCommandErrors(result);
-                    const newElementsData = result.message as [];
-                    const elementsToReplace = [].slice.call(this.currentTerminal.getElementsByClassName('terminal-update'));
-                    newElementsData.forEach((newElementData: any) => {
-                        const elementToReplace: HTMLElement = elementsToReplace[newElementData.i] as HTMLElement;
-                        const newElement = TerminalSpecialRender.renderSpecialBrandedFareElement(elementToReplace, newElementData);
-                        elementToReplace.parentNode?.replaceChild(newElement, elementToReplace);
-                    });
-                },
-                error: (error: Error) => {
-                    this.alertService.show(AlertType.ERROR, error.message);
-                }
-            })
-        })
     }
 
     private processEmailData(emailElement: HTMLElement, emailInfo: any): void {
-        this.authService.getUser().subscribe((user: User) => {
-            if (!emailInfo || !emailElement) return;
+        const user: User = this.authService.getUserValue();
 
-            if (emailElement.className.includes('terminal-email-selected')) {
-                const indexToRemove = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-                user.settings.sendByEmailItems = user.settings.sendByEmailItems.splice(indexToRemove, 1);
+        if (!emailInfo || !emailElement) return;
 
-                this.authService.updateUserSettings(user.settings);
-                emailElement.classList.toggle('terminal-email-selected');
-                return;
-            }
-
-            const index = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
-            if (index < 0) user.settings.sendByEmailItems.push(emailInfo);
+        if (emailElement.className.includes('terminal-email-selected')) {
+            const indexToRemove = user.settings?.sendByEmailItems?.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+            user.settings.sendByEmailItems = user.settings?.sendByEmailItems?.splice(indexToRemove, 1);
 
             this.authService.updateUserSettings(user.settings);
             emailElement.classList.toggle('terminal-email-selected');
+            return;
+        }
 
-        });
+        const index = user.settings.sendByEmailItems.findIndex((item) => JSON.stringify(item) === JSON.stringify(emailInfo));
+        if (index < 0) user.settings.sendByEmailItems.push(emailInfo);
+
+        this.authService.updateUserSettings(user.settings);
+        emailElement.classList.toggle('terminal-email-selected');
     }
 
     processTerminalCommand(result: any, emailElement?: HTMLElement): void {
-        if (!result.success) {
+        if (result.success) {
+            if (result.message) {
+                this.updateCommand = result.message.updateCmd ? result.message.updateCmd : null;
+                this.processCommandResult(result.message);
+                this.processFilters(result.message.filters);
+            }
+            this.processMoveUpAndDown(result.enablePageDown);
+            if (emailElement) this.processEmailData(emailElement, result.emailInfo);
+        } else {
             this.processCommandErrors(result);
-            return;
         }
-        if (result.message) {
-            this.updateCommand = result.message.updateCmd ? result.message.updateCmd : null;
-            this.processCommandResult(result.message);
-            this.processFilters(result.message.filters);
-
-        }
-
-        this.processMoveUpAndDown(result.enablePageDown);
-
-        if (emailElement == null) return;
-
-        this.processEmailData(emailElement, result.emailInfo);
     }
 
     executeTerminalCommand(command: string | string[] | Object, emailElement?: HTMLElement, history?: boolean): void {
@@ -277,57 +239,58 @@ export class TerminalService {
             this.authService.logout();
             return;
         }
+        const user: User = this.authService.getUserValue();
+        
+        if (!(user instanceof AuthenticatedUser)) return;
 
-        this.authService.getUser().subscribe((user: User) => {
-            if (!(user instanceof AuthenticatedUser)) return;
+        // this.utilitiesService.showLoading();
+        const isCommandAString = typeof command === 'string';
+        const isCommandAArray = Array.isArray(command);
+        const postData: any = {};
+        postData['sessionId'] = user.id;
+        if (isCommandAString) {
+            postData['allowEnhanced'] = user.settings.enhancedResults;
+            postData['command'] = command;
+        } else if (isCommandAArray) {
+            postData['commandFields'] = command;
+        } else {
+            postData['cmdObj'] = command;
+        }
 
-            // this.utilitiesService.showLoading();
-            const isCommandAString = typeof command === 'string';
-            const isCommandAArray = Array.isArray(command);
-
-            const postData: any = {};
-            postData['sessionId'] = user.id;
-            if (isCommandAString) {
-                postData['allowEnhanced'] = user.settings.enhancedResults;
-                postData['command'] = command;
-            } else if (isCommandAArray) {
-                postData['commandFields'] = command;
-            } else {
-                postData['cmdObj'] = command;
-            }
-
-            this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
-                next: (result: any) => {
-                    this.lastExecutedCommand.command = command;
-
-                    if (isCommandAString) this.terminalHistory.addCommandToHistory(command as string);
-
-                    this.processTerminalCommand(result, emailElement);
-                    // this.utilitiesService.dismissLoading();
-
-                    if (history) this.menuService.toggleMenu('right');
-
-                    setTimeout(() => {
-                        const commandInput: HTMLInputElement | undefined = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
-                        if (commandInput) commandInput.focus();
-                    }, 300);
-                },
-                error: (err: Error) => {
-                    // this.utilitiesService.dismissLoading();
-                    this.alertService.show(AlertType.ERROR, err.message);
+        this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
+            next: (result: any) => {
+                this.lastExecutedCommand = command;
+                if (isCommandAString) {
+                    this.addCommandToHistory(command as string);
                 }
-            })
+
+                this.processTerminalCommand(result, emailElement!);
+                // this.utilitiesService.dismissLoading();
 
 
+                setTimeout(() => {
+                    const commandInput = document.getElementById('terminal-command-input')?.childNodes[0] as HTMLInputElement;
+                    if (commandInput) commandInput.focus();
+                }, 300);
+
+                if (history) this.menuService.toggleMenu('right');
+            },
+
+            error: (err: Error) => {
+                // this.utilitiesService.dismissLoading();
+                this.alertService.show(AlertType.ERROR, err.message);
+            }
         })
+
+
     }
 
-    public get currentTerminal() {
-        return this.terminals$.value.filter((val: { terminal: HTMLElement, selected: boolean }) => val.selected == true).map((val: { terminal: HTMLElement, selected: boolean }) => val.terminal)[0];
+    private get currentTerminal() {
+        return document.getElementById('terminal' + (this.secondTerminalSelectedSource.getValue() ? 2 : 1));
     }
 
     private executeSubmit(element: HTMLElement) {
-        const terminalBundleElements = this.currentTerminal.getElementsByClassName('bundle-' + element.getAttribute('data-bundle'));
+        const terminalBundleElements = this.currentTerminal?.getElementsByClassName('bundle-' + element.getAttribute('data-bundle'));
         let command = element.getAttribute('data-value')!;
         [].slice.call(terminalBundleElements).forEach((bundleElement: HTMLElement) => {
             const prefix = bundleElement.getAttribute('data-prefix') ? bundleElement.getAttribute('data-prefix') : '';
@@ -391,7 +354,7 @@ export class TerminalService {
     }
 
     private executeMoreInfo(element: HTMLElement): void {
-        const objs: any = element.getAttribute('data-objs') ? JSON.parse(element.getAttribute('data-objs')!.replace(/'/g, '"')) : false;
+        const objs = element.getAttribute('data-objs') ? JSON.parse(element.getAttribute('data-objs')!.replace(/'/g, '"')) : false;
         let info = '<p class="' + element.getAttribute('data-id') + '">';
         if (!objs) {
             info += element.getAttribute('data-value');
@@ -410,41 +373,41 @@ export class TerminalService {
             while (showInfoElement && !showInfoElement.className.includes('terminal-more-info')) {
                 showInfoElement = showInfoElement.nextElementSibling;
             }
-            showInfoElement!.innerHTML = showInfoElement!.innerHTML + info;
+            showInfoElement!.innerHTML = showInfoElement?.innerHTML + info;
             element.setAttribute('data-showing', 'true');
         } else {
-            this.currentTerminal.getElementsByClassName(element.getAttribute('data-id')!)[0].remove();
+            this.currentTerminal?.getElementsByClassName(element.getAttribute('data-id')!)[0].remove();
             element.setAttribute('data-showing', 'false');
         }
     }
 
     private executeTerminalCommandAction(element: HTMLElement): void {
-        const emailElement: HTMLElement | undefined = element.className.includes('terminal-email') ? element : undefined;
-        const destinfoElement: HTMLElement | undefined = element.className.includes('terminal-destinfo') ? element : undefined;
+        const emailElement = element.className.includes('terminal-email') ? element : null;
+        const destinfoElement = element.className.includes('terminal-destinfo') ? element : null;
         if (destinfoElement) {
             const data = JSON.parse(destinfoElement.getAttribute('data-value')!.toString().replace(/\'/g, '"'));
-
-            this.router.navigate(["info/dest"], {
+            this.router.navigate(['terminal/destination-information'], {
                 queryParams: {
                     destinations: data.destinations,
                 },
             });
         } else {
-            this.executeTerminalCommand(JSON.parse(element.getAttribute('data-value')!.toString().replace(/\'/g, '"')), emailElement);
+            this.executeTerminalCommand(JSON.parse(element.getAttribute('data-value')!.toString().replace(/\'/g, '"')), emailElement!);
         }
     }
 
     private async executeBrandedFareAction(element: HTMLElement): Promise<any> {
-
         return new Promise<any>((resolve) => {
             this.authService.getUser().subscribe((user: User) => {
                 if (!(user instanceof AuthenticatedUser)) return;
 
                 const brandedFareCommand = JSON.parse(element.getAttribute('data-value')!.toString().replace(/\'/g, '"'));
+
                 const postData = {
                     sessionId: user.id,
                     cmdObj: brandedFareCommand,
                 };
+
                 this.restService.post<any>(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
                     next: (result: any) => {
                         resolve(result.message);
@@ -484,8 +447,8 @@ export class TerminalService {
 
     executeSubmitAction(element: HTMLInputElement): void {
         if (element.className.includes('terminal-submit-input')) {
-            const inputs: HTMLInputElement[] = [].slice.call(this.currentTerminal.getElementsByClassName('terminal-submit-input'));
-            const fields: { name: string, value: any, size: number, selected: boolean }[] = [];
+            const inputs: any[] = [].slice.call(this.currentTerminal?.getElementsByClassName('terminal-submit-input'));
+            const fields: any = [];
             inputs.map(input => {
                 const inputSize = Number(input.size);
                 let inputValue: string = input.value;
@@ -501,8 +464,7 @@ export class TerminalService {
         }
     }
 
-    fixTerminalContent(id: string | null): void {
-        if (id == null) return;
+    fixTerminalContent(id: string): void {
         const terminal = document.getElementById(id);
         if (terminal !== null) {
             const terminalContent = terminal.getElementsByClassName('terminal-content')[0];
@@ -529,6 +491,7 @@ export class TerminalService {
                     sessionId: user.id,
                     cmdObj: command
                 };
+
                 this.restService.post(`${this.ENDPOINT}/TerminalCommand`, postData).subscribe({
                     next: (result: any) => resolve(result.message),
                     error: (err: any) => {
@@ -537,5 +500,12 @@ export class TerminalService {
                 })
             })
         });
+    }
+
+    loadCommandsHistoryFromStorage(): void {
+        const savedCommandsString = localStorage.getItem('commands');
+        if (savedCommandsString != null) {
+            this.commandsHistorySource.next(JSON.parse(savedCommandsString));
+        }
     }
 }

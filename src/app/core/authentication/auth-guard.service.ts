@@ -59,7 +59,7 @@ export class AuthGuardService {
                 if ((state.url === '/home' || state.url === '/') && user instanceof AuthenticatedUser){
                     canProceed = true;
 
-                    this.router.navigate([this.currentPage === '' ? '/dashboard' : this.currentPage]);
+                    this.router.navigate([this.currentPage === '' ? '/neo' : this.currentPage]);
                     return;
                 }
             }

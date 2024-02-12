@@ -1,3 +1,8 @@
 <label>
-    <input type="checkbox" [(ngModel)]="isChecked"> Checkbox temporaria
+    <label class="checkbox-btn">
+        {{ this.value }}
+        <label for="checkbox"></label>
+        <input id="checkbox" type="checkbox" [(ngModel)]="isChecked">
+        <span class="checkmark"></span>
+    </label>
 </label>

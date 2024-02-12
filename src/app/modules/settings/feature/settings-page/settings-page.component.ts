@@ -15,6 +15,11 @@ import { Contact } from 'src/app/core/models/user/contact/contact.model';
 import { Phone } from 'src/app/core/models/user/contact/segments/phone.model';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { AlertService } from 'src/app/core/services/alert.service';
+import { Address } from 'src/app/core/models/user/contact/segments/address.model';
+import { AuthenticatedUser } from 'src/app/core/models/user/types/authenticated-user.model';
+import { IncompleteUser } from 'src/app/core/models/user/types/incomplete-user.model';
+import { currencies } from '../../utils/currencies.tools';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
     selector: 'app-settings-page',
@@ -25,6 +30,9 @@ export class SettingsPageComponent implements OnInit{
     InputType = InputType;
     patterns = patterns;
     countriesDialCodes = countriesDialCodes;
+    currencies = currencies;
+
+    settingsLoaded: boolean = false;
 
     countriesDialCodeOptions: string[] = []
     
@@ -44,8 +52,14 @@ export class SettingsPageComponent implements OnInit{
         private authService: AuthService,
         private destroyService: DestroyService,
         private alertService: AlertService,
-        private translate: TranslateService
+        private translate: TranslateService,
     ) {
+
+
+        this.authService.getUser().subscribe((user: User) => {
+            if(!(user instanceof AuthenticatedUser || user instanceof IncompleteUser)) return;
+            this.settingsLoaded = true;
+        })
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
@@ -70,29 +84,54 @@ export class SettingsPageComponent implements OnInit{
 
         if(user instanceof AnonymousUser) return;
 
-        user.currency = this.tmpSettings.currency;
-
-        user.name = this.tmpSettings.profileUserName;
-        user.contact = new Contact();
-        user.contact.email = this.tmpSettings.profileUserEmail;
-        user.contact.phone = new Phone();
-        user.contact.phone.dialCode = `+${this.tmpSettings.profileUserDialCode}`;
-        user.contact.phone.number = this.tmpSettings.profileUserPhone;
-
-
-
         try {
-            user.save();
-            this.authService.updateUserSettings(this.tmpSettings);
-            this.changeLanguage();
+            if(this.validateInputs()) {
+                user.save();
+                this.authService.updateUserSettings(this.tmpSettings);
+                this.changeLanguage();
+            }
+        
         } catch (er) {
             er = er as Error;
             this.alertService.show(AlertType.ERROR, this.messages['INVALID_FIELDS_MESSAGE'])
         }
     }
 
+    private isValidInput(value: string, pattern: RegExp): boolean {
+        return pattern.test(value);
+    }
+
+    validateInputs(): boolean {
+
+        const errors: string[] = [];
+
+        if(!this.isValidInput(this.tmpSettings.profileName, patterns.name)) errors.push("The user's profile name is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.profilePhone, patterns.phone)) errors.push("The user's profile phone number is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.profileEmail, patterns.email)) errors.push("The user's profile email is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.address.city, patterns.city)) errors.push("The user's profile city address is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.agencyEntityName, patterns.text)) errors.push("The user's agency entity name is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.address.street, patterns.text)) errors.push("The user's agency street is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.address.postCode, patterns.postCode)) errors.push("The user's agency post code is invalid, please try again");
+
+        if(!this.isValidInput(this.tmpSettings.address.countryCode, patterns.countryCode)) errors.push("The user's agency country code is invalid, please try again");
+
+        if (errors.length === 0) {
+            return true;
+
+          } else {
+            const errorMessage = errors.join('\n');
+            this.alertService.show(AlertType.ERROR, `Invalid input(s) detected:\n${errorMessage}`)
+            return false;
+        }
+    }
+
     changeLanguage(): void {
         this.translate.use(this.tmpSettings.languageCode);
     }
-
 }

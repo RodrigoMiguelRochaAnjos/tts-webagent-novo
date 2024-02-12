@@ -2,7 +2,7 @@
     <div class="card">
         <div class="row">
             <div class="booking-id">
-                <h4>Booking ID</h4>
+                <h4>{{'BOOKING_ID' | translate}}</h4>
                 <p>
                     {{ (booking$ | async)?.id }}
                 </p>
@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="provider-codes">
-                <h4>Provider Codes</h4>
+                <h4>{{'PROVIDER_CODES' | translate}}</h4>
                 <div class="booking-codes">
                     <p class="booking-code" *ngFor="let ref of (this.booking$ | async)?.bookingRefs | keyvalue">
                         {{ getProviderByKey(ref.key) }} Code: <b>{{ ref.value.bookingCode}}</b>
@@ -60,17 +60,17 @@
     
     <div class="card agent-contact">
         <div class="header">
-            <h1>Contact Information</h1>
+            <h1>{{'CONTACT_INFORMATION' | translate}}</h1>
         </div>
         <div class="row">
             <div>
-                <h4>Email:</h4>
+                <h4>{{'EMAIL' | translate}}:</h4>
                 <p>
                     {{ (this.booking$ | async)?.contact?.email }}
                 </p>
             </div>
             <div>
-                <h4>Phone number:</h4>
+                <h4>{{'PHONE_NUMBER' | translate}}:</h4>
                 <p>
                     {{ (this.booking$ | async)?.contact?.phone?.dialCode }} {{ (this.booking$ | async)?.contact?.phone?.number }}
                 </p>
@@ -81,18 +81,18 @@
     <div class="card travellers">
         <div class="traveller" *ngFor="let passenger of (this.booking$ | async)?.passengers">
             <div class="header">
-                <h1>Traveller</h1>
+                <h1>{{'TRAVELLER' | translate}}</h1>
             </div>
             <div class="row">
                 <div>
-                    <h4>Name:</h4>
+                    <h4>{{'NAME' | translate}}:</h4>
                     <p>
                         {{ this.passenger.title }} {{ this.passenger.firstName }} {{ this.passenger.lastName
                         }}
                     </p>
                 </div>
                 <div>
-                    <h4>Date of birth:</h4>
+                    <h4>{{'DATE_OF_BIRTH' | translate}}:</h4>
                     <p>
                         {{ this.passenger.dateOfBirth }}
                     </p>
@@ -100,14 +100,14 @@
             </div>
             <div class="row">
                 <div *ngIf="this.passenger.contact.email != ''">
-                    <h4>Email:</h4>
+                    <h4>{{'EMAIL' | translate}}:</h4>
                     <p>
                         {{ this.passenger.contact.email }}
                     </p>
                 </div>
                 <div
                     *ngIf="this.passenger.contact.phone && this.passenger.contact.phone.dialCode != '' && this.passenger.contact.phone.number != '' ">
-                    <h4>Phone number:</h4>
+                    <h4>{{'PHONE_NUMBER' | translate}}:</h4>
                     <p>
                         {{ this.passenger.contact.phone.dialCode }} {{ this.passenger.contact.phone.number }}
                     </p>

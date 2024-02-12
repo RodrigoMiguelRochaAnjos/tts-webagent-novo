@@ -1,7 +1,7 @@
 <div class="price-details" *ngIf="hasPassengersPrice">
     <div>{{ result.price.totalAmount.toFixed(2) }} {{ result.price.preferredCurrency }}</div>
-    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' }}</div>
-    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' }}</div>
+    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' | translate }}</div>
+    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' | translate}}</div>
     <br>
     <div class="passenger-price-details" *ngFor="let price of passengersPrices">
         <div class="passenger-type">{{ price.ptc }}</div>
@@ -29,8 +29,8 @@
 </div>
 <div class="no-price-details" *ngIf="!hasPassengersPrice">
     <div>{{ result.price.totalAmount.toFixed(2) }} {{ result.price.preferredCurrency }}</div>
-    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' }}</div>
-    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' }}</div>
+    <div *ngIf="result.price.includeTaxes">{{ 'WITH_TAXES' | translate}}</div>
+    <div *ngIf="!result.price.includeTaxes">{{ 'NO_TAXES' | translate}}</div>
     <ng-container *ngIf="outbound">
         <div class="segment" *ngFor="let segment of outbound.segments">
             <div class="segment-label">{{ segment.origin.code }}-{{ segment.destination.code }}</div>

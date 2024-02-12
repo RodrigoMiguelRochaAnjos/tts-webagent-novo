@@ -359,5 +359,20 @@
     "TRAVELLER": "Reisender",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS WebAgent steht nur für Webagent-Benutzer zur Verfügung.",
     "UNCONFIRMED": "Nicht bestätigt",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "Ihre Kontoeinstellungen sind ungültig",
+    "CHOOSE_YEAR": "Wähle ein Jahr",
+    "ADDRESS": "Adresse",
+    "APP_SETTINGS": "App-Einstellungen",
+    "SELECT_LANGUAGE": "Sprache auswählen",
+    "SELECT_CURRENCY": "Währung auswählen",
+    "BILLING_ADDRESS": "Rechnungsadresse",
+    "TAXES_INCLUDED": "Inklusive Steuern",
+    "PAYMENT": "Zahlung",
+    "FLIGHT_PROCESSING_ERROR": "Ein Problem ist bei der Bearbeitung dieser Flugzahlung aufgetreten",
+    "TRANSACTION": "Transaktion",
+    "CHECKOUT": "Bezahlung",
+    "RESERVATION_SUMMARY": "Reservierungszusammenfassung",
+    "TICKET": "Ticket",
+    "TICKETS": "Tickets",
+    "VIEW": "Ansehen"
 }

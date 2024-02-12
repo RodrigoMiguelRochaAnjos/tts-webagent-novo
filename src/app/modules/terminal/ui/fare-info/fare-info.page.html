@@ -1,0 +1,53 @@
+<div class="content">
+    <ul>
+        <!-- <ion-item [detailIcon]="getDetailIcon(0)" [lines]="getLineType(0)" (click)="toggleShowMoreInfo(0)" button detail> -->
+        <!-- <ion-avatar slot="start"> -->
+        <li>
+            <div class="top-section">
+                <img alt="summary" src="assets/icons/summary.svg" />
+                <label for="">
+                    <b class="info-title">Summary</b>
+                    <p>{{ fare.fareInfo.text }}</p>
+                </label>
+
+            </div>
+            <div class="expandable">
+                <div>
+                    <label>
+                        <img src="{{fare.fareInfo.imageRef}}" />
+                        <div [innerHTML]="fare.fareInfo.text | newLine"></div>
+                    </label>
+                </div>
+            </div>
+
+        </li>
+        <!-- </ion-item> -->
+        <ng-container *ngFor="let service of fare.fareInfo.services; index as i">
+            <li>
+                <!-- {{getDetailIcon(i + 1)}}
+                {{getLineType(i + 1)}}
+                {{ toggleShowMoreInfo(i + 1) }} -->
+                <!-- <ion-avatar slot="start"> -->
+                <!-- </ion-avatar> -->
+                <div class="top-section">
+                    <img [src]="service.iconRef" />
+                    <label class="ion-text-wrap">
+                        <div class="info-title">{{ service.info }}</div>
+                        <p>{{ service | fareServiceChargeable }}</p>
+                    </label>
+                </div>
+                <div class="expandable">
+                    <div>
+                        <hr>
+                        <img src="{{ service.imageRef }}">
+                        <br />
+                        <div [innerHTML]="service.text | newLine"></div>
+                    </div>
+                </div>
+            </li>
+            <!-- <ion-item-divider class="ion-padding" *ngIf="showingMoreInfoItems[i + 1]"> -->
+            <!-- </ion-item-divider> -->
+        </ng-container>
+    </ul>
+
+</div>

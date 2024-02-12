@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Journey } from 'src/app/modules/neo/models/journey/journey.model';
 import { OneWay } from 'src/app/modules/neo/models/journey/types/one-way.model';
 import { LocationType } from 'src/app/shared/models/location-search-response.model';
@@ -19,13 +19,14 @@ import { TravellerService } from 'src/app/modules/neo/data-access/traveller.serv
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
   selector: 'flight-search-form',
   templateUrl: './flight-search-form.component.html',
   styleUrls: ['./flight-search-form.component.scss']
 })
-export class FlightSearchFormComponent {
+export class FlightSearchFormComponent implements OnInit{
     InputType = InputType;
     LocationType = LocationType;
     TravellerTypes = TravellerTypes;
@@ -37,18 +38,34 @@ export class FlightSearchFormComponent {
     };
 
     oneWayDate?: moment.Moment;
+    roudTripDate: DateRange = new DateRange();
+
+    searchResume$!: Observable<Journey>;
 
     constructor(
         private searchService: SearchService,
         private router: Router,
         private travellerService: TravellerService,
         private alertService: AlertService
+        private loadingService: LoadingService
     ) {
+        this.searchResume$ = this.searchService.getSearchResume();
 
         this.journey.origin = new SelectedLocation();
         this.journey.destination = new SelectedLocation();
 
         if (this.travellerService.getTravellers().length === 0) this.travellerService.addTraveller(TravellerTypes.ADULTS);
+    }
+    ngOnInit(): void {
+        this.journey = this.searchService.getSearchResumeValue();
+
+        this.roudTripDate = new DateRange();
+        this.roudTripDate.dateFrom = this.getMomentDate(this.journey.departureDate)
+        this.roudTripDate.dateTo = this.getMomentDate(this.journey.returnDate)
+
+        this.searchResume$.subscribe((searchResume: Journey) => {
+            this.journey = searchResume;
+        })
     }
 
     get isRoundTrip(): boolean {
@@ -74,15 +91,22 @@ export class FlightSearchFormComponent {
             return;
         }
 
-        const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
+        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || (!this.journey.returnDate && this.journey instanceof RoundTrip)) {
+            this.alertService.show(AlertType.ERROR, "Please fill in all the fields before proceeding");
+            return;
+        }
 
-        const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(mapper.map(this.journey));
+        if(this.journey.origin.code === this.journey.destination.code) {
+            this.alertService.show(AlertType.ERROR, "The flight origin and destination cannot be the same!");
+            return;
+        }
+
+        const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(this.journey);
 
         if (searchId == null) return;
 
         searchId.subscribe({
             next: (response: AirSearchIdResponse) => {
-
                 this.searchService.reset();
 
                 this.router.navigate([`neo/search/${response.id}`]);
@@ -91,8 +115,8 @@ export class FlightSearchFormComponent {
     }
 
     datesChanged(dates: DateRange): void {
-        this.journey.departureDate = dates.from.format('YYYY-MM-DD');
-        this.journey.returnDate = dates.to.format('YYYY-MM-DD');
+        this.journey.departureDate = dates.dateFrom?.format('YYYY-MM-DD');
+        this.journey.returnDate = dates.dateTo?.format('YYYY-MM-DD');
     }
 
     typeChanged(event: { [key: string]: boolean }): void {

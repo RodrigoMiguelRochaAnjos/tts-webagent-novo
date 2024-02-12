@@ -16,8 +16,7 @@ export class Contact {
         return (
             this.email != null &&
             patterns.email.test(this.email.trim()) &&
-            this.phone != null &&
-            this.phone.isValid()
+            this.phone != null && this.phone?.isValid()
         );
     }
 
@@ -25,9 +24,6 @@ export class Contact {
         return new FormGroup({
             COUNTRY_DIAL_CODE: new FormControl(this.phone.dialCode, [Validators.required]),
             PHONE: new FormControl(this.phone.number, [Validators.required]),
-            TITLE: new FormControl(this.title, [Validators.required]),
-            FIRST_NAME: new FormControl(this.firstName, [Validators.required, Validators.pattern(patterns.name)]),
-            LAST_NAME: new FormControl(this.lastName, [Validators.required, Validators.pattern(patterns.name)]),
             EMAIL: new FormControl(this.email, [Validators.required, Validators.pattern(patterns.email)]),
         });
     }
@@ -75,5 +71,7 @@ export class Contact {
             }
         });
     }
+
+    
 
 }

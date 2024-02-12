@@ -77,7 +77,7 @@ export class TravellerService {
         this._travellers[index] = traveller;
     }
 
-    private getType(travellerType: TravellerTypes): any {
+    public getType(travellerType: TravellerTypes): any {
         for (const flagName in this._flagMapping) {
             if ((travellerType & this._flagMapping[flagName].flag) != this._flagMapping[flagName].flag) continue;
 
@@ -87,7 +87,7 @@ export class TravellerService {
 
     public areTravellersValid(): boolean {
         for (const traveller of this._travellers) {
-            if (!traveller.isValid()) return false;
+            if (!traveller?.isValid()) return false;
         }
         return true;
     }

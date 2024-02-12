@@ -9,6 +9,7 @@ import { PKey } from '../../models/pkey.model';
 import { deepClone } from 'src/app/core/utils/deep-clone.tool';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 import { TerminalHistoryService } from '../../data-access/terminal-history.service';
+import { MenuService } from '../../data-access/menu.service';
 
 
 class PKeyObject {
@@ -28,15 +29,20 @@ class PKeyObject {
     styleUrls: ['./bottom-bar.component.scss'],
 })
 
-export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
+export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
     @Input() pkeyIndex: number = -1;
 
     @Output() commandSubmit = new EventEmitter<string>();
     @ViewChild('terminalCommandInput') terminalCommandInput!: ElementRef;
     @ViewChildren('variableElement') variableElements!: QueryList<ElementRef>
-    private numberClicks: number = -1;
 
     hasActivePkey: boolean = true;
+
+    private selectedCommandSubscription!: Subscription;
+    private settingsSubscription!: Subscription;
+    private commandsHistorySubscription!: Subscription;
+    private commandsHistory!: string[];
+    private numberClicks: number = -1;
 
     pKey?: PKey;
     pkeyObjects!: PKeyObject[];
@@ -44,38 +50,38 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
 
     showingQKeys = false;
     quickKeys: string[] = [];
-
-    private historySize: number = 0;
-    private history$!: Observable<CircularLinkedList<string>>;
-    private forwardsIterator!: Iterator<string>;
-    private backwardIterator!: Iterator<string>;
+    inputMode!: string;
 
     constructor(
-        // private menuService: MenuService,
-        // private pkeysService: PkeysService,
-        // private statisticsService: StatisticsService,
         private terminalHistoryService: TerminalHistoryService,
         private terminalService: TerminalService,
         private authService: AuthService,
+        private menuService: MenuService,
         private pkeysService: PkeysService
     ) { }
 
     ngOnInit(): void {
-        this.history$ = this.terminalHistoryService.getHistory();
-
-        this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.qks[0]);
+        this.inputMode = 'text';
+        this.authService.getUser().subscribe((user: User) => this.quickKeys = user.settings.quickKeys);
         
-        this.history$.subscribe((history: CircularLinkedList<string>) => {
-            if(history == null) return;
-            this.historySize = history.getSize();
-
-            this.forwardsIterator = history.forwardsIterator();
-            this.backwardIterator = history.backwardIterator();
+        this.commandsHistorySubscription = this.terminalService.commandsHistory.subscribe((newCommandsHistory) => {
+            // hack angular to display the commands array in the correct order
+            this.commandsHistory = [];
+            newCommandsHistory.forEach((command) => {
+                this.commandsHistory.unshift(command);
+            });
         });
     }
 
     ngAfterViewInit(): void {
-        this.terminalService.getSelectedCommand().subscribe((selectedCommand: string) => this.terminalCommandInput.nativeElement.value = selectedCommand);
+        this.selectedCommandSubscription = this.terminalService.selectedCommand.subscribe((newSelectedCommand) => {
+            this.terminalCommandInput.nativeElement.value = newSelectedCommand;
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.selectedCommandSubscription.unsubscribe();
+        this.commandsHistorySubscription.unsubscribe();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -83,12 +89,11 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
             this.hasActivePkey = false;
             return;
         }
-
-        this.pKey = deepClone(this.pkeysService.get(this.pkeyIndex))
+        this.pKey = deepClone(this.pkeysService.get(this.pkeyIndex));
 
         const pkeyObjects = this.getPKeyObjects();
-        this.pkeyObjects = deepClone(pkeyObjects);
-
+        const clonedPKeyObjects = deepClone(pkeyObjects);
+        this.pkeyObjects = clonedPKeyObjects;
         // clear pkey variables text in order for the text inputs to be empty
         this.pkeyObjects.forEach((object) => {
             if (object.isVariable) {
@@ -101,8 +106,6 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
 
 
         setTimeout(() => this.executeCommandAuto(), 300);
-
-
     }
 
     private executeCommandAuto() {
@@ -123,14 +126,19 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
             this.variableElements.get(0)?.nativeElement.focus();
             return;
         }
-        // this.menuService.toggleMenu("right");
+        this.menuService.toggleMenu("right");
     }
 
-    emitSubmitEvent(event: KeyboardEvent): void {
-        if (!event || event.key !== 'Enter') return;
+    emitSubmitEvent(event: any): void {
+        if (event && event.key === 'Enter') {
+            this.commandSubmit.emit((this.terminalCommandInput.nativeElement.value as string).trim().toUpperCase());
 
-        this.commandSubmit.emit((this.terminalCommandInput.nativeElement.value as string).trim().toUpperCase());
-        this.terminalCommandInput.nativeElement.value = '';
+            this.commandsHistory.splice(this.numberClicks, 1);
+            this.commandsHistory.unshift((this.terminalCommandInput.nativeElement.value as string).trim().toUpperCase());
+
+            this.numberClicks = -1;
+            this.terminalCommandInput.nativeElement.value = '';
+        }
     }
 
     toggleQKeys(): void {
@@ -160,18 +168,19 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
      * will be the command that corresponds to the element in the history array, using the index of number of clicks.
      */
     onArrowClick(event: any): void {
-
-        let prevCommand: string = '';
-
         if (event.key === "ArrowUp") {
-            prevCommand = this.backwardIterator.next().value;
-        } else if (event.key === "ArrowDown") {
-            prevCommand = this.forwardsIterator.next().value;
+            if (this.numberClicks < this.commandsHistory.length - 1)
+                this.numberClicks += 1;
+            else
+                this.numberClicks = -1;
         }
+        else if (event.key === "ArrowDown" && this.numberClicks > -1)
+            this.numberClicks -= 1;
+
         const value = "";
         const selectionStart = this.terminalCommandInput.nativeElement.selectionStart != null ? this.terminalCommandInput.nativeElement.selectionStart : value.length;
         const selectionEnd = this.terminalCommandInput.nativeElement.selectionEnd != null ? this.terminalCommandInput.nativeElement.selectionEnd : value.length;
-        this.terminalCommandInput.nativeElement.value = `${value.slice(0, selectionStart)}${prevCommand}${value.slice(selectionEnd)}`;
+        this.terminalCommandInput.nativeElement.value = `${value.slice(0, selectionStart)}${this.getCommand()}${value.slice(selectionEnd)}`;
         const newSelection = selectionStart + 1;
         this.terminalCommandInput.nativeElement.setSelectionRange(newSelection, newSelection);
     }
@@ -181,20 +190,18 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
      * If the number of clicks is more than 0, then it will return an element of the array
      * using the number of clicks as an index.
      */
-    // private getCommand(): string | undefined {
-    //     if (this.numberClicks < 0) return "";
-
-    //     return this.commandsHistory.get(this.numberClicks);
-    // }
-
+    private getCommand(): string {
+        if (this.numberClicks < 0)
+            return "";
+        else
+            return this.commandsHistory[this.numberClicks];
+    }
 
     private getPKeyObjects(): PKeyObject[] {
-        if (!this.pKey) return [];
-
-        const objs: any[] = [];
-        const commandVariables = this.pKey.commandVariables;
-        let pkeyItems = this.pKey.command.trim().split('%');
-        pkeyItems = pkeyItems ? pkeyItems : [this.pKey.command.trim()];
+        const objs: any = [];
+        const commandVariables: any = this.pKey?.commandVariables;
+        let pkeyItems: any[] | undefined = this.pKey?.command.trim().split('%');
+        pkeyItems = pkeyItems ? pkeyItems : [this.pKey?.command.trim()];
         let variableIndex = 0;
         pkeyItems.forEach((item, itemIndex) => {
             if (item === '') {
@@ -213,7 +220,7 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
         return objs;
     }
 
-    checkTab(event: KeyboardEvent): void {
+    checkTab(event: any): void {
         if (event && event.key === 'Tab' && this.variableElements.length >= 0 && document.activeElement == this.variableElements.last.nativeElement) {
             setTimeout(() => {
                 this.variableElements.get(0)?.nativeElement.focus();
@@ -221,36 +228,34 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
         }
     }
 
-    executePKey(event: KeyboardEvent): void {
-        if (!event || event.key !== 'Enter') return;
+    executePKey(event: any): void {
 
-        // this.statisticsService.addClientStat(clientStatisticsSources.pkeyExec);
-        let command = '';
-        let emptyVariables = 0;
-        this.pkeyObjects.forEach((obj) => {
-            command += obj.isVariable ? obj.text.trim() : obj.text;
-            if (obj.isVariable && obj.text.trim().length === 0) {
-                emptyVariables += 1;
+        if (event && event.key === 'Enter') {
+            // this.statisticsService.addClientStat(clientStatisticsSources.pkeyExec);
+            let command = '';
+            let emptyVariables = 0;
+            this.pkeyObjects.forEach((obj) => {
+                command += obj.isVariable ? obj.text.trim() : obj.text;
+                if (obj.isVariable && obj.text.trim().length === 0) {
+                    emptyVariables += 1;
+                }
+            });
+            if (emptyVariables <= 0) {
+                if (this.pKey?.autoExecute) {
+                    this.terminalService.executeTerminalCommand(command.toUpperCase());
+                } else {
+                    this.hasActivePkey = false;
+
+                    setTimeout(() => {
+                        this.terminalCommandInput.nativeElement.value = command.toUpperCase();
+                        this.terminalCommandInput.nativeElement.focus();
+                    }, 300);
+
+                    // this.appStateService.selectedCommandSource.next(command.toUpperCase());
+                }
+                this.reset();
             }
-        });
-
-        if (emptyVariables > 0) return;
-
-        if (this.pKey?.autoExecute) {
-            this.terminalService.executeTerminalCommand(command.toUpperCase());
-            this.reset();
-            return;
         }
-
-        this.hasActivePkey = false;
-
-        setTimeout(() => {
-            this.terminalCommandInput.nativeElement.value = command.toUpperCase();
-            this.terminalCommandInput.nativeElement.focus();
-        }, 300);
-
-        // this.appStateService.selectedCommandSource.next(command.toUpperCase());
-        this.reset();
 
     }
 
@@ -265,5 +270,9 @@ export class BottomBarComponent implements OnInit, AfterViewInit, OnChanges {
     reset() {
         this.hasActivePkey = false;
         this.pKey = undefined;
+    }
+
+    toggleMenu(side: 'right'): void {
+        this.menuService.toggleMenu(side);
     }
 }

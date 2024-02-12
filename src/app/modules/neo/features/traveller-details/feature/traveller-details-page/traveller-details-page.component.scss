@@ -11,13 +11,26 @@
             position: relative;
             direction: ltr;
 
+            .traveller {
+                margin-bottom: 16.5px;
+                border-bottom: 1px dotted grey;
+                padding-bottom: 20px;
+
+                &:last-child {
+                    border-bottom: none;
+                    margin-bottom: 0px;
+
+                }
+            }
+
         }
 
         .left-section {
             width: 100%;
             height: calc(100vh - 152px);
             margin: 19px 16.5px 16.5px 26px;
-            overflow-y: scroll;
+            overflow: hidden;
+            overflow-y: auto;
             direction: rtl;
             padding: 10px;
             padding-right: 15px;
@@ -37,7 +50,7 @@
                 transform: translateX(-50px);
             }
 
-            .traveller-title{
+            .traveller-title {
                 width: 32%;
             }
 
@@ -46,7 +59,8 @@
                 justify-content: space-between;
                 align-items: center;
 
-                webagent-input {
+                webagent-input,
+                webagent-dropdown {
                     width: 49%;
                 }
             }
@@ -56,7 +70,8 @@
                 justify-content: space-between;
                 align-items: center;
 
-                webagent-input {
+                webagent-input,
+                webagent-dropdown {
                     width: 32%;
                 }
             }
@@ -66,7 +81,8 @@
                 justify-content: space-between;
                 align-items: center;
 
-                webagent-input {
+                webagent-input,
+                webagent-dropdown {
                     width: 23.5%;
                 }
             }
@@ -78,6 +94,12 @@
                 font-size: 0.65rem;
                 border-radius: 4px;
                 margin-top: 19px;
+            }
+
+            .no-title {
+                .traveller-type {
+                    margin-top: 0px;
+                }
             }
         }
 

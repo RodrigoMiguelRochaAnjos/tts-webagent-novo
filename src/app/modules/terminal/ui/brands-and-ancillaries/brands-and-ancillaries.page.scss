@@ -1,0 +1,137 @@
+:host {
+    position: relative;
+    display: block;
+    min-width: 50%;
+    width: 100vw;
+    .content {
+        display: flex;
+        .container {
+            width: 40%;
+            max-height: 50vh;
+            ul{
+                list-style-type: none;
+                li{
+                    border-bottom: 1px solid #333;
+                    label {
+                        width: 100%;
+                        display: block;
+                        cursor: pointer;
+                        padding: 10px 20px;
+                        background-color: #fff;
+                        transition: background ease-in-out .3s;
+
+                        &:hover {
+                            background-color: #f0f0f0;
+                        }
+                    }
+                }
+            }
+        }
+        app-fare-quote, app-fare-info {
+            width: 60%;
+            max-height: 50vh;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+
+        app-fare-quote {
+            width: 100vw !important;
+        }
+    }
+}
+
+ion-list {
+	padding: 0;
+}
+
+footer {
+	background-color: var(--ion-color-light-shade);
+
+	.price {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+
+		> .text {
+			> p {
+				font-size: 0.8em;
+				margin: 0;
+				margin-bottom: 5px;
+
+				&:first-child {
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		> .number {
+			font-size: 1.2em;
+			font-weight: bold;
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
+			align-items: center;
+			cursor: pointer;
+		}
+	}
+	.fees-text{
+		font-size: 0.8em;
+	}
+}
+
+.connection-icon {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+ion-content{
+	width: 100%;
+	height: 100%;
+	.container{
+		float: left;
+		width: 50%;
+		.container-segment{
+			height: 500px;
+			.icon{
+				color: white;
+				text-align: center;
+				font-size: 1em;
+				width: 90px;
+				background-color: rgb(0, 120, 174);
+			}
+		}
+	}
+	app-fare-info{
+		float: right;
+		width: 50%;
+		height: 100%;
+	}
+}
+
+
+.selected-fares {
+	margin-top: 5px;
+	overflow: hidden;
+	overflow-x: auto;
+
+	> table {
+		font-size: 0.8em;
+		text-align: center;
+
+		> tr {
+			> td:first-child {
+				text-transform: uppercase;
+				color: var(--ion-color-primary);
+			}
+		}
+	}
+}

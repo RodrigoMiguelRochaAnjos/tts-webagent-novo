@@ -359,5 +359,20 @@
     "TRAVELLER": "Viajero",
     "TTS_WEBAGENT_ONLY_AVAILABLE": "TTS Web Agent solo está disponible para usuarios de Webagent.",
     "UNCONFIRMED": "No confirmado",
-    "INVALID_SETTINGS": "Your account settings are invalid"
+    "INVALID_SETTINGS": "La configuración de su cuenta no es válida",
+    "CHOOSE_YEAR": "Elegir un año",
+    "ADDRESS": "Dirección",
+    "APP_SETTINGS": "Configuración de la Aplicación",
+    "SELECT_LANGUAGE": "Seleccionar un idioma",
+    "SELECT_CURRENCY": "Seleccionar una moneda",
+    "BILLING_ADDRESS": "Dirección de Facturación",
+    "TAXES_INCLUDED": "Impuestos incluidos",
+    "PAYMENT": "Pago",
+    "FLIGHT_PROCESSING_ERROR": "Se ha producido un problema al procesar el pago de este vuelo",
+    "TRANSACTION": "Transacción",
+    "CHECKOUT": "Pago",
+    "RESERVATION_SUMMARY": "Resumen de Reserva",
+    "TICKET": "Billete",
+    "TICKETS": "Billetes",
+    "VIEW": "Ver"
 }

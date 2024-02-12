@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, HostListener, OnInit, ViewChild } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
@@ -39,11 +39,13 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
     constructor(
         private formBuilder: FormBuilder,
-        private modalService: ModalControllerService
+        private modalService: ModalControllerService,
+        private elementRef: ElementRef
     ) {
         super();
 
         this.initDateForm();
+
     }
 
     ngOnInit(): void {
@@ -52,20 +54,24 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
         if (this.min && !this.DATE_PATTERN.test(String(this.min))) throw new Error('Invalid [min] format should be DD/MM/YYYY');
         if (this.max && !this.DATE_PATTERN.test(String(this.max))) throw new Error('Invalid [max] format should be DD/MM/YYYY');
 
-        if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
+        if (moment(this.max, "DD/MM/YYYY").isBefore(this.date)) {
+            this.date = moment(this.max, "DD/MM/YYYY");
+            this.dateNext = moment(this.max, "DD/MM/YYYY").add(1, 'M');
+        } else if (moment(this.min, "DD/MM/YYYY").isAfter(this.date)) {
             this.date = moment(this.min, "DD/MM/YYYY");
             this.dateNext = moment(this.min, "DD/MM/YYYY").add(1, 'M');
         }
 
+
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);
-        
+
     }
 
     public initDateForm(): FormGroup {
         return this.dateForm = this.formBuilder.group({
-            dateFrom: [null, Validators.required],
-            dateTo: [null, Validators.required]
+            dateFrom: [this.value?.dateFrom ? this.value?.dateFrom : null, Validators.required],
+            dateTo: [this.value?.dateTo ? this.value?.dateTo : null, Validators.required]
         })
     }
 
@@ -135,8 +141,8 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
         this.value = new DateRange();
 
-        this.value.from = dateFrom;
-        this.value.to = dateTo;
+        this.value.dateFrom = dateFrom;
+        this.value.dateTo = dateTo;
 
         this.update();
 
@@ -238,5 +244,38 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
     showYearPopup(modalContent: any, id: string): void {
         this.modalService.showModal(modalContent, id);
+    }
+
+    get fromDate(): string {
+        if (!this.value?.dateFrom?.isValid() || this.value?.dateFrom == null) return ''
+
+        return this.value?.dateFrom.format('DD/MM/YYYY');
+    }
+
+    get toDate(): string {
+        if (!this.value?.dateTo?.isValid() || this.value?.dateTo == null) return '';
+        return this.value?.dateTo.format('DD/MM/YYYY');
+    }
+
+    @HostListener('document:click', ['$event.target'])
+    onClick(target: any) {
+        let clickedInside: boolean = this.elementRef.nativeElement.contains(target);
+        
+        if(!this.calendarOpen) return;
+
+        if (!clickedInside) {
+            if (this.modalService.getModalValue()) {
+                this.calendarOpen = true;
+                return;
+            }
+            this.calendarOpen = false;
+        } else {
+            this.calendarOpen = true
+        }
+
+        if (this.modalService.getModalValue()) {
+            this.calendarOpen = true;
+            return;
+        }
     }
 }

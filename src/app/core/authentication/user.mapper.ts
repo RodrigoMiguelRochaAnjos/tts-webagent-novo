@@ -12,9 +12,17 @@ import { AnonymousUser } from "../models/user/types/anonymous-user.model";
 import { Settings } from "src/app/modules/home/models/settings.model";
 import { PKey } from "src/app/modules/terminal/models/pkey.model";
 import { Address } from "../models/user/contact/segments/address.model";
+import { Injectable } from "@angular/core";
+import { SettingsMapper } from "./settings.mapper";
+import { deepClone } from "../utils/deep-clone.tool";
 
+@Injectable({
+    providedIn: 'root'
+})
 export class UserMapper {
-    static mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
+
+
+    mapLoginToUser(loginRequest: LoginRequest, response: LoginResponse) : User {
 
         let user: AuthenticatedUser = new AuthenticatedUser();
 
@@ -60,15 +68,16 @@ export class UserMapper {
 
         UserMapper.loadPKeysFromServer(response.syncData.pkeys);
 
-        
-
         user.id = response.sessionId;
         user.token = response.token;
         user.name = response.syncData.settings.profileUserName;
         user.contact = contact;
+
+
         user.currency = 'EUR';
         user.languageCode = 'en';
-        user.settings = response.syncData.settings;
+        user.settings = SettingsMapper.mapSyncDataSettingsToSettings(response.syncData.settings, deepClone(user.settings));
+        user.terminalMessage = response.message;
 
         switch (loginRequest.gds) {
             case 'Galileo':
@@ -114,7 +123,21 @@ export class UserMapper {
         user.id = storedObject.data.id
         user.token = storedObject.data.token
         user.settings = Object.assign(new Settings(), JSON.parse(storedObject.data.settings));
-        user.contact = Object.assign(new Contact(), JSON.parse(storedObject.data.contact));
+        let newContact: Contact = new Contact();
+
+        newContact.phone = new Phone();
+        newContact.phone.dialCode = JSON.parse(storedObject.data.contact)?.phone?.dialCode;
+        newContact.phone.number = JSON.parse(storedObject.data.contact)?.phone?.number;
+        newContact.title = JSON.parse(storedObject.data.contact).title;
+        newContact.firstName = JSON.parse(storedObject.data.contact).firstName;
+        newContact.lastName = JSON.parse(storedObject.data.contact).lastName;
+        newContact.address = JSON.parse(storedObject.data.contact).address;
+        newContact.email = JSON.parse(storedObject.data.contact).email;
+        newContact.entityName = JSON.parse(storedObject.data.contact).entityName;
+
+        user.contact = newContact;
+
+        console.log(user.contact.isValid());
 
         switch (storedObject.data.gds) {
             case 'Galileo':

@@ -1,6 +1,6 @@
-<h4>{{ summaryTitle }}</h4>
+<h4>{{ 'TRIP_SUMMARY'  | translate}}</h4>
 <div class="summary-container">
-    <h6>Tickets</h6>
+    <h6>{{'TICKETS' | translate}}</h6>
     <app-flight-option *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [option]="(selectedFlights$ | async)!.OUTBOUNDS!"
         [displayOnly]="true" (click)="outboundSegments = !outboundSegments" />
     <div class="segments" *ngIf="(selectedFlights$ | async)!.OUTBOUNDS" [ngClass]="{ 'open': outboundSegments }">

@@ -1,6 +1,7 @@
 :host {
     position: relative;
     display: block;
+
     input {
         border: 0px;
         background-color: transparent;
@@ -21,7 +22,7 @@
     }
 
     .search-area {
-        top:100%;
+        top: 100%;
         background-color: #fff;
         z-index: 99;
         display: block;
@@ -29,10 +30,36 @@
         position: absolute;
         display: block;
         width: 400px;
-        .group{
+
+        .group {
             width: 100%;
             position: relative;
-            display: block;
+            padding: 10px 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #3333;
+
+            span {
+                display: block;
+                width: 100%;
+                font-size: 1rem;
+                padding: 10px;
+                }
+
+            &.selected {
+                span {
+                    background-color: #3333;
+                }
+            }
+
+            .airport {
+                padding: 10px;
+                padding-left: 20px;
+                border-bottom: 1px solid #3333;
+            }
+
+            .selected {
+                background-color: #3333;
+            }
         }
     }
 }

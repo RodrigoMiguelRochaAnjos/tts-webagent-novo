@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { AirSearchRequest } from "../utils/requests/air-search-request/air-search-request.model";
-import { BehaviorSubject, Observable, Subscribable, Subscriber, TeardownLogic, takeUntil } from "rxjs";
+import { BehaviorSubject, Observable, Subject, Subscribable, Subscriber, TeardownLogic, takeUntil } from "rxjs";
 import { AirSearchIdResponse } from "../utils/responses/air-search-id-response.model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "src/app/core/authentication/auth.service";
@@ -10,6 +10,10 @@ import { AirSearchResponse, AirSearchResults } from "../../../models/responses/a
 import { EventSourcePolyfill, OnMessageEvent } from "ng-event-source";
 import { FlightOption } from "../../../models/flight-option.model";
 import { DestroyService } from "src/app/core/services/destroy.service";
+import { Journey } from "../../../models/journey/journey.model";
+import { AirSearchRequestMapper } from "../utils/requests/air-search-request/air-search-request.mapper";
+import { RoundTrip } from "../../../models/journey/types/round-trip.model";
+import { LoadingService } from "src/app/core/services/loading.service";
 
 @Injectable({
     providedIn: 'root'
@@ -20,16 +24,18 @@ export class SearchService {
 
     previousSearchId?: string;
     public isLoading: boolean = false;
-
+    
     public itemsPerPage: number = 30;
     public page: number = 1;
-
+    
     private results$: BehaviorSubject<AirSearchResults> = new BehaviorSubject<AirSearchResults>([]);
+    private searchResume$: BehaviorSubject<Journey> = new BehaviorSubject<Journey>(new RoundTrip());
 
     constructor(
         private httpClient: HttpClient,
         private authService: AuthService,
-        private destroyService: DestroyService
+        private destroyService: DestroyService,
+        private loadingService: LoadingService
     ) {
         
     }
@@ -38,11 +44,19 @@ export class SearchService {
         return this.results$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
+    public getSearchResume(): Observable<Journey> {
+        return this.searchResume$;
+    }
+
+    public getSearchResumeValue(): Journey {
+        return this.searchResume$.value;
+    }
+
     public getResultsValue(): AirSearchResults {
         return this.results$.value;
     }
 
-    public getSearchId(airSearch: AirSearchRequest): Observable<AirSearchIdResponse> | undefined {
+    public getSearchId(airSearch: Journey): Observable<AirSearchIdResponse> | undefined {
         const user = this.authService.getUserValue();
 
         if (!(user instanceof AuthenticatedUser)) return undefined;
@@ -53,7 +67,13 @@ export class SearchService {
             "Authorization": `Bearer ${user.token}`
         });
 
-        return this.httpClient.post<AirSearchIdResponse>(`${this.ENDPOINT}/${this.VERSION}/search`, airSearch, { headers: http }).pipe(takeUntil(this.destroyService.getDestroyOrder()));
+        const mapper: AirSearchRequestMapper = new AirSearchRequestMapper();
+
+        return this.httpClient.post<AirSearchIdResponse>(`${this.ENDPOINT}/${this.VERSION}/search`, mapper.map(airSearch), { headers: http }).pipe(takeUntil(this.destroyService.getDestroyOrder()));
+    }
+
+    public updateSearchResume(searchResume: Journey) {
+        this.searchResume$.next(searchResume);
     }
 
     public search(searchId: string) : Promise<boolean> {
@@ -68,7 +88,7 @@ export class SearchService {
             this.previousSearchId = searchId;
     
     
-            this.isLoading = true;
+            this.loadingService.load();
             new Observable<AirSearchResponse>((observer: Subscriber<AirSearchResponse>) => {
                 const eventSource: EventSourcePolyfill = new EventSourcePolyfill(
                     `${this.ENDPOINT}/${this.VERSION}/search/${searchId}`,
@@ -82,6 +102,8 @@ export class SearchService {
                 );
                 let index = 0;
                 eventSource.onmessage = (message: OnMessageEvent) => {
+                    this.loadingService.dismiss();
+
                     const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
                     result.show = true;
 
@@ -108,6 +130,7 @@ export class SearchService {
                 }
     
                 eventSource.onerror = () => {
+                    this.loadingService.dismiss();
                     this.isLoading = false;
     
                     eventSource.close();
@@ -116,6 +139,7 @@ export class SearchService {
                 }
     
                 return () => {
+                    this.loadingService.dismiss();
                     eventSource.close();
                 }
             }).subscribe({

@@ -9,6 +9,8 @@ import { AirSegment } from '../../models/air-segment.model';
 export class SummarySegmentComponent {
     @Input() segment!: AirSegment;
 
+    isOpen: boolean = false;
+
     segmentDuration(): string {
         let duration = '';
 
@@ -24,4 +26,10 @@ export class SummarySegmentComponent {
 
         return duration;
     }
+
+    toggleActive(): boolean {
+        return this.isOpen = !this.isOpen;
+    }
 }
+
+

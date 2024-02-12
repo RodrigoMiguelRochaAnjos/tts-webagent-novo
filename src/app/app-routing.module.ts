@@ -52,7 +52,7 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'WALLET',
         data: {
-            icon: 'fa-solid fa-wallet'
+            icon: 'fa-solid fa-money-bill-wave'
         }
     },
     {
@@ -61,9 +61,14 @@ const routes: Routes = [
         canActivateChild: [AuthGuardService],
         title: 'MY_BOOKINGS',
         data: {
-            icon: 'fa-solid fa-wallet'
+            icon: 'fa-solid fa-book-open'
         }
     },
+    {
+        path: 'dashboard',
+        loadChildren: () => import('./modules/dashboard/feature/dashboard-shell/dashboard-shell.module').then((m) => m.DashBoardShellModule),
+        title: 'Dashboard'
+    }
     
 ];
 

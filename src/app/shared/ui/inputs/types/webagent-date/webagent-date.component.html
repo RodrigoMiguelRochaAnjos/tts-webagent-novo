@@ -1,10 +1,14 @@
 <form [formGroup]="this.dateForm" >
-    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder" [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" [required]="this.required"/>
+    <webagent-input [type]="InputType.TEXT" [label]="this.label" [placeholder]="this.placeholder"
+    [pattern]="DATE_PATTERN.source" formControlName="selectedDate" (click)="openCalendar()" (focus)="openCalendar()" [required]="this.required"/>
 </form>
 
 <ng-template #year>
-    <h3>Choose a year</h3>
-    <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" />
+    <h3>{{ 'CHOOSE_YEAR' |translate }}</h3>
+    <webagent-dropdown (change)="changeYear($event)" [search]="true">
+        <webagent-option *ngFor="let year of this.getPreviousYears()" [value]="year">{{ year }}</webagent-option>
+    </webagent-dropdown>
+    <!-- <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" /> -->
 </ng-template>
 
 <div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">

@@ -1,0 +1,62 @@
+<div class="content" *ngIf="!isFareQuote">
+	<div class="container" *ngIf="segments">
+		<div >
+			<ng-container *ngFor="let segment of segments; let segmentIndex = index">
+				<button > <!-- [value]="segmentIndex" -->
+					<label>{{ segment.origin }} - {{ segment.destination }}</label>
+				</button>
+				<div class="connection-icon" *ngIf="showConnectionIcon(segmentIndex)">
+                    <i class="fa-solid fa-link"></i>
+				</div>
+			</ng-container>
+		</div>
+		<ul lines="full" class="container-segment">
+			<!-- <ion-radio-group [value]="selectedFares[selectedSegmentIndex]"> -->
+				<li *ngFor="let fare of segments[selectedSegmentIndex].faresList; let fareIndex = index" (click)="showFareInfo(fareIndex)" 
+					(click)="selectFare(fareIndex)">
+					<label>
+						{{ fare.fareInfo.name }}
+						<br/>
+						<div class="icon">
+                            <i class="fa-solid fa-circle-info"></i>
+							{{ priceDifference(selectedSegmentIndex, fareIndex) }}
+						</div>
+					</label>
+					<!-- <ion-radio slot="end" [name]="fare.fareInfo.name" [value]="fareIndex"></ion-radio> -->
+				</li>
+			<!-- </ion-radio-group> -->
+		</ul>
+	</div>
+	<app-fare-info [fare]="fare" *ngIf="isFareInfo" 
+		class="fare-info" (exitFareInfo)="exitFareInfo()"></app-fare-info>
+
+</div>
+
+<app-fare-quote [fareQuoteData]="fareQuoteData" [segments]="segments" [selectedFares]="selectedFares"
+	*ngIf="isFareQuote" (onClose)="closeFareQuote()" (backTerminal)='onCloseClick()' (closeBrands)="onCloseClick()"></app-fare-quote>
+
+<footer class="ion-padding" *ngIf="!isFareQuote">
+	<div class="price">
+		<div class="text">
+			<p>{{ 'YOUR_SELECTION' | translate }}</p>
+			<p>{{ 'ALL_PRICES_APPROXIMATE_MESSAGE' | translate }}</p>
+		</div>
+		<div class="number" (click)="requestFareQuote()">	
+			{{ totalPrice }}<i class="fa-solid fa-chevron-right"></i>
+		</div>
+	</div>
+	<p class="fees-text">* {{ 'ADDITIONAL_FEE_MAY_APPLY_MESSAGE' | translate }}</p>
+	<div class="selected-fares" *ngIf="canShowSelectedFares">
+		<table>
+			<tr>
+				<td>Original<br />{{ segments[0].faresList[0].fareInfo.price.total }} {{ segments[0].faresList[0].fareInfo.price.currency }}</td>
+				<ng-container *ngFor="let fare of selectedFaresData; index as selectedFareDataIndex">
+					<ng-container *ngIf="fare.fareInfo.price.segmentBaseDiff">
+						<td>&nbsp;&nbsp;+&nbsp;&nbsp;</td>
+						<td>{{ fare.fareInfo.name }}<br /> {{ fare.fareInfo.price.segmentBaseDiff }} {{ fare.fareInfo.price.currency }}</td>
+					</ng-container>
+				</ng-container>
+			</tr>
+		</table>
+	</div>
+</footer>
