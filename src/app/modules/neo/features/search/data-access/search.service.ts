@@ -13,6 +13,7 @@ import { DestroyService } from "src/app/core/services/destroy.service";
 import { Journey } from "../../../models/journey/journey.model";
 import { AirSearchRequestMapper } from "../utils/requests/air-search-request/air-search-request.mapper";
 import { RoundTrip } from "../../../models/journey/types/round-trip.model";
+import { LoadingService } from "src/app/core/services/loading.service";
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +34,8 @@ export class SearchService {
     constructor(
         private httpClient: HttpClient,
         private authService: AuthService,
-        private destroyService: DestroyService
+        private destroyService: DestroyService,
+        private loadingService: LoadingService
     ) {
         
     }
@@ -86,7 +88,7 @@ export class SearchService {
             this.previousSearchId = searchId;
     
     
-            this.isLoading = true;
+            this.loadingService.load();
             new Observable<AirSearchResponse>((observer: Subscriber<AirSearchResponse>) => {
                 const eventSource: EventSourcePolyfill = new EventSourcePolyfill(
                     `${this.ENDPOINT}/${this.VERSION}/search/${searchId}`,
@@ -100,6 +102,8 @@ export class SearchService {
                 );
                 let index = 0;
                 eventSource.onmessage = (message: OnMessageEvent) => {
+                    this.loadingService.dismiss();
+
                     const result: AirSearchResponse = Object.assign<AirSearchResponse, any>(new AirSearchResponse(), JSON.parse(message.data));
                     result.show = true;
 
@@ -126,6 +130,7 @@ export class SearchService {
                 }
     
                 eventSource.onerror = () => {
+                    this.loadingService.dismiss();
                     this.isLoading = false;
     
                     eventSource.close();
@@ -134,6 +139,7 @@ export class SearchService {
                 }
     
                 return () => {
+                    this.loadingService.dismiss();
                     eventSource.close();
                 }
             }).subscribe({
