@@ -39,8 +39,6 @@ export class AnonymousUser extends User{
             }
         });
 
-        this.contact.save();
-
         localStorage.removeItem("user");
         localStorage.setItem("user", user);
     }

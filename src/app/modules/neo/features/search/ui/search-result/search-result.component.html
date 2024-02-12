@@ -47,6 +47,7 @@
                     </div>
                 </div>
                 <button class="button-medium search-result-info-select call-to-action" [ngClass]="{'disabled': !canBook}"
+                    [disabled]="!canBook"
                     (click)="advance()">
                     <span>{{ 'SELECT' | translate}}&nbsp;</span>
                     <!-- <ion-icon name="cart-outline" size="small"></ion-icon> -->

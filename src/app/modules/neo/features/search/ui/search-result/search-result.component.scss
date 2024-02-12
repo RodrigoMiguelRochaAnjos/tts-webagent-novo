@@ -191,12 +191,6 @@
             transition: opacity ease-in-out .3s;
             cursor: pointer;
             width: 80%;
-
-            &.disabled {
-                background-color: var(--tma-color-c2a-disabled);
-                color: var(--tma-color-text);
-                opacity: .4;
-            }
         }
     }
 

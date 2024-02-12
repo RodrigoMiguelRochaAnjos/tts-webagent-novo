@@ -57,7 +57,7 @@ export class AuthenticatedUser extends User {
         this.contact = user.contact;
         this.settings = user.settings;
         this.gds = user.gds
-
+        
         return this;
     }
 }
