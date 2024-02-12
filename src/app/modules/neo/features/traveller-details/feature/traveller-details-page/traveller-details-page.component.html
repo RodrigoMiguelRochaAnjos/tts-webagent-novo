@@ -12,6 +12,7 @@
                     </div>
                     <div class="traveller-title">
                         <webagent-dropdown [label]="('TITLE' | translate)" [(ngModel)]="traveller.title">
+                            <webagent-option [value]="''">Select an option</webagent-option>
                             <webagent-option [value]="'MR'">MR</webagent-option>
                             <webagent-option [value]="'MRS'">MRS</webagent-option>
                             <webagent-option [value]="'MS'">MS</webagent-option>
