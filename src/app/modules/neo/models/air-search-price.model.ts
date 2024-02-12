@@ -1,3 +1,4 @@
+import { Fees } from "./fees.model";
 import { PassengerPrices } from "./passengers-price.model";
 import { Taxes } from "./tax.model";
 
@@ -10,6 +11,7 @@ export class AirSearchPrice {
     preferredCurrency!: string;
     taxes!: Taxes;
     totalAmount!: number;
+    fees!: Fees
 
     isValid(): boolean {
         return (

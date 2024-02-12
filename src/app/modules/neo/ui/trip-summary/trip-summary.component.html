@@ -83,18 +83,22 @@
     <div class="price">
         <h6>Total price</h6>
         <div class="total-price">
-            {{ (this.price$ | async)?.price?.amount }} {{ (this.price$ | async)?.price?.currency }}
+            {{ (this.price$ | async)?.price?.totalAmount }} {{ (this.price$ | async)?.price?.preferredCurrency }}
         </div>
     </div>
 
-    <div class="payments">
+    <div class="fee-price" *ngFor="let fee of (this.price$ | async)?.price?.fees">
+        {{ fee.name }}: {{ fee.amount }} {{ fee.currency }}
+    </div>
+
+    <!-- <div class="payments">
         <h6>Payment options</h6>
         <ul>
             <li *ngFor="let payment of (this.price$ | async)?.payments">
                 {{payment.creditCard?.cardType}} {{payment.creditCard?.number}}
             </li>
         </ul>
-    </div>
+    </div> -->
     <!-- id!: string;
     bookingRefs!: Map<string, BookingRefs>;
             bookingCode!: string;
