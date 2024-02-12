@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, QueryList, ViewChild, forwardRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, QueryList, ViewChild, forwardRef } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import { WebagentOptionComponent } from '../webagent-option/webagent-option.component';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -114,6 +114,7 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
         });
     }
 
+    @HostListener('keyup', ["$event"])
     navigationHandler(event: KeyboardEvent): void {
         switch(event.key) {
             case "Enter":

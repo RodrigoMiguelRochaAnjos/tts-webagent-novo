@@ -36,7 +36,10 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
 
     searchLocation(event: Event): void {
         this.focused = true;
-        if ((event.target as HTMLInputElement).value.length > 2) this.locationSearchService.search((event.target as HTMLInputElement).value)
+        if ((event.target as HTMLInputElement).value.length > 2) this.locationSearchService.search((event.target as HTMLInputElement).value);
+
+        this.airportIndex = -1;
+        this.cityIndex = 0;
     }
 
     locationSelected(event: Event, location: LocationSearch, airport?: Airport): void {
