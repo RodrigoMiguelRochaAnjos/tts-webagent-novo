@@ -7,5 +7,9 @@ import { WebagentBaseComponent } from '../webagent-base/webagent-base.component'
   styleUrls: ['./webagent-password.component.scss']
 })
 export class WebagentPasswordComponent extends WebagentBaseComponent {
-	
+	show = false;
+
+    toggleEye(): void {
+        this.show = !this.show;
+    }
 }

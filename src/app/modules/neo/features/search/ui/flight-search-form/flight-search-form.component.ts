@@ -17,6 +17,9 @@ import { DateRange } from 'src/app/shared/models/date-range.model';
 import { RoundTrip } from 'src/app/modules/neo/models/journey/types/round-trip.model';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
   selector: 'flight-search-form',
@@ -30,8 +33,8 @@ export class FlightSearchFormComponent implements OnInit{
 
     public journey: Journey = new RoundTrip();
     public typeSwitch: { [key: string]: boolean } = {
-        'ROUNDTRIP': true,
-        'ONEWAY': false
+        'ROUND_TRIP': true,
+        'ONE_WAY': false
     };
 
     oneWayDate?: moment.Moment;
@@ -43,6 +46,8 @@ export class FlightSearchFormComponent implements OnInit{
         private searchService: SearchService,
         private router: Router,
         private travellerService: TravellerService,
+        private alertService: AlertService,
+        private loadingService: LoadingService
     ) {
         this.searchResume$ = this.searchService.getSearchResume();
 
@@ -76,14 +81,32 @@ export class FlightSearchFormComponent implements OnInit{
 
         if (this.oneWayDate != null) this.journey.departureDate = this.oneWayDate.format('YYYY-MM-DD')
 
-        
+        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || (!this.journey.returnDate && this.journey instanceof RoundTrip)) {
+            this.alertService.show(AlertType.ERROR, "Please fill in all the fields before proceeding");
+            return;
+        }
+
+        if(this.journey.origin.code === this.journey.destination.code) {
+            this.alertService.show(AlertType.ERROR, "The flight origin and destination cannot be the same!");
+            return;
+        }
+
+        if(!this.journey.origin || !this.journey.destination || !this.journey.departureDate || (!this.journey.returnDate && this.journey instanceof RoundTrip)) {
+            this.alertService.show(AlertType.ERROR, "Please fill in all the fields before proceeding");
+            return;
+        }
+
+        if(this.journey.origin.code === this.journey.destination.code) {
+            this.alertService.show(AlertType.ERROR, "The flight origin and destination cannot be the same!");
+            return;
+        }
+
         const searchId: Observable<AirSearchIdResponse> | undefined = this.searchService.getSearchId(this.journey);
 
         if (searchId == null) return;
 
         searchId.subscribe({
             next: (response: AirSearchIdResponse) => {
-
                 this.searchService.reset();
 
                 this.router.navigate([`neo/search/${response.id}`]);
@@ -102,10 +125,10 @@ export class FlightSearchFormComponent implements OnInit{
         if(selected == null) return;
 
         switch(selected) {
-            case JourneyType.ONE_WAY:
+            case 'ONE_WAY':
                 this.journey = new OneWay();
                 break;
-            case JourneyType.ROUND_TRIP:
+            case 'ROUND_TRIP':
                 this.journey = new RoundTrip();
                 break;
             default:
@@ -144,5 +167,11 @@ export class FlightSearchFormComponent implements OnInit{
 
     getMomentDate(date: string): moment.Moment {
         return moment(date, 'YYYY-MM-DD')
+    }
+
+    switchDestinations(): void {
+        const tmpDeparture = this.journey.origin;
+        this.journey.origin = this.journey.destination;
+        this.journey.destination = tmpDeparture;
     }
 }

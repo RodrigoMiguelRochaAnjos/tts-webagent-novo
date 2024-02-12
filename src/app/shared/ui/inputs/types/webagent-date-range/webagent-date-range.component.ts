@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostBinding, HostListener, OnInit, ViewChild } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
 import { InputType } from '../../input-type.enum';
@@ -39,7 +39,8 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
 
     constructor(
         private formBuilder: FormBuilder,
-        private modalService: ModalControllerService
+        private modalService: ModalControllerService,
+        private elementRef: ElementRef
     ) {
         super();
 
@@ -254,5 +255,27 @@ export class WebagentDateRangeComponent extends WebagentBaseComponent implements
     get toDate(): string {
         if (!this.value?.dateTo?.isValid() || this.value?.dateTo == null) return '';
         return this.value?.dateTo.format('DD/MM/YYYY');
+    }
+
+    @HostListener('document:click', ['$event.target'])
+    onClick(target: any) {
+        let clickedInside: boolean = this.elementRef.nativeElement.contains(target);
+        
+        if(!this.calendarOpen) return;
+
+        if (!clickedInside) {
+            if (this.modalService.getModalValue()) {
+                this.calendarOpen = true;
+                return;
+            }
+            this.calendarOpen = false;
+        } else {
+            this.calendarOpen = true
+        }
+
+        if (this.modalService.getModalValue()) {
+            this.calendarOpen = true;
+            return;
+        }
     }
 }
