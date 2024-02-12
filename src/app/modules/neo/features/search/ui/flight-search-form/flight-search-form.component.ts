@@ -46,7 +46,7 @@ export class FlightSearchFormComponent implements OnInit{
         private searchService: SearchService,
         private router: Router,
         private travellerService: TravellerService,
-        private alertService: AlertService
+        private alertService: AlertService,
         private loadingService: LoadingService
     ) {
         this.searchResume$ = this.searchService.getSearchResume();
