@@ -15,6 +15,11 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
     results$!: Observable<LocationSearchResponse>;
     focused: boolean = false;
 
+    private selectedLocationSearch: LocationSearch | undefined;
+
+    cityIndex: number = -1;
+    airportIndex: number = -1;
+
     constructor(
         private locationSearchService: LocationSearchService,
         private el: ElementRef
@@ -69,16 +74,68 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
         }, 100);
     }
 
-    selectFirstResult(event: KeyboardEvent) {
-        if (!(event.key === "Enter")) return;
+    handleNavigation(event: KeyboardEvent): void {
+        switch(event.key){
+            case "Enter":
+                this.handleEnter(event);
+                break;
+            case "ArrowUp":
+                this.handleKeyUp();
+                break;
+            case "ArrowDown":
+                this.handleKeyDown();
+                break;
+        }
+    }
 
+
+    private handleEnter(event: KeyboardEvent): void {
         if (this.locationSearchService.getResultsValue().length <= 0) return;
 
-        const first: LocationSearch | undefined = this.locationSearchService.getResultsValue()[0];
+        let selectedCity: LocationSearch | undefined = this.locationSearchService.getResultsValue()[0];;
 
-        if(!first) return;
+        if (this.cityIndex !== -1) selectedCity = this.locationSearchService.getResultsValue()[this.cityIndex];
 
-        this.locationSelected(event, first);
+        let selectedAirport: Airport = selectedCity?.airports[this.airportIndex];
+
+        if (!selectedCity) return;
+
+        this.locationSelected(event, selectedCity, selectedAirport);
         this.focused = false;
     }
+
+    private handleKeyUp(): void {
+
+        if(this.selectedLocationSearch == null){
+            this.cityIndex = 0;
+            this.selectedLocationSearch = this.locationSearchService.getResultsValue()[this.cityIndex];
+        }
+        
+        if (this.airportIndex >= 0) {
+            this.airportIndex--;
+        }else if(this.cityIndex > 0) {
+            this.cityIndex--;
+        }
+    }
+
+    private handleKeyDown(): void {
+        if (this.selectedLocationSearch == null) {
+            this.cityIndex = 0;
+            this.selectedLocationSearch = this.locationSearchService.getResultsValue()[this.cityIndex];
+            return;
+        }
+
+
+        if (this.airportIndex < this.selectedLocationSearch.airports.length - 1) {
+            this.airportIndex++;
+            return;
+        }else if (this.cityIndex < this.locationSearchService.getResultsValue().length - 1 && this.selectedLocationSearch.airports.length - 1 === this.airportIndex) {
+            this.cityIndex++;
+            this.selectedLocationSearch = this.locationSearchService.getResultsValue()[this.cityIndex];
+            return;
+        }
+
+        
+    }
+
 }
