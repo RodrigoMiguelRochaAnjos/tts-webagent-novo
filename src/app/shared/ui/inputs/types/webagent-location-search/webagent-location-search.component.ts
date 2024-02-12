@@ -69,11 +69,20 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
 
             if (this.locationSearchService.getResultsValue().length <= 0) return;
 
-            const first: LocationSearch | undefined = this.locationSearchService.getResultsValue()[0];
+            let selectedLocation: LocationSearch | undefined = this.selectedLocationSearch;
 
-            if (!first) return;
+            if(selectedLocation == null) {
+                selectedLocation = this.locationSearchService.getResultsValue()[0];
+            }
 
-            this.locationSelected(event, first);
+            if (!selectedLocation) return;
+
+            if(this.airportIndex != -1) {
+                this.locationSelected(event, selectedLocation, selectedLocation.airports[this.airportIndex]);
+                return;
+            }
+
+            this.locationSelected(event, selectedLocation);
         }, 100);
     }
 
