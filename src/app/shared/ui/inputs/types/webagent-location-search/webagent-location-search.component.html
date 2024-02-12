@@ -1,9 +1,10 @@
-<input type="text" [(ngModel)]="this.value.text" (input)="searchLocation($event)" [pattern]="this.pattern" [required]="this.required" placeholder="{{ this.placeholder }}" (keyup)="this.selectFirstResult($event)">
+<input type="text" [(ngModel)]="this.value.text" (input)="searchLocation($event)" [pattern]="this.pattern" [required]="this.required" placeholder="{{ this.placeholder }}" (keyup)="this.handleNavigation($event)">
 <div class="search-area" *ngIf="this.focused">
-    <div class="group" *ngFor="let city of (this.results$ | async)" (click)="locationSelected($event, city)">
-        {{ city.name }}, {{ city.country.name }}
-        <div class="airport" *ngFor="let airport of city.airports" (click)="locationSelected($event, city, airport)">
-            {{airport.name}}
+    <div class="group"  *ngFor="let city of (this.results$ | async); let i = index" (click)="locationSelected($event, city)" [class.selected]="i === cityIndex">
+        <span><i class="fa-solid fa-location-dot"></i> {{ city.name }}, {{ city.country.name }}</span>
+
+        <div class="airport" *ngFor="let airport of city.airports; let j = index" (click)="locationSelected($event, city, airport)" [class.selected]="j === airportIndex">
+            <i class="fa-solid fa-plane"></i> {{airport.name}}
         </div>
     </div>
 </div>
