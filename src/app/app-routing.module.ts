@@ -58,6 +58,11 @@ const routes: Routes = [
             icon: 'fa-solid fa-book-open'
         }
     },
+    {
+        path: 'dashboard',
+        loadChildren: () => import('./modules/dashboard/feature/dashboard-shell/dashboard-shell.module').then((m) => m.DashBoardShellModule),
+        title: 'Dashboard'
+    }
     
 ];
 

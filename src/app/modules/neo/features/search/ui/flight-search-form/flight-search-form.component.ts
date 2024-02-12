@@ -17,6 +17,7 @@ import { DateRange } from 'src/app/shared/models/date-range.model';
 import { RoundTrip } from 'src/app/modules/neo/models/journey/types/round-trip.model';
 import { TravellerService } from 'src/app/modules/neo/data-access/traveller.service';
 import { TravellerTypes } from 'src/app/modules/neo/models/traveller/traveller-types.enum';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
   selector: 'flight-search-form',
@@ -43,6 +44,7 @@ export class FlightSearchFormComponent implements OnInit{
         private searchService: SearchService,
         private router: Router,
         private travellerService: TravellerService,
+        private loadingService: LoadingService
     ) {
         this.searchResume$ = this.searchService.getSearchResume();
 
@@ -83,7 +85,6 @@ export class FlightSearchFormComponent implements OnInit{
 
         searchId.subscribe({
             next: (response: AirSearchIdResponse) => {
-
                 this.searchService.reset();
 
                 this.router.navigate([`neo/search/${response.id}`]);
