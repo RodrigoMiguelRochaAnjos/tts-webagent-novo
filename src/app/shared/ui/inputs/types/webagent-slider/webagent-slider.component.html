@@ -1,0 +1,9 @@
+<!-- <input type="number" value="{{ minValue.toFixed(2) }}" #minInput> -->
+<div class="custom-slider">
+    <div class="slider-track" [style.left]="thumbLeft + '%'" [style.width]="(100 - (thumbRight + thumbLeft)) + '%'"></div>
+    <div class="slider-thumb left" [style.left]="thumbLeft + '%'" (mousedown)="onThumbDown($event, 'LEFT')" (mousemove)="onMouseMove($event, 'LEFT')" (mouseup)="onMouseUp($event, 'LEFT')"></div>
+    <div class="slider-thumb right" [style.right]="thumbRight + '%'" (mousedown)="onThumbDown($event, 'RIGHT')" (mousemove)="onMouseMove($event, 'RIGHT')" (mouseup)="onMouseUp($event, 'RIGHT')"></div>
+</div>
+minValue: {{minValue.toFixed(2)}}
+maxValue: {{maxValue.toFixed(2)}}
+<!-- <input type="number" value="{{ maxValue.toFixed(2) }}" #maxInput> -->
