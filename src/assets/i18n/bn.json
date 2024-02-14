@@ -374,5 +374,25 @@
     "RESERVATION_SUMMARY": "মুলক সংক্ষিপ্তসার",
     "TICKET": "টিকিট",
     "TICKETS": "টিকিটগুলি",
-    "VIEW": "দেখুন"
+    "VIEW": "দেখুন",
+
+    "WEEK_DAY_SUNDAY": "র",
+	"WEEK_DAY_MONDAY": "স",
+	"WEEK_DAY_TUESDAY": "ম",
+	"WEEK_DAY_WEDNSDAY": "ব",
+    "WEEK_DAY_THURSDAY": "বৃ",
+    "WEEK_DAY_FRIDAY": "শ",
+    "WEEK_DAY_SATURDAY": "শনি",
+	"JANUARY": "বৈশাখ",
+	"FEBRUARY": "জ্যৈষ্ঠ",
+	"MARCH": "আষাঢ়",
+	"APRIL": "শ্রাবণ",
+	"MAY": "ভাদ্র",
+	"JUNE": "আশ্বয়ুজ",
+	"JULY": "কার্তিক",
+	"AUGUST": "অগ্রহায়ণ",
+	"SEPTEMBER": "পৌষ",
+	"OCTOBER": "মাঘ",
+	"NOVEMBER": "ফাল্গুন",
+	"DECEMBER": "চৈত্র"
 }
