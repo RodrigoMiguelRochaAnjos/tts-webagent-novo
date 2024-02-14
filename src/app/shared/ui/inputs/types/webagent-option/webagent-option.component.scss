@@ -15,4 +15,7 @@
     &.show{
         display: block;
     }
+    &.selected {
+        background-color: #3333;
+    }
 }

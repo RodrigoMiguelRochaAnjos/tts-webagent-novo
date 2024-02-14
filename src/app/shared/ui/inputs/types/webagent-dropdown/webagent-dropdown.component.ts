@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, EventEmitter, HostBinding, Input, OnInit, Output, QueryList, forwardRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, QueryList, ViewChild, forwardRef } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import { WebagentOptionComponent } from '../webagent-option/webagent-option.component';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -29,7 +29,11 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
 
     @ContentChildren(WebagentOptionComponent) options!: QueryList<WebagentOptionComponent>;
 
+    @ViewChild("dropdownList") dropdownList!: ElementRef<HTMLDivElement>;
+
     @Output() change: EventEmitter<any> = new EventEmitter<any>();
+
+    optionIndex: number = -1;
 
     selectedOption!: WebagentOptionComponent;
 
@@ -103,6 +107,92 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
         });
 
         this.isDropdownOpen = true;
+
+        this.optionIndex = -1;
+        this.options.forEach((option: WebagentOptionComponent, index: number) => {
+            option.selected = false;
+        });
+    }
+
+    @HostListener('keyup', ["$event"])
+    navigationHandler(event: KeyboardEvent): void {
+        switch(event.key) {
+            case "Enter":
+                this.handleEnterPressed();
+                break;
+            case "ArrowDown":
+                this.handleArrowDown();
+                break;
+            case "ArrowUp":
+                this.handleArrowUp();
+                break;
+        }
+    }
+
+    handleEnterPressed(): void {
+        let option: WebagentOptionComponent | undefined = this.options.filter((option: WebagentOptionComponent) => option.visible)[this.optionIndex];
+
+        if (option == null) {
+            option = Array.from(this.options).filter((value) => value.visible)[0];
+        }
+
+        if(option == null) return;
+
+        this.selectOption(option);
+    }
+
+    handleArrowDown(): void {
+        if (this.optionIndex >= this.options.length - 1) return;
+        console.log(this.optionIndex);
+
+        this.optionIndex++;
+
+        this.options.forEach((option: WebagentOptionComponent, index: number) => {
+            option.selected = false;
+        });
+
+        const opt: WebagentOptionComponent | undefined = this.options.filter((option: WebagentOptionComponent) => option.visible)[this.optionIndex];
+
+        if(opt == null) return;
+
+        opt.selected = true;
+        this.scrollToElement()
+    }
+
+    private scrollToElement() {
+        const element: WebagentOptionComponent | undefined = this.options.filter((option: WebagentOptionComponent) => option.visible)[this.optionIndex];
+
+        if(element == null) return;
+
+        // Calculate the scroll position to center the element
+        const offsetTop = element.getElementRef().nativeElement.offsetTop;
+        const windowHeight = this.dropdownList.nativeElement.clientHeight;
+        const elementHeight = element.getElementRef().nativeElement.offsetHeight;
+
+        const targetScrollPosition = offsetTop - (windowHeight - elementHeight) / 2;
+
+        // Scroll to the calculated position
+        this.dropdownList.nativeElement.scrollTo({
+            top: targetScrollPosition,
+            behavior: 'smooth', // Optional: Add smooth scrolling effect
+        });
+    }
+
+    handleArrowUp(): void {
+        if (this.optionIndex <= 0) return;
+
+        this.optionIndex--;
+
+        this.options.forEach((option: WebagentOptionComponent, index: number) => {
+            option.selected = false;
+        });
+
+        const opt: WebagentOptionComponent | undefined = this.options.filter((option: WebagentOptionComponent) => option.visible)[this.optionIndex];
+
+        if (opt == null) return;
+
+        opt.selected = true;
+        this.scrollToElement();
     }
 
     selectOption(option: WebagentOptionComponent): void {
@@ -115,15 +205,5 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
 
     keepOpen(): void {
         this.isDropdownOpen = true;
-    }
-
-    selectFirstResult(event: KeyboardEvent) {
-        if (event.key !== "Enter") return;
-
-        const firstOption: WebagentOptionComponent | undefined = Array.from(this.options).filter((value) => value.visible)[0];
-
-        if(firstOption == null) return;
-
-        this.selectOption(firstOption);
     }
 }

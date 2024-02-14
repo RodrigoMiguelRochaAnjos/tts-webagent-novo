@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { Observable, Subscription, forkJoin } from 'rxjs';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from 'src/app/core/authentication/auth.service';
@@ -11,13 +11,14 @@ import { Menu } from '../../models/menu.model';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 import { TerminalHistoryService } from '../../data-access/terminal-history.service';
 import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
+import { BottomBarComponent } from '../../ui/bottom-bar/bottom-bar.component';
 
 @Component({
     selector: 'app-main',
     templateUrl: './terminal.page.html',
     styleUrls: ['./terminal.page.scss'],
 })
-export class TerminalPage implements OnInit {
+export class TerminalPage implements OnInit, AfterViewInit {
     showTwoTerminalsSubscription!: Subscription;
     secondTerminalSelectedSubscription!: Subscription;
     terminalContentSubscription!: Subscription;
@@ -46,7 +47,9 @@ export class TerminalPage implements OnInit {
 
     @ViewChild("brandsAndAcillaries") brandsAndAcillaries!: TemplateRef<any>;
 
-    @ViewChild("emailTempaltes") emailTempaltes!: TemplateRef<any>;
+    @ViewChild("emailTemplates") emailTemplates!: TemplateRef<any>;
+
+    @ViewChild(BottomBarComponent, {static: true}) bottomBarComponent!: BottomBarComponent;
 
     selectedPkey: number = -1;
 
@@ -56,7 +59,8 @@ export class TerminalPage implements OnInit {
         private terminalService: TerminalService,
         private menuService: MenuService,
         private modalService: ModalControllerService,
-        private authService: AuthService
+        private authService: AuthService,
+        private renderer: Renderer2
     ) {
     }
 
@@ -107,6 +111,10 @@ export class TerminalPage implements OnInit {
             const commandsHistory = this.terminalService.commandsHistorySource.getValue();
             this.terminalService.executeTerminalCommand(commandsHistory[commandsHistory.length - 1]);
         }
+    }
+
+    ngAfterViewInit(): void {
+        this.renderer.selectRootElement(this.bottomBarComponent.terminalCommandInput.nativeElement).focus();
     }
 
     ngOnDestroy(): void {
@@ -218,7 +226,7 @@ export class TerminalPage implements OnInit {
     onEmailItemsClick(): void {
         this.isEmail = true;
 
-        this.modalService.showModal(this.emailTempaltes, "email-items-modal");
+        this.modalService.showModal(this.emailTemplates, "email-items-modal");
         this.allowCommands();
         
     }

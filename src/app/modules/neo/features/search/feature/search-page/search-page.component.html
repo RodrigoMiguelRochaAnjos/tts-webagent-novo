@@ -3,7 +3,7 @@
     <flight-search-form></flight-search-form>
 </div>
 <div class="result-section" *ngIf="(this.results$ | async)!.length > 0">
-    <p>Showing {{ showing }} results out of {{ max }}</p>
+    <p>{{ showingResultsString }}</p>
 
     <div class="results">
         <ng-container *ngFor="let result of (this.results$ | async); let i = index">

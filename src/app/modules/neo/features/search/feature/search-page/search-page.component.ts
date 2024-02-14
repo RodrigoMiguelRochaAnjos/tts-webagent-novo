@@ -10,6 +10,7 @@ import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 import { FlightOption } from 'src/app/modules/neo/models/flight-option.model';
 import { trigger, transition, query, stagger, animate, style } from '@angular/animations';
 import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-search-page',
@@ -22,10 +23,13 @@ export class SearchPageComponent implements OnInit {
 
     private id: string | null = null;
 
+    reverseShowingLanguages: string[] = ['bn', 'ne', 'tr']
+
     constructor(
         private searchService: SearchService,
         private router: Router,
         private route: ActivatedRoute,
+        private translateService: TranslateService,
     ) {
         this.results$ = this.searchService.getResults();
 
@@ -56,6 +60,7 @@ export class SearchPageComponent implements OnInit {
         return this.searchService.getResultsValue().length > 0
     }
 
+    
     get showing(): number {
         if ((this.searchService.itemsPerPage * this.searchService.page) >= this.max) return this.max;
 
@@ -73,6 +78,25 @@ export class SearchPageComponent implements OnInit {
         return true;
     }
 
+    get showingResultsString() : string {
+
+        let finalString: string = '';
+
+        this.translateService.get('SHOWING_RESULTS').subscribe({
+            next: (translation: string) => { 
+                let showing: string = translation;
+
+                const splitShowing: string[] = showing.split('[value]')
+
+                  finalString = `${splitShowing[0]} ${this.showing} ${splitShowing[1]} ${this.max}`;
+
+                if (this.reverseShowingLanguages.includes(this.translateService.currentLang)) finalString = `${splitShowing[0]} ${this.max} ${splitShowing[1]} ${this.showing}`;
+            }
+        });
+        
+        return finalString;
+
+    }
     @HostListener('window:scroll', ['$event'])
     onScroll(event: any) {
         if (
