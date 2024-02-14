@@ -23,6 +23,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { WebagentCalendarInputComponent } from './types/webagent-calendar-input/webagent-calendar-input.component';
 import { WebagentOptionComponent } from './types/webagent-option/webagent-option.component';
 import { WebagentDateFilterComponent } from './types/webagent-date-filter/webagent-date-filter.component';
+import { WebagentSliderComponent } from './types/webagent-slider/webagent-slider.component';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { WebagentDateFilterComponent } from './types/webagent-date-filter/webage
         WebagentNumberComponent,
         WebagentCalendarInputComponent,
         WebagentOptionComponent,
-        WebagentDateFilterComponent
+        WebagentDateFilterComponent,
+        WebagentSliderComponent
     ],
     imports: [
         CommonModule,
@@ -55,7 +57,8 @@ import { WebagentDateFilterComponent } from './types/webagent-date-filter/webage
     exports: [
         WebagentInputComponent,
         WebagentOptionComponent,
-        WebagentDropdownComponent
+        WebagentDropdownComponent,
+        WebagentSliderComponent
     ],
     providers: [
         DirectivesModule
