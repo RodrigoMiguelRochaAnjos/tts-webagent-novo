@@ -18,13 +18,13 @@
         <div class="field-container" (keyup.enter)="this.login()">
 
             <div class="field son">
-                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK"/>
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK" (input)="capitalizeInput($event)" />
             </div>
             <div class="field password">
                 <webagent-input [type]="InputType.PASSWORD" [(ngModel)]="this.loginRequest.pwd" id="password" [label]="'Password'" [theme]="Theme.DARK"/>
             </div>
             <div class="field pcc">
-                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.pcc" id="pcc" [label]="'PCC'" [theme]="Theme.DARK"/>
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.pcc" id="pcc" [label]="'PCC'" [theme]="Theme.DARK" (input)="capitalizeInput($event)" />
             </div>
     
             <div class="login-buttons">
