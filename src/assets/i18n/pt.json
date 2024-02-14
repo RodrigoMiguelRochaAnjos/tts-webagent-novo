@@ -304,7 +304,7 @@
     "BOOKING_CREATION_DATE": "Data de Criação da Reserva",
     "BOOKING_START_DATE": "Data de Início da Reserva",
     "TOOLTIP_INVALID": "A troca de moeda ocorreu, mas o valor não pode ser exibido neste momento.",
-    "SHOWING_RESULTS": "Mostrando [value] resultados de [value]",
+    "SHOWING_RESULTS": "A Mostrar [value] resultados de [value]",
     "BOOKINGS_INFORMATION_LINE_ONE": "Os dados da tabela remontam ao momento da reserva.",
     "BOOKINGS_INFORMATION_LINE_TWO": "Como não é atualizado, pode não ser preciso.",
     "BOOKINGS_INFORMATION_TITLE": "Informações",
