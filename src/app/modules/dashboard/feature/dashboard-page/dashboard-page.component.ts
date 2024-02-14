@@ -29,4 +29,8 @@ export class DashboardPageComponent implements OnInit{
 
     ngOnInit(): void {
     }
+
+    logEvent(event: number) {
+        console.log(event);
+    }
 }

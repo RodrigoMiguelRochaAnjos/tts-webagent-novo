@@ -9,6 +9,9 @@ import { WebagentDropdownComponent } from '../webagent-dropdown/webagent-dropdow
 export class WebagentOptionComponent {
     @HostBinding("class.show")
     visible: boolean = true;
+    
+    @HostBinding("class.selected")
+    selected: boolean = false;
 
     @Input() value?: string;
 
@@ -23,4 +26,7 @@ export class WebagentOptionComponent {
         this.parent.selectOption(this);
     }
 
+    getElementRef(): ElementRef {
+        return this.elementRef;
+    }
 }

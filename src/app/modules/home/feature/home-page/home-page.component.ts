@@ -58,4 +58,8 @@ export class HomePageComponent implements OnInit{
 
         this.authService.login(this.loginRequest);
     }
+
+    capitalizeInput(event: any): void {
+        event.target.value = event.target.value.toUpperCase();
+    }
 }
