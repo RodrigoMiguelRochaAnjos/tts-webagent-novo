@@ -16,15 +16,18 @@
             <div class="stops">
                 <div class="stop" [ngClass]="{ 'blue': true }">
                 </div>
-                <div class="stop" *ngFor="let number of range(1, numberOfStops); let index = index"
-                    [ngClass]="{ 'blue': index <= segmentIndex }"></div>
-                <div class="stop" [ngClass]="{ 'blue': numberOfStops == segmentIndex }"></div>
+                <!-- <div class="stop" *ngFor="let number of range(1, numberOfStops); let index = index"
+                    [ngClass]="{ 'blue': index <= segmentIndex }"></div> -->
+                <div class="stop" [ngClass]="{ 'blue': true  }"></div> <!-- numberOfStops == segmentIndex -->
             </div>
-            <div class="title"
-                [style.left]="((100 / ((numberOfStops + 1))) * ((segmentIndex + 1))) - ((100 / ((numberOfStops + 1))/2 )) + '%'">
+            <div class="title">
                 {{ segmentDuration() }}
             </div>
-            <span class="progress-bar" [style.width]="(((segmentIndex + 1) / (numberOfStops + 1)) * 100) +'%'"></span>
+            <!-- <div class="title"
+                [style.left]="((100 / ((numberOfStops + 1))) * ((segmentIndex + 1))) - ((100 / ((numberOfStops + 1))/2 )) + '%'">
+                {{ segmentDuration() }}
+            </div> -->
+            <span class="progress-bar" [style.width]="'100%'"></span> <!--(((segmentIndex + 1) / (numberOfStops + 1)) * 100) +-->
 
         </div>
         <div class="arrival">

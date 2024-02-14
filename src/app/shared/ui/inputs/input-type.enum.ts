@@ -10,5 +10,6 @@ export enum InputType {
     SEARCH,
     TEXT_DATE_INPUT,
     CHECKBOX,
-    NUMBER
+    NUMBER,
+    DATE_FILTER
 }

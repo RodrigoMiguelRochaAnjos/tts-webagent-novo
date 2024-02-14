@@ -16,8 +16,7 @@ export class Contact {
         return (
             this.email != null &&
             patterns.email.test(this.email.trim()) &&
-            this.phone != null &&
-            this.phone.isValid()
+            this.phone != null && this.phone?.isValid()
         );
     }
 
@@ -72,5 +71,7 @@ export class Contact {
             }
         });
     }
+
+    
 
 }

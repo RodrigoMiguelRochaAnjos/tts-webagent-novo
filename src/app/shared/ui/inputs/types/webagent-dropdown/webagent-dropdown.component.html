@@ -8,7 +8,7 @@
         <span class="arrow-icon" [class.up]="isDropdownOpen"></span>
     </div>
     <div class="dropdown-list" [class.active]="isDropdownOpen">
-        <div>
+        <div #dropdownList>
             <ng-content></ng-content>
         </div>
     </div>

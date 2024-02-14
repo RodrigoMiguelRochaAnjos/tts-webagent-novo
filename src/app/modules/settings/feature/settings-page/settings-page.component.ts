@@ -84,18 +84,6 @@ export class SettingsPageComponent implements OnInit{
 
         if(user instanceof AnonymousUser) return;
 
-        user.currency = this.tmpSettings.currency;
-
-        user.name = this.tmpSettings.profileName;
-        user.contact = new Contact();
-        user.contact.email = this.tmpSettings.profileEmail;
-        user.contact.phone = new Phone();
-
-        user.contact.phone.dialCode = `+${this.tmpSettings.profileCountryDialCode}`;
-        user.contact.phone.number = this.tmpSettings.profilePhone;
-
-
-
         try {
             if(this.validateInputs()) {
                 user.save();
@@ -134,7 +122,6 @@ export class SettingsPageComponent implements OnInit{
         if(!this.isValidInput(this.tmpSettings.address.countryCode, patterns.countryCode)) errors.push("The user's agency country code is invalid, please try again");
 
         if (errors.length === 0) {
-            this.alertService.show(AlertType.SUCCESS, "All form information is valid!");
             return true;
 
           } else {

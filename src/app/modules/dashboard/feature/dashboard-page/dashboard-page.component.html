@@ -1,13 +1,7 @@
-<p>Welcome to the Dashboard {{ (this.user$ | async)?.name }}</p>
-<p>{{ (this.user$ | async)?.['id'] }}</p>
-<reservation-state />
-<trip-summary [buttonText]="'Hello'" />
-<app-search-result [result]="testResult"></app-search-result>
 
-<button (click)="forwardInList()">NEXT</button>
-<button (click)="backwardsList()">PREV</button>
+<webagent-input  [type]="InputType.DATE_FILTER" [label]="('PKEY_LABEL' | translate)"/>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-<webagent-input  [type]="InputType.TEXT" [label]="('PKEY_LABEL' | translate)"/>
-<button>Show Modal</button>
-
-<webagent-input [type]="InputType.DATE" [label]="('PKEY_LABEL' | translate)" />
+<webagent-dropdown [search]="true">
+    <webagent-option [value]="'123'">Value</webagent-option>
+</webagent-dropdown>
