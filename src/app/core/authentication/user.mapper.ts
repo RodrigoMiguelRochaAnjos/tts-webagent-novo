@@ -123,7 +123,21 @@ export class UserMapper {
         user.id = storedObject.data.id
         user.token = storedObject.data.token
         user.settings = Object.assign(new Settings(), JSON.parse(storedObject.data.settings));
-        user.contact = Object.assign(new Contact(), JSON.parse(storedObject.data.contact));
+        let newContact: Contact = new Contact();
+
+        newContact.phone = new Phone();
+        newContact.phone.dialCode = JSON.parse(storedObject.data.contact)?.phone?.dialCode;
+        newContact.phone.number = JSON.parse(storedObject.data.contact)?.phone?.number;
+        newContact.title = JSON.parse(storedObject.data.contact).title;
+        newContact.firstName = JSON.parse(storedObject.data.contact).firstName;
+        newContact.lastName = JSON.parse(storedObject.data.contact).lastName;
+        newContact.address = JSON.parse(storedObject.data.contact).address;
+        newContact.email = JSON.parse(storedObject.data.contact).email;
+        newContact.entityName = JSON.parse(storedObject.data.contact).entityName;
+
+        user.contact = newContact;
+
+        console.log(user.contact.isValid());
 
         switch (storedObject.data.gds) {
             case 'Galileo':

@@ -23,6 +23,10 @@ export class LocationSearchService {
         return this.results$.pipe(takeUntil(this.destroyService.getDestroyOrder()));
     }
 
+    public getResultsValue(): LocationSearchResponse {
+        return this.results$.value;
+    }
+
     public search(term: string) : void {
         this.httpClient.get<LocationSearchResponse>(`${this.ENDPOINT}/${term}`).subscribe({
             next: (result: LocationSearchResponse) => {

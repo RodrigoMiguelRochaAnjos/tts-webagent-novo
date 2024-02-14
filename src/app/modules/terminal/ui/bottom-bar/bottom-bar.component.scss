@@ -12,6 +12,10 @@
             font-size: 1.2rem;
             border: none;
             outline: none;
+            
+            &:focus{
+                background-color: #98899845;
+            }
         }
     
         .buttons {

@@ -112,10 +112,17 @@ button {
     cursor: pointer;
     transition: background-color ease-in-out .3s;
 
+    &:disabled {
+        background-color: #9399a8;
+    }
+
     &.call-to-action {
         background-color: #1F75AE;
         color: #fff;
 
+        &:disabled {
+            background-color: #a4b6c1;
+        }
         &::after {
             content: '»';
             display: block;
