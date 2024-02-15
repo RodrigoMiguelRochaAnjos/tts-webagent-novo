@@ -30,7 +30,7 @@ export class DashboardPageComponent implements OnInit{
     ngOnInit(): void {
     }
 
-    logEvent(event: number) {
+    logEvent(event: {min: number, max: number}) {
         console.log(event);
     }
 }
