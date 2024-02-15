@@ -17,9 +17,10 @@ import { AlertService } from 'src/app/core/services/alert.service';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { CircularLinkedList } from 'src/app/core/utils/circular-linked-list.structure';
 import { TerminalHistoryService } from '../../data-access/terminal-history.service';
-import { GetParameter } from 'src/app/modules/neo/models/get-parameter.model';
-import { TranslateService } from '@ngx-translate/core';
 import { DestroyService } from 'src/app/core/services/destroy.service';
+import { TranslateService } from '@ngx-translate/core';
+import { GetParameter } from 'src/app/modules/neo/models/get-parameter.model';
+
 @Component({
     selector: 'app-right-menu',
     templateUrl: './right-menu.component.html',
@@ -57,12 +58,12 @@ export class RightMenuComponent implements OnInit {
         private authService: AuthService,
         private destroyService: DestroyService,
         translate: TranslateService,
-
     ) {
         
         Object.keys(this.messages).forEach((key: string) => {
             translate.stream(key).pipe(takeUntil(this.destroyService.getDestroyOrder())).subscribe((text: string) => this.messages[key] = text);
         });
+        
     }
 
     ngOnInit(): void {
@@ -176,9 +177,9 @@ export class RightMenuComponent implements OnInit {
         });
     }
 
-    // printTerminal(): void {
-    //     const windowPrint: Window | null = window.open();
-    //     windowPrint!.document.write(document.getElementById('terminal-window')!.innerHTML);
-    //     windowPrint!.print();
-    // }
+    printTerminal(): void {
+        const windowPrint: Window | null = window.open();
+        windowPrint!.document.write(document.getElementById('terminal-window')!.innerHTML);
+        windowPrint!.print();
+    }
 }
