@@ -16,6 +16,7 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
     focused: boolean = false;
 
     private selectedLocationSearch: LocationSearch | undefined;
+    private selectedLocation: SelectedLocation | undefined;
 
     cityIndex: number = -1;
     airportIndex: number = -1;
@@ -40,12 +41,15 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
 
         this.airportIndex = -1;
         this.cityIndex = 0;
+
+        this.selectedLocation = undefined;
     }
 
     locationSelected(event: Event, location: LocationSearch, airport?: Airport): void {
         event.stopPropagation();
 
         const selected: SelectedLocation = LocationMapper.locationSearchToSelectedLocation(location, airport);
+        this.selectedLocation = selected;
 
         this.value = selected;
         this.update();
@@ -71,11 +75,11 @@ export class WebagentLocationSearchComponent extends WebagentBaseComponent imple
 
             let selectedLocation: LocationSearch | undefined = this.selectedLocationSearch;
 
-            if(selectedLocation == null) {
+            if(selectedLocation == null && this.selectedLocation == null) {
                 selectedLocation = this.locationSearchService.getResultsValue()[0];
             }
 
-            if (!selectedLocation) return;
+            if(selectedLocation == null) return;
 
             if(this.airportIndex != -1) {
                 this.locationSelected(event, selectedLocation, selectedLocation.airports[this.airportIndex]);
