@@ -1,18 +1,18 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'webagent-slider',
     templateUrl: './webagent-slider.component.html',
     styleUrls: ['./webagent-slider.component.scss']
 })
-export class WebagentSliderComponent implements AfterViewInit{
-    @Input() min = 0;
-    @Input() max = 999999;
+export class WebagentSliderComponent implements AfterViewInit {
+    @Input() min: number = 0;
+    @Input() max: number = 999999;
     @Input() steps?: number;
-    @Input() value: { min: number, max: number} = {
-        min: 0,
+    @Input() value: { min: number, max: number } = {
+        min: this.min,
         max: this.max
-    };
+    };;
     @Output() valueChange = new EventEmitter<{ min: number, max: number }>();
 
     @ViewChild("minInput") minInput!: ElementRef<HTMLInputElement>;
@@ -30,29 +30,32 @@ export class WebagentSliderComponent implements AfterViewInit{
     private mouseupFn = () => { };
 
     constructor(private elementRef: ElementRef, private renderer: Renderer2) { }
-
+    
     ngAfterViewInit(): void {
+        this.minInput.nativeElement.value = `${this.min.toFixed(2)}`;
+        this.maxInput.nativeElement.value = `${this.max.toFixed(2)}`;
+
         this.minInput.nativeElement.style.width = `${this.minInput.nativeElement.value.toString().length}ch`;
         this.maxInput.nativeElement.style.width = `${this.maxInput.nativeElement.value.toString().length}ch`;
         
-        if(this.steps){
+        if (this.steps) {
             const stepSize = 100 / this.steps;
             this.threshHolds = [0];
-    
+            
             for (let i = 0; i < this.steps; i++) {
                 const start = i * stepSize;
                 const end = (i + 1) * stepSize;
-    
+                console.log("end",end)
                 this.threshHolds.push(end);
             }
         }
     }
 
     calculateSteps(maxValue: number, numberOfSteps: number): number[] {
-        
+
         const steps: number[] = [];
 
-        
+
 
         return steps;
     }
@@ -65,7 +68,7 @@ export class WebagentSliderComponent implements AfterViewInit{
 
         this.pressed = true;
 
-        switch(cursor){
+        switch (cursor) {
             case 'LEFT':
                 this.thumbLeft = ((event.x - rect.left) / (this.customSlider.nativeElement.offsetWidth)) * 100;
                 break;
@@ -98,7 +101,7 @@ export class WebagentSliderComponent implements AfterViewInit{
         }
         if (distanceLeft > 100) {
             distanceLeft = 100;
-        } 
+        }
 
         if (distanceRight < 0) {
             distanceRight = 0;
@@ -108,7 +111,7 @@ export class WebagentSliderComponent implements AfterViewInit{
         }
 
         let closestThresholdLeft: number | undefined;
-        if(this.steps){
+        if (this.steps) {
             closestThresholdLeft = this.threshHolds.reduce((closest, threshold) => {
                 const currentDifference = Math.abs(threshold - distanceLeft);
                 const closestDifference = Math.abs(closest - distanceLeft);
@@ -127,33 +130,70 @@ export class WebagentSliderComponent implements AfterViewInit{
 
         switch (cursor) {
             case 'LEFT':
-                if (closestThresholdLeft != null && distanceLeft > closestThresholdLeft){
-                    this.thumbLeft = closestThresholdLeft;
-                } else if(closestThresholdLeft == null) {
-                    this.thumbLeft = distanceLeft;
-                }
+                this.thumbLeft = distanceLeft;
                 break;
             case 'RIGHT':
-                if (closestThresholdRight != null && distanceRight >= closestThresholdRight) {
-                    this.thumbRight = closestThresholdRight;
-                    break;
-                } else if (closestThresholdRight == null) {
-                    this.thumbRight = distanceRight;
-                }
+                this.thumbRight = distanceRight;
                 break;
         }
 
+        if(this.steps == null) {
+            this.value.min = (this.max / 100) * this.thumbLeft;
+            this.value.max = this.max - ((this.max / 100) * this.thumbRight);
+            this.valueChange.emit(this.value);
+    
+            this.minInput.nativeElement.style.width = `${this.minInput.nativeElement.value.toString().length}ch`;
+            this.maxInput.nativeElement.style.width = `${this.maxInput.nativeElement.value.toString().length}ch`;
+        }
+
+
+    }
+
+    onMouseUp(event: MouseEvent, cursor: 'LEFT' | 'RIGHT') {
+
+        const rect = this.customSlider.nativeElement.getBoundingClientRect();
+
+        let distanceLeft: number = ((event.x - rect.left) / (this.customSlider.nativeElement.offsetWidth)) * 100;
+        let distanceRight: number = 100 - (((event.x - rect.left) / (this.customSlider.nativeElement.offsetWidth)) * 100);
+
+        let closestThresholdLeft: number | undefined;
+        if (this.steps) {
+            closestThresholdLeft = this.threshHolds.reduce((closest, threshold) => {
+                const currentDifference = Math.abs(threshold - distanceLeft);
+                const closestDifference = Math.abs(closest - distanceLeft);
+                return currentDifference < closestDifference ? threshold : closest;
+            });
+        }
+
+        let closestThresholdRight: number | undefined;
+        if (this.steps) {
+            closestThresholdRight = this.threshHolds.reduce((closest, threshold) => {
+                const currentDifference = Math.abs(threshold - distanceRight);
+                const closestDifference = Math.abs(closest - distanceRight);
+                return currentDifference < closestDifference ? threshold : closest;
+            });
+        }
+
+        switch(cursor){
+            case 'LEFT':
+                console.log(`${closestThresholdLeft} < ${(100 - this.thumbRight)}`)
+                if (closestThresholdLeft != null && closestThresholdLeft <= (100 - this.thumbRight)) {
+                    this.thumbLeft = closestThresholdLeft;
+                }
+                break;
+            case 'RIGHT':
+                if (closestThresholdRight != null && (100 - closestThresholdRight) >= this.thumbLeft) {
+                    this.thumbRight = closestThresholdRight;
+                } 
+                break;
+        }
+        console.log(this.threshHolds);
         this.value.min = (this.max / 100) * this.thumbLeft;
         this.value.max = this.max - ((this.max / 100) * this.thumbRight);
         this.valueChange.emit(this.value);
 
         this.minInput.nativeElement.style.width = `${this.minInput.nativeElement.value.toString().length}ch`;
         this.maxInput.nativeElement.style.width = `${this.maxInput.nativeElement.value.toString().length}ch`;
-
-
-    }
-
-    onMouseUp(event: MouseEvent, cursor: 'LEFT' | 'RIGHT') {
 
         this.pressed = false;
 
@@ -163,14 +203,14 @@ export class WebagentSliderComponent implements AfterViewInit{
 
     }
 
-    manageSize(event: Event) : void {
+    manageSize(event: Event): void {
         const eventTarget: EventTarget | null = event.target;
 
-        if(eventTarget == null) return;
+        if (eventTarget == null) return;
 
         const element: HTMLInputElement = eventTarget as HTMLInputElement;
 
-        if(element.value.toString().length <= 3) {
+        if (element.value.toString().length <= 3) {
             element.style.width = `3ch`;
             return;
         }
@@ -179,8 +219,8 @@ export class WebagentSliderComponent implements AfterViewInit{
     }
 
     setValue(event: KeyboardEvent, type: 'MIN' | 'MAX') {
-        if(event.key !== "Enter") return;
-        switch(type){
+        if (event.key !== "Enter") return;
+        switch (type) {
             case 'MIN':
                 if (Number((event.target as HTMLInputElement).value) > this.max || Number((event.target as HTMLInputElement).value) < this.min) {
                     this.value.min = 0;
@@ -195,7 +235,7 @@ export class WebagentSliderComponent implements AfterViewInit{
                 this.minInput.nativeElement.style.width = `${this.minInput.nativeElement.value.toString().length + 4}ch`;
                 break;
             case 'MAX':
-                if (Number((event.target as HTMLInputElement).value) > this.max  || Number((event.target as HTMLInputElement).value) < this.min) {
+                if (Number((event.target as HTMLInputElement).value) > this.max || Number((event.target as HTMLInputElement).value) < this.min) {
                     this.value.max = this.max;
                     this.maxInput.nativeElement.style.width = `4ch`;
                     return;

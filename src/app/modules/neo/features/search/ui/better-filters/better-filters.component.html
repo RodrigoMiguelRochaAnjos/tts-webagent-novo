@@ -1,0 +1,80 @@
+<ul>
+
+    <li *ngIf="(this.checkboxFilter$ | async)?.get(SelectionType.CLASSES)">
+        <label>{{ 'CLASSES' | translate }}</label><br/>
+        <app-neo-select [options]="(this.checkboxFilter$ | async)?.get(SelectionType.CLASSES)" (onSelectOption)="updateCheckboxes(SelectionType.CLASSES, $event)"></app-neo-select>
+    </li>
+    <li  *ngIf="(this.checkboxFilter$ | async)?.get(SelectionType.CARRIERS)">
+        <label>{{ 'CARRIERS' | translate }}</label><br/>
+        <app-neo-select [options]="(this.checkboxFilter$ | async)?.get(SelectionType.CARRIERS)" (onSelectOption)="updateCheckboxes(SelectionType.CARRIERS, $event)"></app-neo-select>
+    </li>
+    <li>
+        <label>
+            {{ 'PRICE' | translate }}:
+            <br />
+            <webagent-slider *ngIf="(this.priceFilter$ | async)" [min]="(this.priceFilter$ | async)!.min" [max]="(this.priceFilter$ | async)!.max" [steps]="priceSteps" (valueChange)="onChangePrice($event)"/>
+            <!-- <ion-range [min]="(this.priceFilter$ | async)?.min" [max]="(this.priceFilter$ | async)?.max"
+                dualKnobs="true" ticks="false"
+                [value]="{lower: (this.priceFilter$ | async)?.selected?.min, upper: (this.priceFilter$ | async)?.selected?.max}"
+                [step]="priceSteps" (ionChange)="onChangePrice($event)">
+                <span slot="start">{{ (this.priceFilter$ | async)?.selected?.min.toFixed(2) }} {{ (this.priceFilter$ |
+                    async)?.currency }}</span>
+                <span slot="end">{{ (this.priceFilter$ | async)?.selected?.max.toFixed(2) }} {{ (this.priceFilter$ |
+                    async)?.currency }}</span>
+            </ion-range> -->
+        </label>
+    </li>
+
+    <li *ngIf="(this.intervalFilter$ | async)?.get(IntervalType.STOPS)">
+        <label>
+            {{ 'STOPS' | translate }}:
+            <br />
+            <webagent-slider *ngIf="(this.intervalFilter$ | async)" [min]="(this.intervalFilter$ | async)!.get(IntervalType.STOPS)!.min" [max]="(this.intervalFilter$ | async)!.get(IntervalType.STOPS)!.max" [steps]="(this.intervalFilter$ | async)!.get(IntervalType.STOPS)!.max" (valueChange)="onChangeDate(IntervalType.STOPS, $event)"/>
+            <!-- <ion-range min="{{ (this.intervalFilter$ | async).get(IntervalType.STOPS).min }}" max="{{ (this.intervalFilter$ | async).get(IntervalType.STOPS).max }}" dualKnobs="true" step="1"
+                [value]="{lower: (this.intervalFilter$ | async).get(IntervalType.STOPS).selected.min, upper: (this.intervalFilter$ | async).get(IntervalType.STOPS).selected.max}"
+                (ionChange)="onChangeDate(IntervalType.STOPS, $event)">
+                <span slot="start">{{ (this.intervalFilter$ | async).get(IntervalType.STOPS).selected.min
+                    }}</span>
+                <span slot="end">{{ (this.intervalFilter$ | async).get(IntervalType.STOPS).selected.max
+                    }}</span>
+            </ion-range> -->
+        </label>
+    </li>
+
+    <li *ngIf="(this.intervalFilter$ | async)?.get(IntervalType.DEPARTURE)">
+        <label>
+            {{ 'DEPARTURE' | translate }}:
+            <br />
+            <webagent-slider *ngIf="(this.intervalFilter$ | async)"
+                [min]="0"
+                [max]="1440"
+                [steps]="15"
+                (valueChange)="onChangeDate(IntervalType.DEPARTURE, $event)" />
+
+            <!-- <ion-range min="0" max="1440" dualKnobs="true" step="15"
+                [value]="{lower: (this.intervalFilter$ | async).get(IntervalType.DEPARTURE).selected.min, upper: (this.intervalFilter$ | async).get(IntervalType.DEPARTURE).selected.max}" (ionChange)="onChangeDate(IntervalType.DEPARTURE, $event)">
+                <span slot="start">{{ (this.intervalFilter$ | async).get(IntervalType.DEPARTURE).selected.min | duration }}</span>
+                <span slot="end">{{ (this.intervalFilter$ | async).get(IntervalType.DEPARTURE).selected.max | duration }}</span>
+            </ion-range> -->
+        </label>
+    </li>
+
+    <li *ngIf="(this.intervalFilter$ | async)?.get(IntervalType.RETURN)">
+        <label>
+            {{ 'RETURN_TIME' | translate }}:
+            <br />
+
+            <webagent-slider *ngIf="(this.intervalFilter$ | async)" [min]="0" [max]="1440"
+                [steps]="15"
+                (valueChange)="onChangeDate(IntervalType.RETURN, $event)" />
+            <!-- <ion-range min="0" max="1440" dualKnobs="true" step="15"
+                [value]="{lower: (this.intervalFilter$ | async).get(IntervalType.RETURN).selected.min, upper: (this.intervalFilter$ | async).get(IntervalType.RETURN).selected.max}"
+                (ionChange)="onChangeDate(IntervalType.RETURN, $event)">
+                <span slot="start">{{ (this.intervalFilter$ | async).get(IntervalType.RETURN).selected.min | duration
+                    }}</span>
+                <span slot="end">{{ (this.intervalFilter$ | async).get(IntervalType.RETURN).selected.max | duration
+                    }}</span>
+            </ion-range> -->
+        </label>
+    </li>
+</ul>
