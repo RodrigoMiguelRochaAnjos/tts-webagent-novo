@@ -3,6 +3,37 @@
     height: 100%;
     width: 100vw;
 
+    .download{
+        text-align: center;
+        color: #f0f0f0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        h4{
+            color: #f0f0f0;
+            font-size: 1.3rem;
+            padding-bottom: 20px;
+        }
+        #qr-download {
+            width: 102px;
+            display: block;
+        }
+
+        .buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            a {
+                display: block;
+                text-decoration: none;
+                background-color: transparent;
+                width: 155px;
+            }
+        }
+    }
+
     h1{
         color: #ffff;
     }
@@ -16,13 +47,14 @@
         flex-direction: column;
 
         .fields {
-            width: 74%;
+            width: 70%;
             text-align: center;
             height: 100%;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            margin-top: 10%;
 
             .switch-input {
                 display: flex;
@@ -37,7 +69,7 @@
 
             .register-link {
                 position: relative;
-                top: 7%;
+                top: 3%;
                 margin-top: 2em;
 
                 label {
