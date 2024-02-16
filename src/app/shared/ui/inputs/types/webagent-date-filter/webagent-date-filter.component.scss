@@ -1,9 +1,31 @@
 :host {
+    .range-preview{
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        width: fit-content;
+        cursor: pointer;
+        .range-dates{
+            display: flex;
+            background-color: #fff;
+            box-shadow: 0px 0px 7px #3335;
+            margin-left: 20px;
+            align-items: center;
+            div{
+                padding: 5px 10px;
+                font-size: 10px;
+                &.start, &.end{
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
 
     &.align-left {
         .calendar-container {
             right: 0px;
             left: auto;
+            
         }
     }
 
@@ -25,8 +47,30 @@
         background-color: #fff;
         padding-top: 5px;
         text-align: center;
-        display: flex;
+        display: none;
 
+        .date-interval {
+            ul {
+                list-style-type: none;
+                padding: 0;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                li {
+                    padding: 5px 20px;
+                    cursor: pointer;
+                    margin: 5px;
+                    border-radius: 5px;
+                    &:hover {
+                        background-color: #F2F7FA;
+                    }
+                    &.selected{
+                        background-color: #597A9D;
+                        color: #fff;
+                    }
+                }
+            }
+        }
         &.show {
             display: flex;
         }
@@ -35,30 +79,51 @@
             width: calc(7 * calc(35px + 4px));
             background-color: #fff;
             margin: 10px;
+            text-align: left;
+            select{
+                appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background: transparent;
+                    border: none;
+                    padding: 5px;
+                    padding-right: 20px;
+                &:last-child{
+                    margin-left: 10px;
+                }
+            }
 
-            .date-range-display{
+            .date-range-display {
                 display: flex;
                 justify-content: space-between;
-                .start-date, .end-date {
+
+                .start-date,
+                .end-date {
                     text-align: left;
-                    b{
+
+                    b {
                         font-size: .85rem;
                         font-weight: 500;
                     }
-                    p{
+
+                    p {
                         font-size: .65rem;
                     }
-                    h4{
+
+                    h4 {
                         font-size: 1.1rem;
                     }
                 }
-                .to{
+
+                .to {
                     text-transform: uppercase;
                 }
             }
+
             .week-days {
                 border-bottom: 1px solid #3333;
             }
+
             .calendar-days-container {
                 .calendar-days {
                     width: 35px;
@@ -89,8 +154,8 @@
 
                         &::after {
                             content: '';
-                            width: 33px;
-                            height: 33px;
+                            width: 29px;
+                            height: 29px;
                             position: absolute;
                             top: 2px;
                             left: 2px;
