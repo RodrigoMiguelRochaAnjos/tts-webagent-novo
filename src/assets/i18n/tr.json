@@ -374,5 +374,27 @@
     "RESERVATION_SUMMARY": "Rezervasyon Özeti",
     "TICKET": "Bilet",
     "TICKETS": "Biletler",
-    "VIEW": "Görüntüle"
+    "VIEW": "Görüntüle",
+
+    "WEEK_DAY_SUNDAY": "P",
+	"WEEK_DAY_MONDAY": "P",
+	"WEEK_DAY_TUESDAY": "S",
+	"WEEK_DAY_WEDNSDAY": "Ç",
+    "WEEK_DAY_THURSDAY": "P",
+    "WEEK_DAY_FRIDAY": "C",
+    "WEEK_DAY_SATURDAY": "C",
+	"JANUARY": "Ocak",
+	"FEBRUARY": "Şubat",
+	"MARCH": "Mart",
+	"APRIL": "Nisan",
+	"MAY": "Mayıs",
+	"JUNE": "Haziran",
+	"JULY": "Temmuz",
+	"AUGUST": "Ağustos",
+	"SEPTEMBER": "Eylül",
+	"OCTOBER": "Ekim",
+	"NOVEMBER": "Kasım",
+	"DECEMBER": "Aralık",
+	"REVIEW_RESERVATION": "Rezervasyonu inceleyin"
+
 }

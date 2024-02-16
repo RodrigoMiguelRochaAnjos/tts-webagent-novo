@@ -386,11 +386,7 @@ export class TerminalService {
         const destinfoElement = element.className.includes('terminal-destinfo') ? element : null;
         if (destinfoElement) {
             const data = JSON.parse(destinfoElement.getAttribute('data-value')!.toString().replace(/\'/g, '"'));
-            this.router.navigate(['terminal/destination-information'], {
-                queryParams: {
-                    destinations: data.destinations,
-                },
-            });
+            this.router.navigate([`terminal/destination/info/${data.destinations}`]);
         } else {
             this.executeTerminalCommand(JSON.parse(element.getAttribute('data-value')!.toString().replace(/\'/g, '"')), emailElement!);
         }

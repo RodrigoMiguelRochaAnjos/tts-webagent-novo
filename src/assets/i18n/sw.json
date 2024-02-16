@@ -374,5 +374,27 @@
     "RESERVATION_SUMMARY": "Muhtasari wa Hifadhi",
     "TICKET": "Tiketi",
     "TICKETS": "Tiketi",
-    "VIEW": "Tazama"
+    "VIEW": "Tazama",
+
+    "WEEK_DAY_SUNDAY": "J",
+	"WEEK_DAY_MONDAY": "J",
+	"WEEK_DAY_TUESDAY": "J",
+	"WEEK_DAY_WEDNSDAY": "J",
+    "WEEK_DAY_THURSDAY": "A",
+    "WEEK_DAY_FRIDAY": "I",
+    "WEEK_DAY_SATURDAY": "J",
+	"JANUARY": "Januari",
+	"FEBRUARY": "Februari",
+	"MARCH": "Machi",
+	"APRIL": "Aprili",
+	"MAY": "Mei",
+	"JUNE": "Juni",
+	"JULY": "Julai",
+	"AUGUST": "Agosti",
+	"SEPTEMBER": "Septemba",
+	"OCTOBER": "Oktoba",
+	"NOVEMBER": "Novemba",
+	"DECEMBER": "Desemba",
+	"REVIEW_RESERVATION": "Kagua uhifadhi"
+
 }

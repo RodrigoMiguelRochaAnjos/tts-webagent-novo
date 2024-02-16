@@ -45,7 +45,29 @@
         padding: 10px 20px;
         cursor: pointer;
         &:hover {
-            background-color: #f0f0f0;
+          background-color: #f0f0f0;
+        }
+
+        label {
+          cursor: pointer;
+        }
+      }
+
+      .send-to-mail {
+        padding: 0;
+        height: 39.2px;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        
+        a {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: black;
+          cursor: pointer;
         }
       }
     }

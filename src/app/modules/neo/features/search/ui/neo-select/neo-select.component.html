@@ -1,0 +1,13 @@
+<div class="mobile-select">
+    <div class="value-show" (click)="toggle()">
+        <div class="triangle" [class.rotate]="open"></div>
+    </div>
+    <ul #selectWrapper [ngClass]="{ 'open': this.open }">
+        <li *ngFor="let option of this.options; index as i" (click)="this.select(option, i)">
+            <input class="option" type="checkbox" [checked]="option.selected">
+            <div>
+                {{ option.label }}
+            </div>
+        </li>
+    </ul>
+</div>

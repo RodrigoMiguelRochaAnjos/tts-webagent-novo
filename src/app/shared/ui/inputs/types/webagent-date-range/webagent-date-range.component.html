@@ -19,17 +19,17 @@
             <div class="left-control flex-container flex-middle flex-left" (click)="previousMonth()">
                 <
             </div>
-            <div>{{ date.format('MMMM') }} <span (click)="showYearPopup(year, 'year-popup')">{{ date.format('YYYY') }}</span></div>
+            <div>{{ date.format('MMMM').toUpperCase() | translate }} <span (click)="showYearPopup(year, 'year-popup')">{{ date.format('YYYY') }}</span></div>
             </div>
             <div class="flex-container flex-center">
                 <div class="flex-container flex-center flex-middle calendar-days-container">
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SUNDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_MONDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_TUESDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_WEDNESDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_THURSDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_FRIDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SATURDAY" | translate }}</div>
                 </div>
             </div>
             <div class="calendar-days-container flex-container">
@@ -43,20 +43,20 @@
         <div class="date-range-container">
             <div class="month-control flex-container flex-center flex-middle">
 
-                <div>{{ dateNext.format('MMMM') }} <span (click)="showYearPopup(year, 'year-popup')">{{ dateNext.format('YYYY') }}</span></div>
+                <div>{{ dateNext.format('MMMM').toUpperCase() | translate }} <span (click)="showYearPopup(year, 'year-popup')">{{ dateNext.format('YYYY') }}</span></div>
                 <div class="right-control flex-container flex-middle flex-right" (click)="nextMonth()">
                     >
                 </div>
             </div>
             <div class="flex-container flex-center">
                 <div class="flex-container flex-center flex-middle calendar-days-container">
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SUNDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_MONDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_TUESDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_WEDNESDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_THURSDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_FRIDAY" | translate }}</div>
+                    <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SATURDAY" | translate }}</div>
                 </div>
             </div>
             <div class="calendar-days-container flex-container">

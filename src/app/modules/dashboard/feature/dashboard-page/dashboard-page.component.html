@@ -1,7 +1,12 @@
 
-<webagent-input  [type]="InputType.DATE_FILTER" [label]="('PKEY_LABEL' | translate)"/>
+<webagent-input  [type]="InputType.DATE_FILTER" [label]="('PKEY_LABEL' | translate)" (change)="logEvent($event)"/>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<webagent-input [type]="InputType.TEXT" [label]="('COUNTRY' | translate)" [required]="true"/>
 
 <webagent-dropdown [search]="true">
     <webagent-option [value]="'123'">Value</webagent-option>
 </webagent-dropdown>
+
+<!-- <webagent-slider
+    (valueChange)="logEvent($event)"
+></webagent-slider> -->

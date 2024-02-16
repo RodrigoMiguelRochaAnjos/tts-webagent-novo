@@ -214,8 +214,11 @@
             font-weight: 400;
             position: relative;
 
+            transition: background-color ease-in-out .3s;
+
             &.selected {
                 color: #11214A;
+                background-color: aliceblue;
             }
 
             &:hover {

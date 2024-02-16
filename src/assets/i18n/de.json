@@ -374,5 +374,28 @@
     "RESERVATION_SUMMARY": "Reservierungszusammenfassung",
     "TICKET": "Ticket",
     "TICKETS": "Tickets",
-    "VIEW": "Ansehen"
+    "VIEW": "Ansehen",
+
+    "WEEK_DAY_SUNDAY": "S",
+	"WEEK_DAY_MONDAY": "M",
+	"WEEK_DAY_TUESDAY": "D",
+	"WEEK_DAY_WEDNESDAY": "M",
+	"WEEK_DAY_THURSDAY": "D",
+	"WEEK_DAY_FRIDAY": "F",
+	"WEEK_DAY_SATURDAY": "S",
+	"JANUARY": "Januar",
+	"FEBRUARY": "Februar",
+	"MARCH": "März",
+	"APRIL": "April",
+	"MAY": "Mai",
+	"JUNE": "Juni",
+	"JULY": "Juli",
+	"AUGUST": "August",
+	"SEPTEMBER": "September",
+	"OCTOBER": "Oktober",
+	"NOVEMBER": "November",
+	"DECEMBER": "Dezember",
+	"REVIEW_RESERVATION": "Überprüfen Sie die Reservierung"
+
+
 }

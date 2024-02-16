@@ -374,5 +374,27 @@
     "RESERVATION_SUMMARY": "आरक्षण संक्षिप्तीकरण",
     "TICKET": "टिकट",
     "TICKETS": "टिकटहरू",
-    "VIEW": "हेर्नुहोस्"
+    "VIEW": "हेर्नुहोस्",
+
+    "WEEK_DAY_SUNDAY": "आ",
+	"WEEK_DAY_MONDAY": "स",
+	"WEEK_DAY_TUESDAY": "म",
+	"WEEK_DAY_WEDNSDAY": "बु",
+    "WEEK_DAY_THURSDAY": "बि",
+    "WEEK_DAY_FRIDAY": "शु",
+    "WEEK_DAY_SATURDAY": "श",
+	"JANUARY": "बैशाख",
+	"FEBRUARY": "जेठ",
+	"MARCH": "अषाढ",
+	"APRIL": "श्रावण",
+	"MAY": "भदौ",
+	"JUNE": "आश्वयुज",
+	"JULY": "कार्तिक",
+	"AUGUST": "मंसिर",
+	"SEPTEMBER": "पुष",
+	"OCTOBER": "माघ",
+	"NOVEMBER": "फाल्गुण",
+	"DECEMBER": "चैत",
+	"REVIEW_RESERVATION": "आरक्षण समीक्षा गर्नुहोस्"
+
 }

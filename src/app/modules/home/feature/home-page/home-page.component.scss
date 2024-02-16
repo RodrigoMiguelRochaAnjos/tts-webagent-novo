@@ -220,14 +220,12 @@
                 bottom: 2%;
                 right: 0%;
                 display: flex;
-                flex-wrap: wrap;
-                flex-direction: column;
                 padding-right: 50px;
                 align-items: flex-end;
                 
                 a{
                     text-decoration: none;
-                    color: black;
+                    color: #12214A;
                     margin-bottom: 5px;
                 }
 
@@ -361,4 +359,8 @@
             }
         }
     }
+}
+
+.link{
+    text-decoration:none !important;
 }

@@ -173,6 +173,8 @@ export class TerminalPage implements OnInit, AfterViewInit {
         this.isBrandAcc = false;
         document.getElementById('terminal1')!.style.pointerEvents = 'auto';
         this.allowCommands();
+
+        this.modalService.hideModal("brands-and-acillaries");
     }
 
     onTerminalSubmit(element: HTMLInputElement): void {

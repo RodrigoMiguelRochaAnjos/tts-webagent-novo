@@ -11,7 +11,7 @@ export class AirSearchPrice {
     preferredCurrency!: string;
     taxes!: Taxes;
     totalAmount!: number;
-    fees!: Fees
+    fees!: Fees;
 
     isValid(): boolean {
         return (

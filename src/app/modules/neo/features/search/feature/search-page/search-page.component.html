@@ -3,13 +3,20 @@
     <flight-search-form></flight-search-form>
 </div>
 <div class="result-section" *ngIf="(this.results$ | async)!.length > 0">
-    <p>Showing {{ showing }} results out of {{ max }}</p>
-
-    <div class="results">
+    <app-better-filters *ngIf="!isLoading"></app-better-filters>
+    <div class="results" #results (wheel)="infiniteDetector($event)">
+        <p>{{ showingResultsString }}</p>
         <ng-container *ngFor="let result of (this.results$ | async); let i = index">
             <div (onScreen)="onScreen($event)" class="result" style="--index: {{i}}" *ngIf="result.show && hasOptions(result)">
                 <app-search-result [result]="result"></app-search-result>
             </div>
         </ng-container>
+        <div #infiniteScrollContainer>
+            <!-- Your content goes here -->
+        
+            <div #infiniteScrollLoader>
+                Loading more...
+            </div>
+        </div>
     </div>
 </div>

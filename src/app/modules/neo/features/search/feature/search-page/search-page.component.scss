@@ -33,11 +33,18 @@
     }
 
     .result-section {
-        width: 70%;
+        width: 100%;
         margin: 0px auto;
         padding-top: 30px;
+        display: flex;
+        app-better-filters{
+            width: 16%;
+            margin: 0px 2%;
+        }
         .results {
+            width: 80%;
             .result {
+                width: 80%;
                 transform: translateX(-100%);
                 opacity: 0;
 

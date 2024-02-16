@@ -374,5 +374,28 @@
     "RESERVATION_SUMMARY": "Resumen de Reserva",
     "TICKET": "Billete",
     "TICKETS": "Billetes",
-    "VIEW": "Ver"
+    "VIEW": "Ver",
+
+    "WEEK_DAY_SUNDAY": "D",
+	"WEEK_DAY_MONDAY": "L",
+	"WEEK_DAY_TUESDAY": "M",
+	"WEEK_DAY_WEDNESDAY": "M",
+	"WEEK_DAY_THURSDAY": "J",
+	"WEEK_DAY_FRIDAY": "V",
+	"WEEK_DAY_SATURDAY": "S",
+	"JANUARY": "Enero",
+	"FEBRUARY": "Febrero",
+	"MARCH": "Marzo",
+	"APRIL": "Abril",
+	"MAY": "Mayo",
+	"JUNE": "Junio",
+	"JULY": "Julio",
+	"AUGUST": "Agosto",
+	"SEPTEMBER": "Septiembre",
+	"OCTOBER": "Octubre",
+	"NOVEMBER": "Noviembre",
+	"DECEMBER": "Diciembre",
+	"REVIEW_RESERVATION": "Revisar reserva"
+
+
 }

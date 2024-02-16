@@ -18,13 +18,13 @@
         <div class="field-container" (keyup.enter)="this.login()">
 
             <div class="field son">
-                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK"/>
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.son" id="son" [label]="'SON'" [theme]="Theme.DARK" (input)="capitalizeInput($event)" />
             </div>
             <div class="field password">
                 <webagent-input [type]="InputType.PASSWORD" [(ngModel)]="this.loginRequest.pwd" id="password" [label]="'Password'" [theme]="Theme.DARK"/>
             </div>
             <div class="field pcc">
-                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.pcc" id="pcc" [label]="'PCC'" [theme]="Theme.DARK"/>
+                <webagent-input [type]="InputType.TEXT" [(ngModel)]="this.loginRequest.pcc" id="pcc" [label]="'PCC'" [theme]="Theme.DARK" (input)="capitalizeInput($event)" />
             </div>
     
             <div class="login-buttons">
@@ -47,9 +47,11 @@
     </div>
 
     <div class="footer">
+        <a href="https://tts.zendesk.com/hc/en-us/categories/200114315-TTS-WebAgent" target="_blank" class="link"> 
         <div class="question-mark">
             <span>?</span>
         </div>
+    </a>
     </div>
 </div>
 
@@ -81,10 +83,10 @@
         </div>
         
         <div class="bottom-right">
-            <a href="https://www.facebook.com/TravelTechSolutions"><i class="fa-brands fa-square-facebook"></i></a>
-            <a href="https://linkedin.com/company/tts-lab"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://twitter.com/tts_travel"><i class="fa-brands fa-square-x-twitter"></i></a>
-            <a href="https://www.youtube.com/@TtsTravelTechSolutions"><i class="fa-brands fa-square-youtube"></i></a>
+            <a href="https://www.facebook.com/TravelTechSolutions"  rel="noopener" target="_blank"><i class="fa-brands fa-square-facebook"></i></a>
+            <a href="https://linkedin.com/company/tts-lab"  rel="noopener" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://twitter.com/tts_travel"  rel="noopener" target="_blank"><i class="fa-brands fa-square-x-twitter"></i></a>
+            <a href="https://www.youtube.com/@TtsTravelTechSolutions"  rel="noopener" target="_blank"><i class="fa-brands fa-square-youtube"></i></a>
 
         </div>
 

@@ -51,9 +51,27 @@
     <div *ngIf="activeTab === 3" class="menu-tab-content">
         <ul lines="full">
             <li button detail (click)="getPnrs()">
-                <label>{{'MY_PNRS' | translate}}</label>
                 <i class="fa-solid fa-calendar"></i>
+                <label>{{'MY_PNRS' | translate}}</label>
                 <!-- <ion-icon slot="start" name="calendar"></ion-icon> -->
+            </li>
+            <li (click)="viewTripItinerary()">
+                <i class="fa-solid fa-list-check"></i>
+                <label> {{ 'REVIEW_RESERVATION' | translate }} </label>
+            </li>
+            <li (click)="printTerminal()">
+                <i class="fa-solid fa-print"></i>
+                <label> {{ 'PRINT_TERMINAL_RESPONSE' | translate }} </label>
+            </li>
+            <li class="send-to-mail">
+                    <a href="mailto:example@example.com">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <label> {{ "SEND_BY_EMAIL" | translate }}</label>
+                </a> 
+            </li>
+            <li (click)="toggleDoubleTerminal()">
+                <i class="fa-solid fa-terminal"></i>
+                <label> {{ "DOUBLE_WINDOW" | translate }}</label>
             </li>
         </ul>
     </div>
