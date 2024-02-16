@@ -182,4 +182,13 @@ export class RightMenuComponent implements OnInit {
         windowPrint!.document.write(document.getElementById('terminal-window')!.innerHTML);
         windowPrint!.print();
     }
+
+    toggleDoubleTerminal(): void {
+        const showTwoTerminals = !this.terminalService.showTwoTerminalsSource.getValue();
+        this.terminalService.showTwoTerminalsSource.next(showTwoTerminals);
+        // this.statisticsService.addClientStat(
+        //     showTwoTerminals ? "DoubleWindowON" : "DoubleWindowOFF"
+        // );
+        this.menuService.toggleMenu('right');
+    }
 }
