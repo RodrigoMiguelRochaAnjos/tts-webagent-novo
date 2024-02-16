@@ -62,7 +62,6 @@ export class SearchService {
         if (!(user instanceof AuthenticatedUser)) return undefined;
 
         const http: HttpHeaders = new HttpHeaders({
-            'skip': "true",
             'Content-Type': 'application/json',
             "Authorization": `Bearer ${user.token}`
         });

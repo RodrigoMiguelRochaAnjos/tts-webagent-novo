@@ -11,6 +11,7 @@ import { DestroyService } from 'src/app/core/services/destroy.service';
 import { ModalControllerService } from 'src/app/core/services/modal-controller.service';
 import { Deposit } from 'src/app/shared/models/deposit.model';
 import { patterns } from 'src/app/shared/utils/validation-patterns';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-wallet-page',
@@ -41,7 +42,7 @@ export class WalletPageComponent implements OnInit{
     }
 
     ngOnInit(): void {
-        this.balanceService.loadTransactions(this.numDays);
+        this.updateTransactions();
     }
 
     get daysIntervalValues(): string[] {
@@ -49,30 +50,10 @@ export class WalletPageComponent implements OnInit{
     }
 
     updateTransactions(): void {
+        if(this.dateRange == null) return;
+        
         this.balanceService.resetTransactions();
-        this.balanceService.loadTransactions(this.numDays, this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
-    }
-
-    updateDays(choice: DayInterval): void {
-        switch(choice) {
-            case DayInterval.YESTERDAY:
-                this.numDays = 1;
-                break;
-            case DayInterval.LAST_7_DAYS:
-                this.numDays = 7;
-                break;
-            case DayInterval.LAST_30_DAYS:
-                this.numDays = 30;
-                break;
-            case DayInterval.LAST_90_DAYS:
-                this.numDays = 90;
-                break;
-            case DayInterval.ALL_TIME:
-                this.numDays = undefined;
-                break;
-        }
-
-        this.updateTransactions();
+        this.balanceService.loadTransactions(this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
     }
 
     toggleModal(content: any, modalId: string) {

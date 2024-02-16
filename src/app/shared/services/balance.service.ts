@@ -66,7 +66,7 @@ export class BalanceService {
         });
     }
 
-    loadTransactions(numberOfDays?: number, startDate?: string, endDate?: string) {
+    loadTransactions(startDate?: string, endDate?: string) {
         this.authService.getUser().subscribe((user: User) => {
             if (!(user instanceof AuthenticatedUser)) return;
 
@@ -76,7 +76,9 @@ export class BalanceService {
 
             let remoteUrl: string = `${this.ENDPOINT}/account/transactions?page=${this.page}&size=${this.size}`;
 
-            if (numberOfDays != null) remoteUrl += `&limit=${numberOfDays}`;
+            // if (numberOfDays != null) remoteUrl += `&limit=${numberOfDays}`;
+
+            console.log(startDate, endDate)
 
             if (startDate != null) remoteUrl += `&startdate=${startDate}`;
 

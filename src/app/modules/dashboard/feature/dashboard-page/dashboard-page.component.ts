@@ -10,6 +10,7 @@ import { CheckoutService } from 'src/app/modules/neo/data-access/checkout.servic
 import { ReservationService } from 'src/app/modules/neo/data-access/reservation/reservation.service';
 import { AirCheckoutDetailsResponse } from 'src/app/modules/neo/features/search/models/air-checkout-details-response.model';
 import { AirSearchResponse } from 'src/app/modules/neo/models/responses/air-search-result/air-search-result-response.model';
+import { DateRange } from 'src/app/shared/models/date-range.model';
 import { AlertType } from 'src/app/shared/ui/alerts/alert-type.enum';
 import { InputType } from 'src/app/shared/ui/inputs/input-type.enum';
 
@@ -30,7 +31,7 @@ export class DashboardPageComponent implements OnInit{
     ngOnInit(): void {
     }
 
-    logEvent(event: number) {
+    logEvent(event: DateRange) {
         console.log(event);
     }
 }
