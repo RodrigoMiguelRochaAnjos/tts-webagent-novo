@@ -349,6 +349,11 @@
 	"SEPTEMBER": "September",
 	"OCTOBER": "October",
 	"NOVEMBER": "November",
-	"DECEMBER": "December"
+	"DECEMBER": "December",
+    "LAST_7_DAYS": "Last 7 days",
+    "LAST_30_DAYS": "Last 30 days",
+    "LAST_90_DAYS": "Last 90 days",
+    "LAST_YEAR": "Last year",
+    "ALL_TIME": "All time"
 }
 
