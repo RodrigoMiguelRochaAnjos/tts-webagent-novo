@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, ViewChild } from '@angular/core';
 import { WebagentBaseComponent } from '../webagent-base/webagent-base.component';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -47,12 +47,12 @@ export class WebagentDateFilterComponent extends WebagentBaseComponent{
     constructor(
         private formBuilder: FormBuilder,
         private modalService: ModalControllerService,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private cdr: ChangeDetectorRef
     ) {
         super();
 
         this.initDateForm();
-        this.selectInterval(DayInterval.LAST_90_DAYS);
     }
 
     ngOnInit(): void {
@@ -73,12 +73,28 @@ export class WebagentDateFilterComponent extends WebagentBaseComponent{
         this.daysArray = this.createCalendar(this.date);
         this.daysNextArray = this.createCalendar(this.dateNext);
 
+        setTimeout(() => {
+            this.selectInterval(DayInterval.LAST_90_DAYS);
+        }, 100);
+
     }
 
     public selectInterval(dayInterval?: DayInterval) {
         if(dayInterval == null) {
             this.selectedInterval = DayInterval.ALL_TIME
-            this.dateForm.setValue({ 'dateFrom': moment.min().format("DD/MM/YYYY"), 'dateTo': moment.max().format("DD/MM/YYYY") })
+            this.dateForm.setValue({ 'dateFrom': moment("1970-01-01"), 'dateTo': moment() })
+
+            let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
+            let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
+
+            this.value = new DateRange();
+
+            this.value.dateFrom = dateFrom;
+            this.value.dateTo = dateTo;
+
+            this.update();
+
+            this.calendarOpen = false;
             return;
         }
 
@@ -99,14 +115,19 @@ export class WebagentDateFilterComponent extends WebagentBaseComponent{
                 break;
         }
 
-        this.dateForm.setValue({ 'dateFrom': moment().subtract(interval, 'days').format("DD/MM/YYYY"), 'dateTo': moment().format("DD/MM/YYYY") });
+        this.dateForm.setValue({ 'dateFrom': moment().subtract(interval, 'days'), 'dateTo': moment() });
+
+        let dateFrom = moment(this.dateForm.value.dateFrom, 'DD/MM/YYYY');
+        let dateTo = moment(this.dateForm.value.dateTo, 'DD/MM/YYYY');
 
         this.value = new DateRange();
 
-        this.value.dateFrom = this.dateForm.get('dateFrom');
-        this.value.dateTo = this.dateForm.get('dateTo');
+        this.value.dateFrom = dateFrom;
+        this.value.dateTo = dateTo;
 
         this.update();
+
+        this.calendarOpen = false;
     }
 
     public initDateForm(): FormGroup {
