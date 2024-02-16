@@ -329,6 +329,31 @@
 	"RESERVATION_SUMMARY": "Reservation Summary",
 	"TICKET": "Ticket",
 	"TICKETS": "Tickets",
-	"VIEW": "View"
+	"VIEW": "View",
+	
+	"WEEK_DAY_SUNDAY": "S",
+	"WEEK_DAY_MONDAY": "M",
+	"WEEK_DAY_TUESDAY": "T",
+	"WEEK_DAY_WEDNESDAY": "W",
+	"WEEK_DAY_THURSDAY": "T",
+	"WEEK_DAY_FRIDAY": "F",
+	"WEEK_DAY_SATURDAY": "S",
+	"JANUARY": "January",
+	"FEBRUARY": "February",
+	"MARCH": "March",
+	"APRIL": "April",
+	"MAY": "May",
+	"JUNE": "June",
+	"JULY": "July",
+	"AUGUST": "August",
+	"SEPTEMBER": "September",
+	"OCTOBER": "October",
+	"NOVEMBER": "November",
+	"DECEMBER": "December",
+    "LAST_7_DAYS": "Last 7 days",
+    "LAST_30_DAYS": "Last 30 days",
+    "LAST_90_DAYS": "Last 90 days",
+    "LAST_YEAR": "Last year",
+    "ALL_TIME": "All time"
 }
 
