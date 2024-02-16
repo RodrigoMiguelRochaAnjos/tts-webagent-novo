@@ -206,6 +206,7 @@ export class WebagentDateFilterComponent extends WebagentBaseComponent{
         this.value.dateFrom = dateFrom;
         this.value.dateTo = dateTo;
 
+        console.log(this.value);
         this.update();
 
         this.calendarOpen = false;

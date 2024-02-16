@@ -42,13 +42,13 @@
             <div class="start-date"> <!--(click)="previousMonth()"-->
                 <b>{{ 'START_DATE' | translate }}</b>
                 <p>dd/mm/yyyy</p>
-                <h4 *ngIf="this.dateForm.get('dateFrom')?.value">{{ this.dateForm.get('dateFrom')?.value.format("DD/MM/YYYY") }}</h4>
+                <h4>{{ getDateStart().format("DD/MM/YYYY") }}</h4>
             </div>
             <div class="to">To</div>
             <div class="end-date"> <!-- (click)="previousMonth()"-->
                 <b>{{ 'END_DATE' | translate }}</b>
                 <p>dd/mm/yyyy</p>
-                <h4 *ngIf="this.dateForm.get('dateTo')?.value">{{ this.dateForm.get('dateTo')?.value.format("DD/MM/YYYY") }}</h4>
+                <h4>{{ getDateEnd().format("DD/MM/YYYY") }}</h4>
             </div>
         </div>
         <div class="flex-container flex-center week-days">

@@ -50,7 +50,11 @@ export class WalletPageComponent implements OnInit{
     }
 
     updateTransactions(): void {
-        if(this.dateRange == null) return;
+        if (this.dateRange == null) return;
+        if (this.dateRange.dateFrom == null) return;
+        if (this.dateRange.dateTo == null) return;
+
+        console.log(this.dateRange);
         
         this.balanceService.resetTransactions();
         this.balanceService.loadTransactions(this.dateRange.dateFrom?.format("YYYY-MM-DD"), this.dateRange.dateTo?.format("YYYY-MM-DD"));
