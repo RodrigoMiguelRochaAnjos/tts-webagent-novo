@@ -143,7 +143,6 @@ export class WebagentDropdownComponent implements ControlValueAccessor, AfterCon
 
     handleArrowDown(): void {
         if (this.optionIndex >= this.options.length - 1) return;
-        console.log(this.optionIndex);
 
         this.optionIndex++;
 

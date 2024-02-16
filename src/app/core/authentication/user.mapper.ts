@@ -137,8 +137,6 @@ export class UserMapper {
 
         user.contact = newContact;
 
-        console.log(user.contact.isValid());
-
         switch (storedObject.data.gds) {
             case 'Galileo':
                 user.gds = new Galileo();

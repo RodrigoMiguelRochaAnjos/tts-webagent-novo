@@ -6,47 +6,81 @@
     <!-- <webagent-input [type]="InputType.DROPDOWN" [options]="this.getPreviousYears()" (change)="changeYear($event)" /> -->
 </ng-template>
 
-<div #calendar class="calendar-container">
+<div class="range-preview" (click)="openCalendar()">
+    <div class="range">
+        {{ this.selectedInterval | translate}}
+    </div>
+    <div class="range-dates">
+        <div class="start">{{ getDateStart().format("MMMM Do") }}</div>
+        <div>TO</div>
+        <div class="end">{{ getDateEnd().format("MMMM Do") }}</div>
+    </div>
+</div>
+
+<div #calendar class="calendar-container" [ngClass]="{ 'show': calendarOpen }">
     <div class="date-interval">
         <ul>
-            <li>LAST 90 DAYS</li>
-            <li>LAST 90 DAYS</li>
-            <li>LAST 90 DAYS</li>
-            <li>LAST 90 DAYS</li>
-            <li>LAST 90 DAYS</li>
+            <li (click)="selectInterval(DayInterval.LAST_90_DAYS)"
+                [ngClass]="{ 'selected': this.selectedInterval === DayInterval.LAST_90_DAYS}">{{
+                DayInterval.LAST_90_DAYS | translate}}</li>
+            <li (click)="selectInterval(DayInterval.LAST_30_DAYS)"
+                [ngClass]="{ 'selected': this.selectedInterval === DayInterval.LAST_30_DAYS}">{{
+                DayInterval.LAST_30_DAYS | translate}}</li>
+            <li (click)="selectInterval(DayInterval.LAST_7_DAYS)"
+                [ngClass]="{ 'selected': this.selectedInterval === DayInterval.LAST_7_DAYS}">{{ DayInterval.LAST_7_DAYS
+                | translate}}</li>
+            <li (click)="selectInterval(DayInterval.YESTERDAY)"
+                [ngClass]="{ 'selected': this.selectedInterval === DayInterval.YESTERDAY}">{{ DayInterval.YESTERDAY
+                |translate}}</li>
+            <li (click)="selectInterval()" [ngClass]="{ 'selected': this.selectedInterval === DayInterval.ALL_TIME}">{{
+                DayInterval.ALL_TIME | translate}}</li>
+            <li [ngClass]="{ 'selected': this.selectedInterval === DayInterval.CUSTOM }">{{ "CUSTOM" | translate}}</li>
         </ul>
     </div>
     <div class="date-range-container">
         <div class="date-range-display flex-container flex-center flex-middle">
-            <div class="start-date" (click)="previousMonth()">
+            <div class="start-date"> <!--(click)="previousMonth()"-->
                 <b>{{ 'START_DATE' | translate }}</b>
                 <p>dd/mm/yyyy</p>
-                <h4>01/07/2023</h4>
+                <h4>{{ getDateStart().format("DD/MM/YYYY") }}</h4>
             </div>
             <div class="to">To</div>
-            <div class="end-date" (click)="previousMonth()">
+            <div class="end-date"> <!-- (click)="previousMonth()"-->
                 <b>{{ 'END_DATE' | translate }}</b>
                 <p>dd/mm/yyyy</p>
-                <h4>01/07/2023</h4>
+                <h4>{{ getDateEnd().format("DD/MM/YYYY") }}</h4>
             </div>
         </div>
-            <div class="flex-container flex-center week-days">
-                <div class="flex-container flex-center flex-middle calendar-days-container">
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">M</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">W</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">T</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">F</div>
-                    <div class="flex-container flex-center flex-middle calendar-days week-day">S</div>
-                </div>
-            </div>
-            <div class="calendar-days-container flex-container">
-                <div class="calendar-days flex-container flex-center flex-middle"
-                    [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
-                    *ngFor="let day of daysArray" (click)="selectedDate(day)" (mouseenter)="this.hoveredDate = day">
-                    <div *ngIf="day">{{ day.date() }}</div>
-                </div>
+        <div class="flex-container flex-center week-days">
+            <div class="flex-container flex-center flex-middle calendar-days-container">
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SUNDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_MONDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_TUESDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_WEDNESDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_THURSDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_FRIDAY" |
+                    translate }}</div>
+                <div class="flex-container flex-center flex-middle calendar-days week-day">{{ "WEEK_DAY_SATURDAY" |
+                    translate }}</div>
             </div>
         </div>
+        <div class="calendar-days-container flex-container">
+            <div class="calendar-days flex-container flex-center flex-middle"
+                [ngClass]="{'inactive' : (!day || withinBounds(day)), 'today': todayCheck(day), 'selected': isSelected(day), 'hovered': isHovered(day)}"
+                *ngFor="let day of daysArray" (click)="selectedDate(day)" (mouseenter)="this.hoveredDate = day">
+                <div *ngIf="day">{{ day.date() }}</div>
+            </div>
+        </div>
+        <select (change)="changeMonth($event)" style="background: url('assets/caret-down-solid.svg') no-repeat right center; background-size: 10px;">
+            <option *ngFor="let month of MONTHS" value="{{ month }}" [selected]="this.date.format('MMMM').toUpperCase() === month">{{ month | translate }}</option>
+        </select>
+        <select style="background: url('assets/caret-down-solid.svg') no-repeat right center; background-size: 10px;">
+            <option *ngFor="let year of this.getPreviousYears()" value="{{ year }}" [selected]="this.date.format('YYYY').toUpperCase() === year" (click)="changeYear(year)">{{ year | translate }}</option>
+        </select>
+    </div>
 </div>

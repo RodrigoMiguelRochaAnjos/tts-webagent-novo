@@ -3,5 +3,6 @@ export enum DayInterval {
     LAST_7_DAYS = 'LAST_7_DAYS',
     LAST_30_DAYS = 'LAST_30_DAYS',
     LAST_90_DAYS = 'LAST_90_DAYS',
-    ALL_TIME = 'ALL_TIME'
+    ALL_TIME = 'ALL_TIME',
+    CUSTOM = 'CUSTOM'
 }
