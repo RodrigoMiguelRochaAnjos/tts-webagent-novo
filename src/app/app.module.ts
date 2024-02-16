@@ -13,6 +13,7 @@ import { AirSegmentComponent } from './modules/neo/ui/air-segment/air-segment.co
 import { SummarySegmentComponent } from './modules/neo/ui/summary-segment/summary-segment.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { DestinationInfoComponent } from './modules/terminal/feature/destination-info/destination-info.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
