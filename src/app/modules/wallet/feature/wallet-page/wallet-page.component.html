@@ -2,11 +2,12 @@
     <div class="top-bar">
         <h4>{{'WALLET' | translate}} <button class="button-small call-to-action" (click)="this.toggleModal(customContent1, 'modal1')">{{'ADD_FUNDS' | translate}}</button></h4>
         <div class="date-filter">
-            <webagent-dropdown (change)="updateDays($event)">
+        <webagent-input  [type]="InputType.DATE_FILTER" [(ngModel)]="this.dateRange" (change)="updateTransactions()" />
+
+            <!-- <webagent-dropdown (change)="updateDays($event)">
                 <webagent-option *ngFor="let dayRange of this.daysIntervalValues" [value]="dayRange">{{dayRange | translate}}</webagent-option>
             </webagent-dropdown>
-            <!-- <webagent-input [type]="InputType.DROPDOWN" [value]="DayInterval.LAST_30_DAYS" [options]="daysIntervalValues" (change)="updateDays($event)"/> -->
-            <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRange" (change)="updateTransactions()" />
+            <webagent-input [type]="InputType.DATE_RANGE" [(ngModel)]="this.dateRange" (change)="updateTransactions()" /> -->
 
         </div>
     </div>

@@ -3,12 +3,12 @@
 <ng-template #infoList>
     <ul>
         <ng-container *ngFor="let info of information">
-            <li (click)="toggleMoreInformation(info)" >
+            <li class="country-info-selection" (click)="toggleMoreInformation(info)" [ngClass]="{'active':  info.ShowingMore}" >
                 <label>{{ info.CountryName }}</label>
         </li>
             <ng-container *ngIf="info.ShowingMore">
                 <div class="ion-padding content">
-                    <p><b>Type: </b>{{ info.Type }}</p>
+                    <p class="first-paragraph"><b>Type: </b>{{ info.Type }}</p>
                     <p><b>Source: </b>{{ info.Source }}</p>
                     <p><b>Published Date: </b>{{ info.PublishedDate }}</p>
                     <p style="text-align: justify;" [innerHTML]="info.Content"></p>
@@ -18,7 +18,7 @@
     </ul>
 </ng-template>
 <div class="ion-padding credits">
-    <p>
+    <p class="flight-info">
         This information is provided by IATA via the TIMATIC GDS.<br />This information is only provided during the
         COVID-19 crisis as a
         service to the industry, however user and any other third parties shall not without the prior written permission
@@ -31,7 +31,7 @@
         merge it with, or permit
         such inclusion in or merge with, another archival or searchable system.
     </p>
-    <p>
+    <p class="flight-info">
         The information is correct to the best of IATA's knowledge at the time of publication and is being reviewed and
         updated on an ongoing
         basis by IATA staff, given the rapidly evolving nature of the international response to the COVID-19 outbreak

@@ -309,7 +309,7 @@
 	"WALLET": "Wallet",
     "INVALID_SETTINGS": "Your account settings are invalid",
 	"FREQUENT_FLYER_NUMBER": "Add frequent flyer number",
-
+	"SHOWING_RESULTS": "Showing [value] results of [value]",
 	"START_DATE": "Start Date",
 	"END_DATE": "End Date",
 	"CHOOSE_YEAR": "Choose a year",
@@ -330,6 +330,9 @@
 	"TICKET": "Ticket",
 	"TICKETS": "Tickets",
 	"VIEW": "View",
+	"MY_BOOKINGS": "My Bookings",
+	"ADD_FUNDS": "Add Funds",
+	"MINIMUM_AMOUNT": "Minimum amount",
 	
 	"WEEK_DAY_SUNDAY": "S",
 	"WEEK_DAY_MONDAY": "M",
@@ -350,6 +353,11 @@
 	"OCTOBER": "October",
 	"NOVEMBER": "November",
 	"DECEMBER": "December",
-	"REVIEW_RESERVATION": "Review reservation"
+	"REVIEW_RESERVATION": "Review reservation",
+    "LAST_7_DAYS": "Last 7 days",
+    "LAST_30_DAYS": "Last 30 days",
+    "LAST_90_DAYS": "Last 90 days",
+    "LAST_YEAR": "Last year",
+    "ALL_TIME": "All time"
 }
 

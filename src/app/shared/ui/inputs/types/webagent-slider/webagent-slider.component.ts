@@ -45,8 +45,6 @@ export class WebagentSliderComponent implements AfterViewInit{
     
                 this.threshHolds.push(end);
             }
-    
-            console.log(this.threshHolds);
         }
     }
 
@@ -60,7 +58,6 @@ export class WebagentSliderComponent implements AfterViewInit{
     }
 
     onThumbDown(event: MouseEvent, cursor: 'LEFT' | 'RIGHT') {
-        console.log(this.customSlider);
         const rect = this.customSlider.nativeElement.getBoundingClientRect();
         // const rect = this.elementRef.nativeElement.getBoundingClientRect();
 
@@ -92,7 +89,6 @@ export class WebagentSliderComponent implements AfterViewInit{
 
         if (cursor === 'LEFT' && distanceLeft > 100 - this.thumbRight) {
             distanceLeft = 100 - this.thumbRight;
-            console.log("DENIED");
             return;
         }
         if (cursor === 'RIGHT' && distanceRight > 100 - this.thumbLeft) return;
@@ -138,7 +134,6 @@ export class WebagentSliderComponent implements AfterViewInit{
                 }
                 break;
             case 'RIGHT':
-                console.log(closestThresholdRight);
                 if (closestThresholdRight != null && distanceRight >= closestThresholdRight) {
                     this.thumbRight = closestThresholdRight;
                     break;
@@ -147,8 +142,6 @@ export class WebagentSliderComponent implements AfterViewInit{
                 }
                 break;
         }
-
-        console.log(this.thumbRight);
 
         this.value.min = (this.max / 100) * this.thumbLeft;
         this.value.max = this.max - ((this.max / 100) * this.thumbRight);
@@ -193,7 +186,6 @@ export class WebagentSliderComponent implements AfterViewInit{
                     this.value.min = 0;
                     (event.target as HTMLInputElement).value = "0.00";
                     this.minInput.nativeElement.style.width = `4ch`;
-                    console.log("RESET")
                     return;
                 }
 

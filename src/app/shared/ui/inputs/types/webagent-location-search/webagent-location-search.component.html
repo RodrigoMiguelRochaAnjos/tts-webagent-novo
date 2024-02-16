@@ -3,7 +3,7 @@
     <div class="group"  *ngFor="let city of (this.results$ | async); let i = index" (click)="locationSelected($event, city)" [class.selected]="i === cityIndex" (mouseup)="this.cityIndex = i">
         <span><i class="fa-solid fa-location-dot"></i> {{ city.name }}, {{ city.country.name }}</span>
 
-        <div class="airport" *ngFor="let airport of city.airports; let j = index" (click)="locationSelected($event, city, airport)" [class.selected]="j === airportIndex" (mouseup)="this.airportIndex = j">
+        <div class="airport" *ngFor="let airport of city.airports; let j = index" (click)="locationSelected($event, city, airport)" [class.selected]="j === airportIndex && i === cityIndex" (mouseup)="this.airportIndex = j">
             <i class="fa-solid fa-plane"></i> {{airport.name}}
         </div>
     </div>

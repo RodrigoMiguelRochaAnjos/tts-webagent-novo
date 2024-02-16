@@ -109,10 +109,10 @@ export class AuthService implements OnDestroy {
                             this.processLogin((this.userMapper.mapLoginToUser(loginRequest, response) as IncompleteUser));
                             break;
                         case AuthValidators.HAS_ALERT:
-                            this.alertService.show(AlertType.ERROR, 'HAS ALERTS');
+                            this.alertService.show(AlertType.ERROR, response.licenseAlert.join(' '));
                             break;
                         case AuthValidators.INVALID_REQUEST:
-                            this.alertService.show(AlertType.ERROR, 'INVALID_LOGIN');
+                            this.alertService.show(AlertType.ERROR, response.message.text);
                             break;
                     }
 
